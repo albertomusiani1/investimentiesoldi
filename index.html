@@ -3,270 +3,326 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Conti — investimenti, spese e desideri</title>
-<meta name="theme-color" content="#111110">
+<title>Conti — spese, investimenti e futuro</title>
+<meta name="theme-color" content="#0F0F14">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23111110%22/%3E%3Crect%20x%3D%2214%22%20y%3D%2236%22%20width%3D%227%22%20height%3D%2214%22%20rx%3D%222%22%20fill%3D%22%232a78d6%22/%3E%3Crect%20x%3D%2225%22%20y%3D%2228%22%20width%3D%227%22%20height%3D%2222%22%20rx%3D%222%22%20fill%3D%22%231baf7a%22/%3E%3Crect%20x%3D%2236%22%20y%3D%2220%22%20width%3D%227%22%20height%3D%2230%22%20rx%3D%222%22%20fill%3D%22%23eb6834%22/%3E%3Cpath%20d%3D%22M17%2033%20L28%2025%20L39%2016%22%20stroke%3D%22%23fcfcfb%22%20stroke-width%3D%223%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%230F0F14%22/%3E%3Crect%20x%3D%2214%22%20y%3D%2236%22%20width%3D%227%22%20height%3D%2214%22%20rx%3D%222%22%20fill%3D%22%234F46E5%22/%3E%3Crect%20x%3D%2225%22%20y%3D%2228%22%20width%3D%227%22%20height%3D%2222%22%20rx%3D%222%22%20fill%3D%22%231baf7a%22/%3E%3Crect%20x%3D%2236%22%20y%3D%2220%22%20width%3D%227%22%20height%3D%2230%22%20rx%3D%222%22%20fill%3D%22%23eb6834%22/%3E%3Cpath%20d%3D%22M17%2033%20L28%2025%20L39%2016%22%20stroke%3D%22%23F5F5F7%22%20stroke-width%3D%223%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
-<!-- iOS: icona e modalità a schermo pieno quando la aggiungi alla Home -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Conti">
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <style>
-/* ============ TOKENS ============ */
+/* =====================================================================
+   COLORI
+   Interfaccia: accento indaco, superfici neutre fredde.
+   Dati (grafici, fette del patrimonio): palette validata per daltonismo
+   e contrasto, tenuta separata dai colori di interfaccia.
+   ===================================================================== */
 :root{
   color-scheme: light;
-  --surface-0:#f4f3f0;
-  --surface-1:#fcfcfb;
-  --surface-2:#f0efec;
-  --border:#e2e0da;
-  --border-strong:#c9c6bd;
-  --text-primary:#0b0b0b;
-  --text-secondary:#52514e;
-  --text-muted:#7a7873;
-  --series-1:#2a78d6;
-  --series-2:#eb6834;
-  --series-3:#1baf7a;
-  --good:#0ca30c;
-  --warning:#fab219;
-  --serious:#ec835a;
-  --critical:#d03b3b;
-  --grid:#e6e4de;
-  --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.04);
-  --r:14px;
+  --bg:#F4F4F7;
+  --card:#FFFFFF;
+  --card-2:#EFEFF4;
+  --line:#E5E5EC;
+  --line-2:#CFCFDA;
+  --ink:#16161C;
+  --ink-2:#4B4B57;
+  --ink-3:#6E6E80;
+  --accent:#4F46E5;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#EEEDFD;
+  --up:#0F8A54;
+  --down:#D33A3A;
+  --warn:#B26B00;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --grid:#ECECF2;
+  --sh:0 1px 2px rgba(20,20,40,.05);
+  --sh-2:0 4px 16px rgba(20,20,40,.07);
+  --r:16px; --r-s:11px;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:where(:not([data-theme="light"])){
     color-scheme: dark;
-    --surface-0:#111110;
-    --surface-1:#1a1a19;
-    --surface-2:#232322;
-    --border:#333331;
-    --border-strong:#4a4a47;
-    --text-primary:#ffffff;
-    --text-secondary:#c3c2b7;
-    --text-muted:#8e8d85;
-    --series-1:#3987e5;
-    --series-2:#d95926;
-    --series-3:#199e70;
-    --grid:#2e2e2c;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+    --bg:#0F0F14; --card:#17171F; --card-2:#1F1F29;
+    --line:#282833; --line-2:#3B3B4A;
+    --ink:#F5F5F7; --ink-2:#B9B9C6; --ink-3:#8B8BA0;
+    --accent:#A5A0FF; --accent-ink:#15151C; --accent-soft:#232135;
+    --up:#3DD08A; --down:#FF6B6B; --warn:#F0B429;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+    --grid:#242430;
+    --sh:0 1px 2px rgba(0,0,0,.4); --sh-2:0 4px 18px rgba(0,0,0,.35);
   }
 }
 :root[data-theme="dark"]{
   color-scheme: dark;
-  --surface-0:#111110; --surface-1:#1a1a19; --surface-2:#232322;
-  --border:#333331; --border-strong:#4a4a47;
-  --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#8e8d85;
-  --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70;
-  --grid:#2e2e2c;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  --bg:#0F0F14; --card:#17171F; --card-2:#1F1F29;
+  --line:#282833; --line-2:#3B3B4A;
+  --ink:#F5F5F7; --ink-2:#B9B9C6; --ink-3:#8B8BA0;
+  --accent:#A5A0FF; --accent-ink:#15151C; --accent-soft:#232135;
+  --up:#3DD08A; --down:#FF6B6B; --warn:#F0B429;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --grid:#242430;
+  --sh:0 1px 2px rgba(0,0,0,.4); --sh-2:0 4px 18px rgba(0,0,0,.35);
 }
 
-/* ============ BASE ============ */
+/* ============================ BASE ============================ */
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
-  background:var(--surface-0);
-  color:var(--text-primary);
+  background:var(--bg); color:var(--ink);
   font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  font-size:15px; line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-  padding-bottom:env(safe-area-inset-bottom);
+  font-size:15px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:contain;
 }
-.wrap{max-width:1180px;margin:0 auto;padding:16px 16px 64px}
-h1,h2,h3{margin:0;font-weight:650;letter-spacing:-.01em}
-h1{font-size:clamp(19px,4.2vw,24px)}
-h2{font-size:15px;letter-spacing:.02em;text-transform:uppercase;color:var(--text-secondary);font-weight:600}
-h3{font-size:15px}
-a{color:var(--series-1)}
-small{font-size:12.5px}
-.muted{color:var(--text-muted)}
-.sec{color:var(--text-secondary)}
+.wrap{max-width:1080px;margin:0 auto;padding:10px 14px 24px}
+h1,h2,h3{margin:0;font-weight:640;letter-spacing:-.015em}
+h1{font-size:19px}
+h2{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:640}
+h3{font-size:14.5px}
+a{color:var(--accent)}
+small{font-size:12px}
+.muted{color:var(--ink-3)} .sec{color:var(--ink-2)}
 .num{font-variant-numeric:tabular-nums;font-family:var(--mono)}
-.pos{color:var(--good)} .neg{color:var(--critical)}
+.up{color:var(--up)} .down{color:var(--down)}
+.hidden{display:none !important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
-/* ============ LAYOUT ============ */
-header.top{
-  display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
-  padding:14px 0 18px;
+/* ============================ CARD ============================ */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);
+  padding:14px;margin-bottom:12px}
+.card>header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:11px;flex-wrap:wrap}
+.card.tight{padding:11px 14px}
+.grid{display:grid;gap:12px}
+@media(min-width:840px){
+  .wrap{padding:14px 20px 32px}
+  .card{padding:18px;margin-bottom:14px}
+  .cols2{grid-template-columns:1fr 1fr}
+  h1{font-size:22px}
 }
-.brand{display:flex;flex-direction:column;gap:2px;min-width:0}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.card{
-  background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r);
-  box-shadow:var(--shadow);padding:18px;margin-bottom:16px;
-}
-.card>header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
-.grid{display:grid;gap:16px}
-@media(min-width:820px){ .cols2{grid-template-columns:1fr 1fr} }
 
-/* ============ CONTROLS ============ */
-button,.btn{
-  font:inherit;font-size:14px;font-weight:550;cursor:pointer;
-  background:var(--surface-2);color:var(--text-primary);
-  border:1px solid var(--border-strong);border-radius:9px;padding:8px 13px;
-  transition:.12s background,.12s border-color; white-space:nowrap;
-}
-button:hover{background:var(--border)}
-button.primary{background:var(--series-1);border-color:var(--series-1);color:#fff}
-button.primary:hover{filter:brightness(1.08)}
-button.ghost{background:transparent;border-color:var(--border)}
-button.danger{color:var(--critical);border-color:var(--border)}
-button:disabled{opacity:.5;cursor:not-allowed}
-input,select{
-  font:inherit;font-size:14px;background:var(--surface-1);color:var(--text-primary);
-  border:1px solid var(--border-strong);border-radius:9px;padding:9px 11px;width:100%;
-}
-input:focus,select:focus{outline:2px solid var(--series-1);outline-offset:1px;border-color:var(--series-1)}
-label{display:block;font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:5px}
+/* ========================= CONTROLLI ========================= */
+button{font:inherit;font-size:14px;font-weight:560;cursor:pointer;background:var(--card-2);color:var(--ink);
+  border:1px solid var(--line-2);border-radius:10px;padding:8px 13px;
+  transition:background .12s,border-color .12s,transform .06s; -webkit-tap-highlight-color:transparent}
+button:active{transform:scale(.97)}
+button:hover{background:var(--line)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button.primary:hover{filter:brightness(1.06)}
+button.ghost{background:transparent;border-color:var(--line)}
+button.quiet{background:transparent;border:0;color:var(--ink-3);padding:6px 8px}
+button.quiet:hover{color:var(--ink);background:var(--card-2)}
+button.danger{color:var(--down);border-color:var(--line);background:transparent}
+button:disabled{opacity:.45;cursor:not-allowed}
+input,select,textarea{font:inherit;font-size:16px;background:var(--card);color:var(--ink);
+  border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;width:100%}
+@media(min-width:840px){ input,select,textarea{font-size:14px;padding:9px 11px} }
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+label{display:block;font-size:12px;font-weight:620;color:var(--ink-2);margin-bottom:5px}
 .field{min-width:0}
-.formgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:2px;gap:2px}
-.seg button{border:0;background:transparent;padding:6px 11px;border-radius:7px;font-size:13px}
-.seg button[aria-pressed="true"]{background:var(--surface-1);box-shadow:var(--shadow);color:var(--text-primary)}
+.formgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.seg{display:inline-flex;background:var(--card-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px;
+  max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+.chk input{width:auto;margin:0}
 
-/* ============ HERO STATS ============ */
-.stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.stat{background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
-.stat .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);font-weight:600}
-.stat .v{font-size:clamp(20px,4.5vw,27px);font-weight:660;font-variant-numeric:tabular-nums;margin-top:4px;letter-spacing:-.02em}
-.stat .s{font-size:12.5px;color:var(--text-secondary);font-variant-numeric:tabular-nums;margin-top:2px}
+/* ======================= INTESTAZIONE ======================= */
+header.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0 12px}
+.brand{display:flex;flex-direction:column;gap:1px;min-width:0}
+.toolbar{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.status-line{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-3);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw}
+.status-line button{font-size:10.5px;padding:2px 7px}
+#syncChipWrap{cursor:pointer}
+#syncChip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:620;padding:4px 9px;
+  border-radius:100px;border:1px solid var(--line-2);background:var(--card);color:var(--ink-3);white-space:nowrap}
+#syncChip[data-state="ok"]{color:var(--up);border-color:color-mix(in srgb,var(--up) 40%,var(--line))}
+#syncChip[data-state="err"]{color:var(--down);border-color:color-mix(in srgb,var(--down) 40%,var(--line))}
+#syncChip[data-state="run"]{color:var(--accent)}
 
-/* ============ CHART ============ */
+/* ====================== NAVIGAZIONE ====================== */
+.tabbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.tabs{display:flex;gap:3px;background:var(--card-2);border:1px solid var(--line);border-radius:11px;padding:3px}
+.tabs button{border:0;background:transparent;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+.quick{display:flex;gap:8px}
+
+/* barra in basso, solo su telefono */
+.bottomnav{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
+  background:color-mix(in srgb,var(--card) 92%,transparent);
+  backdrop-filter:saturate(140%) blur(12px);
+  border-top:1px solid var(--line);
+  padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+  grid-template-columns:1fr 1fr auto 1fr 1fr;align-items:center;
+}
+.bottomnav button{background:none;border:0;padding:6px 2px;border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;font-weight:600;color:var(--ink-3)}
+.bottomnav button .ic{font-size:19px;line-height:1}
+.bottomnav button[aria-selected="true"]{color:var(--accent)}
+.bottomnav .fab{width:52px;height:52px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+  border:0;font-size:26px;font-weight:400;line-height:1;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 45%,transparent);
+  display:flex;align-items:center;justify-content:center;margin:-16px 4px 0}
+@media(max-width:759px){
+  .bottomnav{display:grid}
+  .tabbar{display:none}
+  .status-line{display:none}
+  body{padding-bottom:74px}
+  .wrap{padding-top:6px}
+}
+
+/* ================== RIEPILOGO COMPATTO ================== */
+.summary{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.summary .big{font-size:clamp(26px,7vw,32px);font-weight:680;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.05}
+.summary .biglab{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:620}
+.summary .facts{display:flex;gap:16px;flex-wrap:wrap;margin-left:auto}
+.fact{display:flex;flex-direction:column;gap:1px;min-width:0}
+.fact .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:620;white-space:nowrap}
+.fact .v{font-size:15px;font-weight:640;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media(max-width:520px){
+  .summary .facts{width:100%;margin-left:0;justify-content:space-between;gap:10px;
+    border-top:1px solid var(--line);padding-top:9px}
+  .fact .v{font-size:14px}
+}
+
+/* =================== BARRA ALLOCAZIONE =================== */
+.allocbar{display:flex;height:10px;border-radius:100px;overflow:hidden;gap:2px;background:var(--card-2)}
+.allocbar i{display:block;height:100%;border-radius:2px}
+.alloclegend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:9px;font-size:11.5px;color:var(--ink-2)}
+.alloclegend span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.alloclegend i{width:8px;height:8px;border-radius:3px;flex:none}
+.alloclegend b{font-variant-numeric:tabular-nums;font-weight:620;color:var(--ink)}
+.drift{font-size:10.5px;font-weight:620;color:var(--warn)}
+
+/* ========================= TABELLE ========================= */
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -14px;padding:0 14px}
+@media(min-width:840px){ .tbl-scroll{margin:0 -18px;padding:0 18px} }
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:right;padding:9px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);font-weight:620}
+th:first-child,td:first-child,td.tal,th.tal{text-align:left}
+td.name{max-width:210px;overflow:hidden;text-overflow:ellipsis;text-align:left}
+td.name b{display:block;font-size:13.5px;font-weight:620}
+td.name small{color:var(--ink-3);display:block;font-size:11px}
+tbody tr:last-child td{border-bottom:0}
+tfoot td{font-weight:640;border-top:1px solid var(--line-2);border-bottom:0;padding-top:10px}
+.pill{display:inline-block;font-size:10px;font-weight:660;padding:2px 7px;border-radius:100px;
+  border:1px solid var(--line-2);background:var(--card-2);color:var(--ink-2)}
+.iconbtn{border:0;background:transparent;color:var(--ink-3);padding:5px 7px;border-radius:8px;font-size:13px}
+.iconbtn:hover{background:var(--card-2);color:var(--ink)}
+.iconbtn.danger:hover{color:var(--down)}
+
+/* ======================== ELENCHI ======================== */
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;
+  padding:11px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .main{min-width:0}
+.row .t{font-weight:600;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .s{font-size:11.5px;color:var(--ink-3);display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:2px}
+.row .amt{font-variant-numeric:tabular-nums;font-weight:640;font-size:14.5px;text-align:right;white-space:nowrap}
+.row .amt small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:500}
+.row .acts{display:flex;gap:2px}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:680;padding:2px 7px;border-radius:100px;
+  border:1px solid var(--line-2);background:var(--card-2);letter-spacing:.02em}
+.tag[data-k="need"]{color:var(--down);border-color:color-mix(in srgb,var(--down) 40%,var(--line))}
+.tag[data-k="want"]{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.tag[data-k="due"]{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
+.tag.late{color:var(--down);border-color:var(--down)}
+.done .t{text-decoration:line-through;color:var(--ink-3)}
+.done .amt{color:var(--ink-3)}
+
+/* ========================= GRAFICI ========================= */
 .chart-wrap{position:relative;width:100%}
 svg.chart{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
 svg.chart text{font-family:inherit;font-variant-numeric:tabular-nums}
-.axis-lbl{font-size:11px;fill:var(--text-muted)}
+.axis-lbl{font-size:10.5px;fill:var(--ink-3)}
 .gridline{stroke:var(--grid);stroke-width:1}
-.zeroline{stroke:var(--border-strong);stroke-width:1}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--text-secondary);margin-top:10px}
+.zeroline{stroke:var(--line-2);stroke-width:1}
+.legend{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:11.5px;color:var(--ink-2);margin-top:9px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
-.swatch{width:14px;height:3px;border-radius:2px;flex:none}
-.swatch.sq{height:11px;width:11px;border-radius:3px}
-.tip{
-  position:absolute;pointer-events:none;z-index:5;opacity:0;transition:opacity .08s;
-  background:var(--surface-1);border:1px solid var(--border-strong);border-radius:9px;
-  box-shadow:var(--shadow);padding:8px 11px;font-size:12.5px;min-width:130px;
-  font-variant-numeric:tabular-nums;
-}
-.tip .th{font-weight:650;margin-bottom:4px;font-size:12px;color:var(--text-secondary)}
+.swatch{width:13px;height:3px;border-radius:2px;flex:none}
+.swatch.sq{height:10px;width:10px;border-radius:3px}
+.tip{position:absolute;pointer-events:none;z-index:5;opacity:0;transition:opacity .08s;
+  background:var(--card);border:1px solid var(--line-2);border-radius:10px;box-shadow:var(--sh-2);
+  padding:8px 11px;font-size:12px;min-width:120px;font-variant-numeric:tabular-nums}
+.tip .th{font-weight:640;margin-bottom:4px;font-size:11.5px;color:var(--ink-2)}
 .tip .tr{display:flex;justify-content:space-between;gap:14px}
-.range-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 
-/* ============ TABLE ============ */
-.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -18px;padding:0 18px}
-table{border-collapse:collapse;width:100%;font-size:13.5px}
-th,td{text-align:right;padding:10px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
-th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);font-weight:650;
-   position:sticky;top:0;background:var(--surface-1)}
-th:first-child,td:first-child{text-align:left}
-tbody tr:hover{background:var(--surface-2)}
-tfoot td{font-weight:650;border-top:2px solid var(--border-strong);border-bottom:0}
-td.name{max-width:230px;overflow:hidden;text-overflow:ellipsis;text-align:left}
-td.tal,th.tal{text-align:left}
-td.name b{display:block;font-size:13.5px}
-td.name small{color:var(--text-muted);display:block;font-size:11.5px}
-.pill{display:inline-block;font-size:10.5px;font-weight:650;padding:2px 7px;border-radius:100px;
-  border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-secondary)}
-
-/* ============ MISC ============ */
-details.info{border:1px solid var(--border);border-radius:var(--r);background:var(--surface-1);padding:0;margin-bottom:16px}
-details.info>summary{cursor:pointer;padding:14px 18px;font-weight:620;font-size:14.5px;list-style:none;display:flex;justify-content:space-between;align-items:center}
-details.info>summary::-webkit-details-marker{display:none}
-details.info>summary::after{content:"＋";color:var(--text-muted);font-weight:400}
-details.info[open]>summary::after{content:"−"}
-details.info .body{padding:0 18px 18px;font-size:14px;color:var(--text-secondary);max-width:74ch}
-details.info .body h4{margin:16px 0 6px;font-size:13.5px;color:var(--text-primary)}
-details.info .body ul{padding-left:18px;margin:6px 0}
-details.info .body li{margin:4px 0}
-
-
-/* ============ SINCRONIZZAZIONE ============ */
-#syncChipWrap{cursor:pointer}
-#syncChip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 11px;
-  border-radius:100px;border:1px solid var(--border-strong);background:var(--surface-1);white-space:nowrap;color:var(--text-secondary)}
-#syncChip[data-state="ok"]{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,var(--border))}
-#syncChip[data-state="err"]{color:var(--critical);border-color:color-mix(in srgb,var(--critical) 45%,var(--border))}
-#syncChip[data-state="run"]{color:var(--series-1)}
-.synctest{font-size:12.5px;line-height:1.7;margin-top:12px;border-top:1px solid var(--border);padding-top:12px}
-.synctest code{font-size:11.5px;background:var(--surface-2);padding:1px 5px;border-radius:4px}
-.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);margin-top:4px}
-.chk input{width:auto;margin:0}
-
-/* ============ TABS ============ */
-.tabbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
-.quick{display:flex;gap:8px;flex-wrap:wrap}
-.quick button{font-size:13.5px;padding:8px 14px}
-.quick button .plus{font-weight:700;margin-right:2px}
-@media(max-width:520px){ .tabbar{gap:8px} .quick{width:100%} .quick button{flex:1} }
-
-dialog.modal{border:1px solid var(--border-strong);border-radius:var(--r);background:var(--surface-1);color:var(--text-primary);
-  padding:0;max-width:520px;width:calc(100vw - 32px);box-shadow:0 12px 48px rgba(0,0,0,.28)}
-dialog.modal::backdrop{background:rgba(0,0,0,.45);backdrop-filter:blur(2px)}
-dialog.modal .mhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px 0}
-dialog.modal .mhead h3{font-size:16px}
-dialog.modal .mbody{padding:14px 18px 0}
-dialog.modal .mfoot{display:flex;gap:8px;justify-content:flex-end;padding:16px 18px 18px;flex-wrap:wrap}
-dialog.modal .x{border:0;background:transparent;font-size:19px;color:var(--text-muted);padding:2px 8px;line-height:1;border-radius:8px}
-dialog.modal .x:hover{background:var(--surface-2);color:var(--text-primary)}
-
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(12px);z-index:60;
-  background:var(--text-primary);color:var(--surface-1);font-size:13.5px;font-weight:600;
-  padding:10px 18px;border-radius:100px;box-shadow:0 6px 24px rgba(0,0,0,.3);
-  opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;max-width:calc(100vw - 32px)}
-#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-
-.prio{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:100px;
-  border:1px solid var(--border-strong);background:var(--surface-2);white-space:nowrap}
-.prio[data-p="alta"]{color:var(--critical);border-color:color-mix(in srgb,var(--critical) 45%,var(--border))}
-.prio[data-p="media"]{color:#8a6000;border-color:color-mix(in srgb,var(--warning) 55%,var(--border))}
-@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .prio[data-p="media"]{color:var(--warning)}}
-:root[data-theme="dark"] .prio[data-p="media"]{color:var(--warning)}
-.bought td{opacity:.55}
-.tabs{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;
-  padding:3px;margin-bottom:18px;width:fit-content;max-width:100%;overflow-x:auto}
-.tabs button{border:0;background:transparent;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:600;color:var(--text-secondary)}
-.tabs button[aria-selected="true"]{background:var(--surface-1);color:var(--text-primary);box-shadow:var(--shadow)}
-
-/* ============ MENÙ CON RICERCA ============ */
+/* ==================== MENÙ CON RICERCA ==================== */
 .combo{position:relative}
-.combo input{padding-right:32px}
-.combo .caret{position:absolute;right:1px;top:1px;bottom:1px;width:30px;border:0;background:transparent;
-  color:var(--text-muted);font-size:11px;padding:0;border-radius:0 8px 8px 0;cursor:pointer}
-.combo .caret:hover{color:var(--text-primary);background:var(--surface-2)}
-.combo-list{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;margin:0;padding:4px;
-  list-style:none;background:var(--surface-1);border:1px solid var(--border-strong);border-radius:10px;
-  box-shadow:0 8px 28px rgba(0,0,0,.16);max-height:244px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.combo input{padding-right:34px}
+.combo .caret{position:absolute;right:1px;top:1px;bottom:1px;width:32px;border:0;background:transparent;
+  color:var(--ink-3);font-size:10px;padding:0;border-radius:0 9px 9px 0}
+.combo-list{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;margin:0;padding:4px;list-style:none;
+  background:var(--card);border:1px solid var(--line-2);border-radius:11px;box-shadow:var(--sh-2);
+  max-height:238px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .combo-list.up{top:auto;bottom:calc(100% + 4px)}
-.combo-list li{padding:8px 11px;border-radius:7px;font-size:14px;cursor:pointer;white-space:nowrap;
+.combo-list li{padding:9px 11px;border-radius:8px;font-size:14px;cursor:pointer;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
-.combo-list li.on{background:var(--series-1);color:#fff}
-.combo-list li.create{color:var(--series-1);font-weight:600;border-top:1px solid var(--border);border-radius:0 0 7px 7px;margin-top:4px}
-.combo-list li.create.on{color:#fff}
-.combo-list li.none{color:var(--text-muted);cursor:default}
+.combo-list li.on{background:var(--accent);color:var(--accent-ink)}
+.combo-list li.create{color:var(--accent);font-weight:620;border-top:1px solid var(--line);margin-top:4px}
+.combo-list li.create.on{color:var(--accent-ink)}
+.combo-list li.none{color:var(--ink-3);cursor:default}
 
-/* ============ CHIPS (categorie) ============ */
-.chips{display:flex;flex-wrap:wrap;gap:7px}
-.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-strong);background:var(--surface-2);
-  border-radius:100px;padding:5px 6px 5px 12px;font-size:13px;font-weight:550}
-.chip .x{cursor:pointer;border:0;background:transparent;color:var(--text-muted);padding:0 5px;font-size:14px;line-height:1;border-radius:100px}
-.chip .x:hover{color:var(--critical);background:var(--border)}
-.chip .sw{width:9px;height:9px;border-radius:50%;flex:none}
-.catdot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:7px;vertical-align:baseline;flex:none}
-.status-line{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-muted);flex-wrap:wrap}
-.spinner{width:12px;height:12px;border:2px solid var(--border-strong);border-top-color:var(--series-1);border-radius:50%;animation:spin .7s linear infinite;flex:none}
+/* ========================== CHIPS ========================== */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-2);background:var(--card-2);
+  border-radius:100px;padding:5px 6px 5px 11px;font-size:12.5px;font-weight:550}
+.chip .x{cursor:pointer;border:0;background:transparent;color:var(--ink-3);padding:0 4px;font-size:13px;border-radius:100px}
+.chip .x:hover{color:var(--down)}
+
+/* ========================= FINESTRE ========================= */
+dialog.modal{border:1px solid var(--line-2);border-radius:18px;background:var(--card);color:var(--ink);
+  padding:0;max-width:480px;width:calc(100vw - 24px);box-shadow:0 16px 50px rgba(0,0,0,.35)}
+dialog.modal::backdrop{background:rgba(10,10,16,.5);backdrop-filter:blur(3px)}
+dialog.modal .mhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 16px 0}
+dialog.modal .mhead h3{font-size:16.5px}
+dialog.modal .mbody{padding:14px 16px 0}
+dialog.modal .mfoot{display:flex;gap:8px;justify-content:flex-end;padding:16px;flex-wrap:wrap}
+dialog.modal .mfoot button{flex:1;justify-content:center;padding:11px 14px}
+@media(min-width:560px){ dialog.modal .mfoot button{flex:0 0 auto} }
+dialog.modal .x{border:0;background:transparent;font-size:18px;color:var(--ink-3);padding:2px 8px;border-radius:8px}
+/* su telefono la finestra sale dal basso */
+@media(max-width:559px){
+  dialog.modal{position:fixed;bottom:0;left:0;right:0;top:auto;margin:0;width:100%;max-width:none;
+    border-radius:20px 20px 0 0;border-bottom:0;padding-bottom:env(safe-area-inset-bottom)}
+}
+.sheetbtn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border-radius:12px;
+  border:1px solid var(--line);background:var(--card-2);margin-bottom:8px;font-size:15px;font-weight:600}
+.sheetbtn .ic{font-size:20px;width:26px;text-align:center}
+.sheetbtn small{display:block;font-size:11.5px;color:var(--ink-3);font-weight:500;margin-top:1px}
+
+/* ========================== VARIE ========================== */
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(10px);
+  z-index:60;background:var(--ink);color:var(--card);font-size:13px;font-weight:600;padding:10px 18px;border-radius:100px;
+  box-shadow:0 6px 22px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+  max-width:calc(100vw - 28px);text-align:center}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(min-width:760px){ #toast{bottom:24px} }
+.empty{text-align:center;padding:26px 14px;color:var(--ink-3)}
+.empty h3{color:var(--ink);margin-bottom:5px}
+.empty p{max-width:40ch;margin:6px auto;font-size:13.5px}
+.notice{border-radius:11px;padding:10px 13px;font-size:12.5px;border:1px solid;margin-bottom:10px;display:flex;gap:8px}
+.notice.warn{border-color:color-mix(in srgb,var(--warn) 45%,var(--line));background:color-mix(in srgb,var(--warn) 8%,var(--card))}
+.notice.err{border-color:color-mix(in srgb,var(--down) 40%,var(--line));background:color-mix(in srgb,var(--down) 7%,var(--card))}
+.spinner{width:11px;height:11px;border:2px solid var(--line-2);border-top-color:var(--accent);border-radius:50%;
+  animation:spin .7s linear infinite;flex:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:36px 18px;color:var(--text-muted)}
-.empty p{max-width:44ch;margin:8px auto}
-.notice{border-radius:10px;padding:11px 14px;font-size:13px;border:1px solid;margin-bottom:12px;display:flex;gap:9px;align-items:flex-start}
-.notice.warn{border-color:color-mix(in srgb,var(--warning) 50%,var(--border));background:color-mix(in srgb,var(--warning) 9%,var(--surface-1))}
-.notice.err{border-color:color-mix(in srgb,var(--critical) 45%,var(--border));background:color-mix(in srgb,var(--critical) 8%,var(--surface-1))}
-.hidden{display:none !important}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-footer.foot{text-align:center;font-size:12px;color:var(--text-muted);padding:26px 12px;max-width:62ch;margin:0 auto}
+details.fold{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
+details.fold>summary{cursor:pointer;font-size:12.5px;font-weight:620;color:var(--ink-2);list-style:none;
+  display:flex;justify-content:space-between;align-items:center}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:"▾";color:var(--ink-3);font-size:10px}
+details.fold[open]>summary::after{content:"▴"}
+details.fold .body{padding-top:12px}
+.synctest{font-size:12.5px;line-height:1.65;margin-top:11px;border-top:1px solid var(--line);padding-top:11px}
+.synctest code{font-size:11px;background:var(--card-2);padding:1px 5px;border-radius:4px}
+footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12px 8px;max-width:56ch;margin:0 auto}
 </style>
 </head>
 <body>
@@ -275,71 +331,61 @@ footer.foot{text-align:center;font-size:12px;color:var(--text-muted);padding:26p
 <header class="top">
   <div class="brand">
     <h1>Conti</h1>
-    <div class="status-line" id="statusLine"><span class="muted">Inizializzazione…</span></div>
+    <div class="status-line" id="statusLine"></div>
   </div>
   <div class="toolbar">
-    <span id="syncChipWrap" title="Stato della sincronizzazione — clicca per aprire le impostazioni"><span id="syncChip" class="hidden"></span></span>
-    <button id="btnRefresh" class="primary">↻ Aggiorna prezzi</button>
-    <button id="btnTheme" class="ghost" title="Tema chiaro/scuro">◐</button>
-    <button id="btnData" class="ghost" title="Esporta / importa dati">⇅ Dati</button>
+    <span id="syncChipWrap" title="Stato della sincronizzazione"><span id="syncChip" class="hidden"></span></span>
+    <button id="btnRefresh" class="quiet" title="Aggiorna i prezzi">↻</button>
+    <button id="btnTheme" class="quiet" title="Tema chiaro o scuro">◐</button>
+    <button id="btnData" class="quiet" title="Dati e sincronizzazione">⇅</button>
   </div>
 </header>
 
 <div id="notices"></div>
 
-<!-- ======== PANNELLO DATI E SINCRONIZZAZIONE ======== -->
+<!-- ===================== PANNELLO DATI ===================== -->
 <section class="card hidden" id="dataPanel">
-  <header>
-    <h2>Dati e sincronizzazione</h2>
-    <button class="ghost" id="btnCloseData" style="padding:4px 10px;font-size:13px">Chiudi</button>
-  </header>
+  <header><h2>Dati e sincronizzazione</h2><button class="quiet" id="btnCloseData">✕</button></header>
 
-  <h3 style="font-size:14px;margin-bottom:6px">Copia di sicurezza</h3>
-  <p class="sec" style="font-size:13.5px;margin:0 0 12px;max-width:78ch">
-    Posizioni, spese, categorie, stipendi e acquisti desiderati vivono nel browser di questo dispositivo.
-    Il backup serve a spostarli a mano o a non perderli se svuoti la cache del browser.
+  <h3 style="margin-bottom:5px">Copia di sicurezza</h3>
+  <p class="sec" style="font-size:13px;margin:0 0 11px;max-width:70ch">
+    Spese, investimenti e acquisti futuri vivono nel browser di questo dispositivo.
+    Il backup serve a spostarli a mano o a non perderli se svuoti la cache.
   </p>
   <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <button class="ghost" id="btnExport">↓ Esporta backup</button>
-    <button class="ghost" id="btnImport">↑ Importa backup</button>
-    <button class="ghost danger" id="btnReset">Azzera tutto</button>
+    <button class="ghost" id="btnExport">↓ Esporta</button>
+    <button class="ghost" id="btnImport">↑ Importa</button>
+    <button class="danger" id="btnReset">Azzera tutto</button>
+    <button class="ghost" id="btnDiag2" title="Come sta andando il canale dei prezzi">Diagnostica prezzi</button>
   </div>
 
-  <div id="syncBox" style="margin-top:22px;border-top:1px solid var(--border);padding-top:18px">
-    <h3 style="font-size:14px;margin-bottom:6px">Sincronizzazione fra dispositivi</h3>
-    <p class="sec" style="font-size:13.5px;margin:0 0 6px;max-width:78ch">
-      I dati vivono in un file cifrato dentro un tuo repository GitHub: ogni dispositivo lo legge all'apertura,
-      lo unisce con quello che ha in locale e lo riscrive. Per <b>leggere</b> basta la password;
-      per <b>scrivere</b> serve anche un token, da incollare una volta su ogni dispositivo da cui inserisci dati.
+  <div id="syncBox" style="margin-top:18px;border-top:1px solid var(--line);padding-top:16px">
+    <h3 style="margin-bottom:5px">Sincronizzazione fra dispositivi</h3>
+    <p class="sec" style="font-size:13px;margin:0 0 6px;max-width:74ch">
+      I dati stanno in un file cifrato in un tuo repository GitHub. Per <b>leggere</b> basta la password;
+      per <b>scrivere</b> serve anche il token, da incollare una volta per dispositivo.
     </p>
-    <div id="syncState" class="muted" style="font-size:12.5px;margin-bottom:14px"></div>
-
+    <div id="syncState" class="muted" style="font-size:12px;margin-bottom:12px"></div>
     <div class="formgrid">
       <div class="field"><label for="sOwner">Utente GitHub</label><input id="sOwner" placeholder="iltuonome" autocomplete="off" spellcheck="false"></div>
       <div class="field"><label for="sRepo">Repository</label><input id="sRepo" placeholder="investimenti" autocomplete="off" spellcheck="false"></div>
-      <div class="field"><label for="sPath">Nome del file</label><input id="sPath" placeholder="dati.json" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="sPath">File</label><input id="sPath" placeholder="dati.json" autocomplete="off" spellcheck="false"></div>
       <div class="field"><label for="sBranch">Ramo</label><input id="sBranch" placeholder="main" autocomplete="off" spellcheck="false"></div>
     </div>
-    <div class="formgrid" style="margin-top:12px">
-      <div class="field">
-        <label for="sPass">Password di cifratura</label>
+    <div class="formgrid" style="margin-top:10px">
+      <div class="field"><label for="sPass">Password di cifratura</label>
         <input id="sPass" type="password" autocomplete="new-password" placeholder="la stessa su ogni dispositivo">
-        <small class="muted">Non è recuperabile. Deve essere identica su tutti i dispositivi.</small>
-      </div>
-      <div class="field">
-        <label for="sToken">Token GitHub <span class="muted" style="font-weight:400">(solo per scrivere)</span></label>
+        <small class="muted">Non è recuperabile.</small></div>
+      <div class="field"><label for="sToken">Token GitHub <span class="muted" style="font-weight:400">(per scrivere)</span></label>
         <input id="sToken" type="password" autocomplete="off" placeholder="github_pat_…">
-        <small class="muted">Resta solo in questo browser. Dagli il permesso Contents in lettura e scrittura sul solo repository indicato.</small>
-      </div>
+        <small class="muted">Resta solo in questo browser.</small></div>
     </div>
-
-    <label class="chk" style="margin-top:12px"><input type="checkbox" id="sAuto"> Sincronizza da sola all'apertura e dopo ogni modifica</label>
-
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+    <label class="chk" style="margin-top:11px"><input type="checkbox" id="sAuto"> Sincronizza da sola</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
       <button class="primary" id="btnSyncSave">Salva e sincronizza</button>
-      <button class="ghost" id="btnSyncNow">↻ Sincronizza ora</button>
-      <button class="ghost" id="btnSyncTest">Verifica connessione</button>
-      <button class="ghost danger hidden" id="btnForgetToken">Dimentica il token qui</button>
+      <button class="ghost" id="btnSyncNow">↻ Ora</button>
+      <button class="ghost" id="btnSyncTest">Verifica</button>
+      <button class="danger hidden" id="btnForgetToken">Dimentica il token</button>
     </div>
     <div class="synctest" id="syncTest"></div>
   </div>
@@ -347,339 +393,292 @@ footer.foot{text-align:center;font-size:12px;color:var(--text-muted);padding:26p
 
 <div class="tabbar">
   <nav class="tabs" id="tabs" role="tablist">
-    <button data-tab="inv" role="tab" aria-selected="true">Investimenti</button>
-    <button data-tab="exp" role="tab" aria-selected="false">Spese</button>
-    <button data-tab="wish" role="tab" aria-selected="false">Desideri</button>
+    <button data-tab="exp" role="tab" aria-selected="true">Spese</button>
+    <button data-tab="inv" role="tab" aria-selected="false">Investimenti</button>
+    <button data-tab="fut" role="tab" aria-selected="false">Futuro</button>
   </nav>
   <div class="quick">
-    <button class="primary" id="qExpense"><span class="plus">+</span> Spesa</button>
-    <button class="ghost" id="qWish"><span class="plus">+</span> Desiderio</button>
+    <button class="primary" id="qExpense">+ Spesa</button>
+    <button class="ghost" id="qWish">+ Futuro</button>
   </div>
 </div>
 
-<div id="pageInv">
+<!-- =====================================================================
+     SPESE
+     ===================================================================== -->
+<div id="pageExp">
 
-<!-- ======== HERO ======== -->
-<section class="stats" id="heroStats" aria-label="Riepilogo portafoglio"></section>
+  <section class="card tight">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:11px">
+      <select id="monthSel" style="width:auto;padding:6px 10px;font-size:13.5px;font-weight:620"></select>
+      <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);margin-left:auto">
+        Stipendio
+        <input id="incomeInput" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0"
+               style="width:92px;padding:6px 9px;font-size:13.5px" aria-label="Stipendio del mese"> €
+      </span>
+    </div>
+    <div class="summary" id="expSummary"></div>
+  </section>
 
-<div class="grid cols2">
-  <!-- ======== PORTFOLIO CHART ======== -->
   <section class="card">
-    <header><h2>Valore vs capitale investito</h2></header>
+    <header>
+      <h2>Movimenti</h2>
+      <span class="muted" style="font-size:11.5px" id="monthSummary"></span>
+    </header>
+    <div class="rows" id="movRows"></div>
+    <div id="movEmpty" class="empty">
+      <h3>Nessun movimento</h3>
+      <p>Tocca <b>+</b> per registrare una spesa: bastano descrizione, importo e categoria.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <header>
+      <h2>Andamento</h2>
+      <span class="muted" style="font-size:11.5px">ultimi 12 mesi</span>
+    </header>
+    <div class="chart-wrap" id="emWrap">
+      <svg class="chart" id="emChart" role="img" aria-label="Spese di ciascuno degli ultimi dodici mesi"></svg>
+      <div class="tip" id="emTip"></div>
+    </div>
+    <div class="legend" id="emLegend"></div>
+
+    <details class="fold" id="foldCat">
+      <summary>Dove vanno i soldi</summary>
+      <div class="body">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+          <select id="ecPeriod" style="width:auto;padding:5px 9px;font-size:12.5px">
+            <option value="month">Mese selezionato</option>
+            <option value="y12" selected>Ultimi 12 mesi</option>
+            <option value="year">Anno corrente</option>
+          </select>
+        </div>
+        <div class="chart-wrap" id="ecWrap">
+          <svg class="chart" id="ecChart" role="img" aria-label="Spese per categoria"></svg>
+          <div class="tip" id="ecTip"></div>
+        </div>
+        <div class="legend" id="ecLegend"></div>
+      </div>
+    </details>
+
+    <details class="fold" id="foldFix">
+      <summary>Spese fisse <span class="muted" id="fixSummary" style="font-weight:500"></span></summary>
+      <div class="body">
+        <div class="rows" id="fixRows"></div>
+        <div id="fixEmpty" class="empty"><p>Nessuna spesa fissa. Quando registri una spesa scegli una ricorrenza e finisce qui.</p></div>
+      </div>
+    </details>
+
+    <details class="fold" id="foldCats">
+      <summary>Categorie</summary>
+      <div class="body">
+        <div class="chips" id="catChips"></div>
+        <div style="display:flex;gap:8px;margin-top:11px">
+          <input id="newCat" placeholder="Nuova categoria" autocomplete="off">
+          <button class="ghost" id="btnAddCat">+</button>
+        </div>
+      </div>
+    </details>
+  </section>
+</div>
+
+<!-- =====================================================================
+     INVESTIMENTI
+     ===================================================================== -->
+<div id="pageInv" class="hidden">
+
+  <section class="card tight">
+    <div class="summary" id="invSummary"></div>
+  </section>
+
+  <section class="card">
+    <header>
+      <h2>Posizioni</h2>
+      <button class="ghost" id="btnAddToggle" style="padding:6px 11px;font-size:13px">+ Aggiungi</button>
+    </header>
+
+    <div id="addForm" class="hidden" style="border:1px dashed var(--line-2);border-radius:12px;padding:13px;margin-bottom:12px;background:var(--card-2)">
+      <div class="formgrid">
+        <div class="field" style="grid-column:span 2;min-width:180px">
+          <label for="fTicker">Ticker <span class="muted" style="font-weight:400">(Yahoo Finance)</span></label>
+          <input id="fTicker" list="tickerList" placeholder="es. VWCE.DE" autocomplete="off" spellcheck="false">
+          <datalist id="tickerList"></datalist>
+        </div>
+        <div class="field"><label for="fCat">Categoria</label>
+          <select id="fCat">
+            <option value="equity">Azionario</option>
+            <option value="bond">Obbligazionario</option>
+            <option value="gold">Oro / materie prime</option>
+            <option value="crypto">Crypto</option>
+            <option value="cash">Liquidità</option>
+            <option value="other">Altro</option>
+          </select>
+        </div>
+        <div class="field"><label for="fAmount">Investito (€)</label>
+          <input id="fAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="5000"></div>
+        <div class="field"><label for="fDate">Data</label><input id="fDate" type="date"></div>
+        <div class="field"><label for="fShares">Quote <span class="muted" style="font-weight:400">(auto)</span></label>
+          <input id="fShares" type="number" inputmode="decimal" step="any" min="0" placeholder="auto"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:11px">
+        <button class="primary" id="btnAdd">Aggiungi</button>
+        <button class="ghost" id="btnCancelAdd">Annulla</button>
+      </div>
+    </div>
+
+    <div class="rows" id="posRows"></div>
+    <div id="posEmpty" class="empty">
+      <h3>Nessuna posizione</h3>
+      <p>Aggiungi un investimento: ticker, quanto hai messo e quando.</p>
+      <button class="primary" id="btnAddFirst" style="margin-top:8px">+ Aggiungi</button>
+      <p><small>oppure <a href="#" id="btnDemo">carica un esempio</a></small></p>
+    </div>
+
+    <div id="allocBox" style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <h2 style="font-size:11px">Ripartizione</h2>
+        <button class="quiet" id="btnTargets" style="font-size:11.5px;padding:3px 7px">obiettivo</button>
+      </div>
+      <div class="allocbar" id="allocBar"></div>
+      <div class="alloclegend" id="allocLegend"></div>
+      <div id="targetEditor" class="hidden" style="margin-top:12px;border-top:1px solid var(--line);padding-top:11px"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <header><h2>Valore vs investito</h2></header>
     <div class="chart-wrap" id="pfWrap">
-      <svg class="chart" id="pfChart" role="img" aria-label="Andamento del valore del portafoglio contro il capitale investito"></svg>
+      <svg class="chart" id="pfChart" role="img" aria-label="Andamento del valore contro il capitale investito"></svg>
       <div class="tip" id="pfTip"></div>
     </div>
     <div class="legend" id="pfLegend"></div>
   </section>
+</div>
 
-  <!-- ======== ALLOCATION ======== -->
+<!-- =====================================================================
+     FUTURO
+     ===================================================================== -->
+<div id="pageFut" class="hidden">
+
+  <section class="card tight">
+    <div class="summary" id="futSummary"></div>
+  </section>
+
   <section class="card">
     <header>
-      <h2>Allocazione — attuale vs obiettivo</h2>
-      <button class="ghost" id="btnTargets" style="padding:5px 10px;font-size:13px">Modifica obiettivo</button>
+      <div class="seg" id="futFilter" role="group" aria-label="Filtro">
+        <button data-f="all" aria-pressed="true">Tutto</button>
+        <button data-f="need" aria-pressed="false">Serve</button>
+        <button data-f="want" aria-pressed="false">Piace</button>
+        <button data-f="due" aria-pressed="false">Scade</button>
+      </div>
+      <button class="ghost" id="btnAddFut" style="padding:6px 11px;font-size:13px">+ Aggiungi</button>
     </header>
-    <div class="chart-wrap" id="alWrap">
-      <svg class="chart" id="alChart" role="img" aria-label="Allocazione attuale confrontata con l'allocazione obiettivo"></svg>
-      <div class="tip" id="alTip"></div>
+    <div class="rows" id="futRows"></div>
+    <div id="futEmpty" class="empty">
+      <h3>Niente in programma</h3>
+      <p>Segna quello che devi comprare, quello che ti piacerebbe avere, e le spese che sai già che arriveranno — bollo, assicurazione, un viaggio.</p>
+      <button class="primary" id="btnAddFut2" style="margin-top:8px">+ Aggiungi</button>
     </div>
-    <div class="legend" id="alLegend"></div>
-    <div id="targetEditor" class="hidden" style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px"></div>
+
+    <details class="fold" id="foldDone">
+      <summary>Fatti <span class="muted" id="doneSummary" style="font-weight:500"></span></summary>
+      <div class="body"><div class="rows" id="doneRows"></div></div>
+    </details>
   </section>
 </div>
 
-<!-- ======== POSITIONS ======== -->
-<section class="card">
-  <header>
-    <h2>Le mie posizioni</h2>
-    <button class="ghost" id="btnAddToggle">+ Aggiungi posizione</button>
-  </header>
-
-  <div id="addForm" class="hidden" style="border:1px dashed var(--border-strong);border-radius:11px;padding:15px;margin-bottom:16px;background:var(--surface-2)">
-    <div class="formgrid">
-      <div class="field" style="grid-column:span 2;min-width:210px">
-        <label for="fTicker">Ticker / simbolo <span class="muted" style="font-weight:400">(Yahoo Finance)</span></label>
-        <input id="fTicker" list="tickerList" placeholder="es. VWCE.DE" autocomplete="off" spellcheck="false">
-        <datalist id="tickerList"></datalist>
-        <small class="muted" id="tickerHint">Hai solo l'ISIN? Cercalo su finance.yahoo.com e copia il simbolo.</small>
-      </div>
-      <div class="field">
-        <label for="fCat">Categoria</label>
-        <select id="fCat">
-          <option value="equity">Azionario</option>
-          <option value="bond">Obbligazionario</option>
-          <option value="gold">Oro / materie prime</option>
-          <option value="crypto">Crypto</option>
-          <option value="cash">Liquidità / monetario</option>
-          <option value="other">Altro</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="fAmount">Importo investito (€)</label>
-        <input id="fAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="5000">
-      </div>
-      <div class="field">
-        <label for="fDate">Data di acquisto</label>
-        <input id="fDate" type="date">
-      </div>
-      <div class="field">
-        <label for="fShares">Quote <span class="muted" style="font-weight:400">(facoltativo)</span></label>
-        <input id="fShares" type="number" inputmode="decimal" step="any" min="0" placeholder="auto">
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-      <button class="primary" id="btnAdd">Aggiungi</button>
-      <button class="ghost" id="btnCancelAdd">Annulla</button>
-      <span class="muted" style="font-size:12.5px;align-self:center">Se lasci "Quote" vuoto, le calcolo dal prezzo di chiusura della data indicata.</span>
-    </div>
+<!-- ======================= FINESTRE ======================= -->
+<dialog class="modal" id="dlgPick">
+  <div class="mhead"><h3>Cosa aggiungi?</h3><button type="button" class="x" data-close="dlgPick">✕</button></div>
+  <div class="mbody" style="padding-bottom:16px">
+    <button type="button" class="sheetbtn" id="pickExp"><span class="ic">🧾</span>
+      <span>Una spesa<small>l'hai appena fatta</small></span></button>
+    <button type="button" class="sheetbtn" id="pickFut"><span class="ic">🎯</span>
+      <span>Qualcosa nel futuro<small>da comprare, da pagare, o che ti piacerebbe</small></span></button>
   </div>
-
-  <div class="tbl-scroll">
-    <table id="posTable">
-      <thead><tr>
-        <th>Strumento</th><th>Cat.</th><th>Dal</th><th>Quote</th><th>Prezzo</th>
-        <th>Investito</th><th>Valore</th><th>P/L €</th><th>P/L %</th><th>Ann.</th><th></th>
-      </tr></thead>
-      <tbody id="posBody"></tbody>
-      <tfoot id="posFoot"></tfoot>
-    </table>
-  </div>
-  <div id="posEmpty" class="empty">
-    <h3>Nessuna posizione ancora</h3>
-    <p>Aggiungi il tuo primo investimento: ticker, importo e data d'acquisto. Il resto lo calcolo io.</p>
-    <button class="primary" id="btnAddFirst" style="margin-top:10px">+ Aggiungi la prima posizione</button>
-    <p><small>Oppure <a href="#" id="btnDemo">carica un portafoglio d'esempio</a> per vedere come funziona.</small></p>
-  </div>
-</section>
-
-</div><!-- /pageInv -->
-
-<!-- =====================================================================
-     PAGINA SPESE
-     ===================================================================== -->
-<div id="pageExp" class="hidden">
-
-  <section class="stats" id="expStats" aria-label="Riepilogo spese"></section>
-
-  <div class="grid cols2">
-    <!-- ---------- andamento mensile ---------- -->
-    <section class="card">
-      <header>
-        <div>
-          <h2>Spese per mese</h2>
-          <div class="muted" style="font-size:12.5px;margin-top:3px">Ultimi 12 mesi, fisse e variabili separate.</div>
-        </div>
-      </header>
-      <div class="chart-wrap" id="emWrap">
-        <svg class="chart" id="emChart" role="img" aria-label="Totale delle spese per ciascuno degli ultimi dodici mesi"></svg>
-        <div class="tip" id="emTip"></div>
-      </div>
-      <div class="legend" id="emLegend"></div>
-    </section>
-
-    <!-- ---------- per categoria ---------- -->
-    <section class="card">
-      <header>
-        <h2>Per categoria</h2>
-        <select id="ecPeriod" style="width:auto;padding:5px 9px;font-size:13px">
-          <option value="month">Mese selezionato</option>
-          <option value="y12" selected>Ultimi 12 mesi</option>
-          <option value="year">Anno corrente</option>
-        </select>
-      </header>
-      <div class="chart-wrap" id="ecWrap">
-        <svg class="chart" id="ecChart" role="img" aria-label="Spese suddivise per categoria"></svg>
-        <div class="tip" id="ecTip"></div>
-      </div>
-      <div class="legend" id="ecLegend"></div>
-    </section>
-  </div>
-
-  <!-- ---------- spese fisse ---------- -->
-  <section class="card">
-    <header>
-      <h2>Spese fisse</h2>
-      <span class="muted" style="font-size:12.5px" id="fixSummary"></span>
-    </header>
-    <div class="tbl-scroll">
-      <table id="fixTable">
-        <thead><tr><th>Descrizione</th><th class="tal">Categoria</th><th>Importo</th><th class="tal">Frequenza</th><th>Dal</th><th>Fino al</th><th>Al mese</th><th></th></tr></thead>
-        <tbody id="fixBody"></tbody>
-        <tfoot id="fixFoot"></tfoot>
-      </table>
-    </div>
-    <div id="fixEmpty" class="empty"><p>Nessuna spesa fissa. Aggiungine una scegliendo "Fissa ricorrente" qui sopra: affitto, bollette, abbonamenti, assicurazioni.</p></div>
-  </section>
-
-  <!-- ---------- movimenti del mese ---------- -->
-  <section class="card">
-    <header>
-      <h2>Movimenti del mese</h2>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <select id="monthSel" style="width:auto;padding:5px 9px;font-size:13px"></select>
-        <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-secondary)">
-          Stipendio
-          <input id="incomeInput" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00"
-                 style="width:104px;padding:5px 8px;font-size:13px" aria-label="Stipendio del mese selezionato"> €
-        </span>
-        <span class="muted" style="font-size:12.5px" id="monthSummary"></span>
-      </div>
-    </header>
-    <div class="tbl-scroll">
-      <table id="movTable">
-        <thead><tr><th>Data</th><th class="tal">Descrizione</th><th class="tal">Categoria</th><th class="tal">Tipo</th><th>Importo</th><th></th></tr></thead>
-        <tbody id="movBody"></tbody>
-        <tfoot id="movFoot"></tfoot>
-      </table>
-    </div>
-    <div id="movEmpty" class="empty"><p>Nessun movimento in questo mese.</p></div>
-  </section>
-
-  <div class="grid">
-    <!-- ---------- categorie ---------- -->
-    <section class="card">
-      <header><h2>Categorie</h2></header>
-      <div class="chips" id="catChips"></div>
-      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-        <input id="newCat" placeholder="Nuova categoria" style="flex:1;min-width:140px" autocomplete="off">
-        <button class="ghost" id="btnAddCat">+ Aggiungi</button>
-      </div>
-      <div class="muted" style="font-size:12.5px;margin-top:10px">
-        Una categoria usata da qualche spesa non può essere eliminata: prima riassegna quelle spese.
-      </div>
-    </section>
-
-  </div>
-
-</div><!-- /pageExp -->
-
-<!-- =====================================================================
-     PAGINA DESIDERI
-     ===================================================================== -->
-<div id="pageWish" class="hidden">
-
-  <section class="card">
-    <header><h2>Aggiungi un desiderio</h2></header>
-    <div class="formgrid">
-      <div class="field" style="grid-column:span 2;min-width:200px">
-        <label for="wName">Cosa vorresti comprare</label>
-        <input id="wName" placeholder="es. Bici gravel" autocomplete="off">
-      </div>
-      <div class="field">
-        <label for="wAmount">Prezzo (€)</label>
-        <input id="wAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00">
-      </div>
-      <div class="field">
-        <label for="wPrio">Priorità</label>
-        <select id="wPrio">
-          <option value="alta">Alta</option>
-          <option value="media" selected>Media</option>
-          <option value="bassa">Bassa</option>
-        </select>
-      </div>
-      <div class="field" style="grid-column:span 2;min-width:200px">
-        <label for="wNote">Note <span class="muted" style="font-weight:400">(facoltative)</span></label>
-        <input id="wNote" placeholder="modello, negozio, link…" autocomplete="off">
-      </div>
-    </div>
-    <div style="margin-top:14px"><button class="primary" id="btnAddWish">Aggiungi</button></div>
-  </section>
-
-  <section class="card">
-    <header>
-      <h2>Lista dei desideri</h2>
-      <span class="muted" style="font-size:12.5px" id="wishSummary"></span>
-    </header>
-    <div class="tbl-scroll">
-      <table id="wishTable">
-        <thead><tr><th class="tal">Desiderio</th><th class="tal">Priorità</th><th>Prezzo</th><th class="tal">Note</th><th>Mesi</th><th></th></tr></thead>
-        <tbody id="wishBody"></tbody>
-        <tfoot id="wishFoot"></tfoot>
-      </table>
-    </div>
-    <div id="wishEmpty" class="empty">
-      <h3>Nessun desiderio in lista</h3>
-      <p>Segna quello che vorresti comprare con il suo prezzo: la dashboard ti dice quanto pesa sul tuo risparmio.</p>
-    </div>
-  </section>
-
-  <section class="card" id="boughtCard">
-    <header>
-      <h2>Già comprati</h2>
-      <span class="muted" style="font-size:12.5px" id="boughtSummary"></span>
-    </header>
-    <div class="tbl-scroll">
-      <table id="boughtTable">
-        <thead><tr><th class="tal">Desiderio</th><th>Prezzo</th><th class="tal">Note</th><th></th></tr></thead>
-        <tbody id="boughtBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-</div><!-- /pageWish -->
-
-<dialog class="modal" id="dlgExp">
-  <form method="dialog" id="frmExp">
-    <div class="mhead"><h3>Nuova spesa</h3><button type="button" class="x" data-close="dlgExp" aria-label="Chiudi">✕</button></div>
-    <div class="mbody">
-      <div class="formgrid">
-        <div class="field" style="grid-column:1/-1"><label for="qDesc">Descrizione</label><input id="qDesc" placeholder="es. Spesa supermercato" autocomplete="off"></div>
-        <div class="field"><label for="qAmount">Importo (€)</label><input id="qAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00"></div>
-        <div class="field"><label for="qCat">Categoria</label>
-          <div class="combo">
-            <input id="qCat" role="combobox" aria-expanded="false" aria-controls="qCatList" aria-autocomplete="list"
-                   autocomplete="off" spellcheck="false" placeholder="cerca o scegli…">
-            <button type="button" class="caret" data-combo="qCat" tabindex="-1" aria-label="Apri l'elenco">▼</button>
-            <ul class="combo-list hidden" id="qCatList" role="listbox" aria-label="Categorie"></ul>
-          </div>
-        </div>
-        <div class="field"><label for="qDate">Data</label><input id="qDate" type="date"></div>
-        <div class="field"><label for="qFreq">Ricorrenza</label>
-          <select id="qFreq">
-            <option value="">nessuna, una volta sola</option>
-            <option value="settimanale">ogni settimana</option>
-            <option value="mensile">ogni mese</option>
-            <option value="bimestrale">ogni 2 mesi</option>
-            <option value="trimestrale">ogni 3 mesi</option>
-            <option value="semestrale">ogni 6 mesi</option>
-            <option value="annuale">ogni anno</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="mfoot">
-      <button type="button" class="ghost" data-close="dlgExp">Annulla</button>
-      <button type="button" class="primary" id="qExpSave">Aggiungi spesa</button>
-    </div>
-  </form>
 </dialog>
 
-<dialog class="modal" id="dlgWish">
-  <form method="dialog" id="frmWish">
-    <div class="mhead"><h3>Nuovo desiderio</h3><button type="button" class="x" data-close="dlgWish" aria-label="Chiudi">✕</button></div>
-    <div class="mbody">
-      <div class="formgrid">
-        <div class="field" style="grid-column:1/-1"><label for="qwName">Cosa vorresti comprare</label><input id="qwName" placeholder="es. Bici gravel" autocomplete="off"></div>
-        <div class="field"><label for="qwAmount">Prezzo (€)</label><input id="qwAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00"></div>
-        <div class="field"><label for="qwPrio">Priorità</label>
-          <select id="qwPrio"><option value="alta">Alta</option><option value="media" selected>Media</option><option value="bassa">Bassa</option></select>
+<dialog class="modal" id="dlgExp">
+  <div class="mhead"><h3>Nuova spesa</h3><button type="button" class="x" data-close="dlgExp">✕</button></div>
+  <div class="mbody">
+    <div class="formgrid">
+      <div class="field" style="grid-column:1/-1"><label for="qDesc">Cosa</label>
+        <input id="qDesc" placeholder="es. spesa al supermercato" autocomplete="off"></div>
+      <div class="field"><label for="qAmount">Quanto (€)</label>
+        <input id="qAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00"></div>
+      <div class="field"><label for="qCat">Categoria</label>
+        <div class="combo">
+          <input id="qCat" role="combobox" aria-expanded="false" aria-controls="qCatList" aria-autocomplete="list"
+                 autocomplete="off" spellcheck="false" placeholder="cerca…">
+          <button type="button" class="caret" data-combo="qCat" tabindex="-1" aria-label="Apri l'elenco">▼</button>
+          <ul class="combo-list hidden" id="qCatList" role="listbox" aria-label="Categorie"></ul>
         </div>
       </div>
+      <div class="field"><label for="qDate">Quando</label><input id="qDate" type="date"></div>
+      <div class="field"><label for="qFreq">Si ripete</label>
+        <select id="qFreq">
+          <option value="">no, una volta sola</option>
+          <option value="settimanale">ogni settimana</option>
+          <option value="mensile">ogni mese</option>
+          <option value="bimestrale">ogni 2 mesi</option>
+          <option value="trimestrale">ogni 3 mesi</option>
+          <option value="semestrale">ogni 6 mesi</option>
+          <option value="annuale">ogni anno</option>
+        </select>
+      </div>
     </div>
-    <div class="mfoot">
-      <button type="button" class="ghost" data-close="dlgWish">Annulla</button>
-      <button type="button" class="primary" id="qWishSave">Aggiungi desiderio</button>
+  </div>
+  <div class="mfoot">
+    <button type="button" class="ghost" data-close="dlgExp">Annulla</button>
+    <button type="button" class="primary" id="qExpSave">Registra</button>
+  </div>
+</dialog>
+
+<dialog class="modal" id="dlgFut">
+  <div class="mhead"><h3 id="futDlgTitle">Nel futuro</h3><button type="button" class="x" data-close="dlgFut">✕</button></div>
+  <div class="mbody">
+    <label>Di che si tratta</label>
+    <div class="seg" id="futKind" style="width:100%;margin-bottom:12px">
+      <button type="button" data-k="need" aria-pressed="true" style="flex:1">Mi serve</button>
+      <button type="button" data-k="want" aria-pressed="false" style="flex:1">Mi piacerebbe</button>
+      <button type="button" data-k="due" aria-pressed="false" style="flex:1">Da pagare</button>
     </div>
-  </form>
+    <div class="formgrid">
+      <div class="field" style="grid-column:1/-1"><label for="fuName">Cosa</label>
+        <input id="fuName" placeholder="es. bici gravel · bollo auto · viaggio in Giappone" autocomplete="off"></div>
+      <div class="field"><label for="fuAmount">Quanto costa (€)</label>
+        <input id="fuAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00"></div>
+      <div class="field"><label for="fuDue">Entro quando <span class="muted" style="font-weight:400">(facoltativo)</span></label>
+        <input id="fuDue" type="date"></div>
+      <div class="field" style="grid-column:1/-1"><label for="fuNote">Note <span class="muted" style="font-weight:400">(facoltativo)</span></label>
+        <input id="fuNote" placeholder="modello, negozio, link…" autocomplete="off"></div>
+    </div>
+    <div class="muted" style="font-size:12px;margin-top:10px" id="fuHint">
+      Se metti una data, ti dico quanto accantonare al mese per arrivarci.
+    </div>
+  </div>
+  <div class="mfoot">
+    <button type="button" class="ghost" data-close="dlgFut">Annulla</button>
+    <button type="button" class="primary" id="fuSave">Aggiungi</button>
+  </div>
 </dialog>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
 <footer class="foot">
-  <span id="footQuotes">Prezzi forniti da Yahoo Finance, ritardati di circa 15 minuti. </span>Strumento personale, non una consulenza finanziaria.
+  <span id="footQuotes">Prezzi da Yahoo Finance, ritardati di ~15 minuti. </span>Strumento personale, non una consulenza finanziaria.
 </footer>
 
 </div>
+
+<nav class="bottomnav" id="bottomnav" aria-label="Sezioni">
+  <button data-tab="exp" aria-selected="true"><span class="ic">🧾</span>Spese</button>
+  <button data-tab="inv" aria-selected="false"><span class="ic">📈</span>Investimenti</button>
+  <button class="fab" id="fabAdd" aria-label="Aggiungi">+</button>
+  <button data-tab="fut" aria-selected="false"><span class="ic">🎯</span>Futuro</button>
+  <button id="navData" aria-selected="false"><span class="ic">⚙</span>Dati</button>
+</nav>
 
 <script>
 /* =====================================================================
@@ -702,7 +701,7 @@ const eur = v => (Math.abs(v) >= 1000 ? nfEur : nfEur2).format(v || 0);
 const dec = (v, d = 1) => new Intl.NumberFormat('it-IT', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
 const pct = (v, d = 1) => (Math.abs(v) < 5e-5 ? '' : v > 0 ? '+' : '−') + dec(Math.abs(v * 100), d) + '%';
 const pctPlain = (v, d = 1) => dec(v * 100, d) + '%';
-const cls = v => v > 0.00005 ? 'pos' : v < -0.00005 ? 'neg' : '';
+const cls = v => v > 0.00005 ? 'up' : v < -0.00005 ? 'down' : '';
 
 const iso = d => {
   const x = new Date(d);
@@ -1137,139 +1136,100 @@ function drawPortfolio(hist) {
 
 /* ------------------------------------------- allocazione a barre */
 function drawAllocation(tot) {
-  const svg = $('#alChart'), wrap = $('#alWrap'), tip = $('#alTip');
-  svg.textContent = ''; $('#alLegend').textContent = '';
+  const bar = $('#allocBar'), leg = $('#allocLegend');
+  if (!bar) return;
+  const COL = ['--s1', '--s3', '--s4', '--s5', '--s2', '--s6'];
   const keys = Object.keys(CATS).filter(k => tot.byCat[k].val > 0 || (SET.targets[k] || 0) > 0);
-  if (!keys.length || !tot.val) { $('#alLegend').innerHTML = '<span class="muted">Nessun dato di allocazione.</span>'; return; }
+  if (!tot.val || !keys.length) { bar.innerHTML = ''; leg.innerHTML = '<span class="muted">Nessun dato.</span>'; return; }
 
-  const W = Math.max(300, wrap.clientWidth || 520);
-  const narrow = W < 470;                      // su schermi stretti l'etichetta va sopra la barra
-  const rowH = narrow ? 60 : 46;
-  const H = keys.length * rowH + 28;
-  const M = { t: narrow ? 14 : 6, r: 54, b: 22, l: narrow ? 4 : 96 };
-  const iw = W - M.l - M.r;
-  const maxv = Math.max(...keys.map(k => Math.max(tot.byCat[k].val / tot.val * 100, SET.targets[k] || 0)), 10) * 1.12;
+  const parts = keys.map((k, i) => {
+    const pctv = tot.byCat[k].val / tot.val * 100;
+    return { k, pctv, tgt: SET.targets[k] || 0, col: cssv(COL[i % COL.length]) };
+  }).filter(p => p.pctv > 0 || p.tgt > 0);
 
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H);
-  const g = el('g'); svg.appendChild(g);
-  const x = v => M.l + v / maxv * iw;
-
-  niceTicks(0, maxv, 4).forEach(v => {
-    g.appendChild(el('line', { x1: x(v), x2: x(v), y1: M.t, y2: H - M.b, class: 'gridline' }));
-    const t = el('text', { x: x(v), y: H - 6, 'text-anchor': 'middle', class: 'axis-lbl' });
-    t.textContent = Math.round(v) + '%'; g.appendChild(t);
-  });
-
-  keys.forEach((k, r) => {
-    const yTop = M.t + r * rowH;
-    const cur = tot.byCat[k].val / tot.val * 100;
-    const tgt = SET.targets[k] || 0;
-    const diff0 = cur - tgt;
-    const lbl = el('text', narrow
-      ? { x: M.l, y: yTop + 6, 'font-size': 12.5, 'font-weight': 600, fill: cssv('--text-primary') }
-      : { x: M.l - 10, y: yTop + rowH / 2 + 4, 'text-anchor': 'end', 'font-size': 12.5, 'font-weight': 600, fill: cssv('--text-primary') });
-    lbl.textContent = CATS[k].label;
-    if (narrow && Math.abs(diff0) >= 5) {
-      const sp = el('tspan', { fill: cssv(diff0 > 0 ? '--serious' : '--series-1'), 'font-size': 11 });
-      sp.textContent = (diff0 > 0 ? '  ▲ ' : '  ▼ ') + Math.abs(diff0).toFixed(0) + ' pt';
-      lbl.appendChild(sp);
-    }
-    g.appendChild(lbl);
-
-    [[cur, cssv('--series-1'), 0], [tgt, cssv('--series-2'), 1]].forEach(([v, col, j]) => {
-      const bh = 13, gap = 2;
-      const by = yTop + (narrow ? 16 : rowH / 2 - bh - gap / 2) + j * (bh + gap);
-      const w = Math.max(0, x(v) - M.l);
-      const rect = el('rect', { x: M.l, y: by, width: w, height: bh, fill: col, rx: 4, ry: 4 });
-      if (w > 0 && w < 8) { rect.setAttribute('width', Math.max(w, 2)); rect.setAttribute('rx', 1); }
-      g.appendChild(rect);
-      const t = el('text', { x: M.l + w + 7, y: by + bh - 2, 'font-size': 11.5, 'font-weight': 600, fill: cssv('--text-secondary') });
-      t.textContent = v.toFixed(1) + '%'; g.appendChild(t);
-    });
-
-    const diff = cur - tgt;
-    if (!narrow && Math.abs(diff) >= 5) {
-      const w = el('text', { x: M.l - 10, y: yTop + rowH / 2 + 17, 'text-anchor': 'end', 'font-size': 10.5, 'font-weight': 650, fill: cssv(diff > 0 ? '--serious' : '--series-1') });
-      w.textContent = (diff > 0 ? '▲ ' : '▼ ') + Math.abs(diff).toFixed(0) + ' pt'; g.appendChild(w);
-    }
-  });
-
-  $('#alLegend').innerHTML =
-    `<span><i class="swatch sq" style="background:${cssv('--series-1')}"></i>Attuale</span>` +
-    `<span><i class="swatch sq" style="background:${cssv('--series-2')}"></i>Obiettivo</span>` +
-    `<span class="muted">Gli scostamenti oltre 5 punti dall'obiettivo sono evidenziati.</span>`;
+  bar.innerHTML = parts.filter(p => p.pctv > 0)
+    .map(p => `<i style="width:${p.pctv}%;background:${p.col}" title="${CATS[p.k].label} ${dec(p.pctv, 0)}%"></i>`).join('');
+  leg.innerHTML = parts.map(p => {
+    const d = p.pctv - p.tgt;
+    return `<span><i style="background:${p.col}"></i>${CATS[p.k].label} <b>${dec(p.pctv, 0)}%</b>` +
+      (Math.abs(d) >= 5 ? ` <span class="drift">${d > 0 ? '▲' : '▼'}${dec(Math.abs(d), 0)}</span>` : '') + `</span>`;
+  }).join('');
 }
+
 
 /* =====================================================================
    6. RENDER UI
    ===================================================================== */
 let STATE = {};
 
-function renderHero(tot, rows) {
+function renderInvSummary(tot, rows) {
   const twr = (() => {
-    // rendimento annualizzato ponderato per tempo, approssimato sul capitale medio
     let num = 0, den = 0;
     for (const r of rows) { if (r.plp == null) continue; num += r.plp * r.amount * r.yrs; den += r.amount * r.yrs; }
     if (!den) return null;
-    const wYrs = rows.reduce((a, r) => a + (r.plp != null ? r.amount * r.yrs : 0), 0) / rows.reduce((a, r) => a + (r.plp != null ? r.amount : 0), 1);
+    const wYrs = rows.reduce((x, r) => x + (r.plp != null ? r.amount * r.yrs : 0), 0) /
+                 rows.reduce((x, r) => x + (r.plp != null ? r.amount : 0), 1);
     const total = num / den;
     return wYrs > 0.08 ? Math.pow(1 + total, 1 / wYrs) - 1 : null;
   })();
-
-  const items = [
-    { k: 'Valore attuale', v: eur(tot.val), s: `${rows.length} posizion${rows.length === 1 ? 'e' : 'i'}` },
-    { k: 'Capitale investito', v: eur(tot.inv), s: 'somma dei versamenti' },
-    { k: 'Utile / perdita', v: (tot.pl >= 0 ? '+' : '−') + eur(Math.abs(tot.pl)), s: pct(tot.plp, 2) + ' complessivo', c: cls(tot.pl) },
-    { k: 'Rendimento annuo', v: twr != null ? pct(twr, 1) : '—', s: twr != null ? 'media annualizzata' : 'serve più storico', c: twr != null ? cls(twr) : '' }
-  ];
-  $('#heroStats').innerHTML = items.map(i =>
-    `<div class="stat"><div class="k">${i.k}</div><div class="v ${i.c || ''}">${i.v}</div><div class="s">${i.s}</div></div>`).join('');
+  $('#invSummary').innerHTML = `
+    <div>
+      <div class="biglab">Valore</div>
+      <div class="big">${eur(tot.val)}</div>
+      <div class="${cls(tot.pl)}" style="font-size:13.5px;font-weight:640;margin-top:2px">
+        ${(tot.pl >= 0 ? '+' : '−') + eur(Math.abs(tot.pl))} · ${pct(tot.plp, 1)}
+      </div>
+    </div>
+    <div class="facts">
+      <div class="fact"><span class="k">Investito</span><span class="v">${eur(tot.inv)}</span></div>
+      <div class="fact"><span class="k">All'anno</span><span class="v ${twr != null ? cls(twr) : ''}">${twr != null ? pct(twr, 1) : '—'}</span></div>
+      <div class="fact"><span class="k">Posizioni</span><span class="v">${rows.length}</span></div>
+    </div>`;
 }
 
 
+
 function renderTable(rows, tot) {
-  const body = $('#posBody'), foot = $('#posFoot');
   $('#posEmpty').classList.toggle('hidden', rows.length > 0);
-  $('#posTable').classList.toggle('hidden', rows.length === 0);
-  if (!rows.length) { body.innerHTML = ''; foot.innerHTML = ''; return; }
+  $('#allocBox').classList.toggle('hidden', rows.length === 0);
+  if (!rows.length) { $('#posRows').innerHTML = ''; return; }
 
-  body.innerHTML = rows.map(r => `
-    <tr data-id="${r.id}">
-      <td class="name"><b>${esc(r.ticker)}</b><small>${r.name === r.ticker ? '' : esc(r.name)}</small></td>
-      <td><span class="pill">${CATS[r.cat].short}</span></td>
-      <td class="num">${dispDate(r.date)}</td>
-      <td class="num">${r.shares != null ? nfSh.format(r.shares) : `<input data-ms="${r.id}" type="number" step="any" placeholder="quote" style="width:78px;padding:4px 6px;font-size:12px">`}</td>
-      <td class="num">${r.price != null ? nfNum.format(r.price) + (r.currency !== 'EUR' ? ' ' + r.currency : ' €') : `<input data-mp="${r.id}" type="number" step="any" placeholder="prezzo" style="width:88px;padding:4px 6px;font-size:12px">`}</td>
-      <td class="num">${eur(r.amount)}</td>
-      <td class="num">${r.value != null ? eur(r.value) : '—'}</td>
-      <td class="num ${cls(r.pl)}">${r.pl != null ? (r.pl >= 0 ? '+' : '−') + eur(Math.abs(r.pl)) : '—'}</td>
-      <td class="num ${cls(r.plp)}">${r.plp != null ? pct(r.plp, 1) : '—'}</td>
-      <td class="num ${cls(r.ann)}">${r.ann != null && r.yrs > 0.25 ? pct(r.ann, 1) : '—'}</td>
-      <td><button class="danger ghost" data-del="${r.id}" style="padding:3px 8px;font-size:12px" title="Elimina">✕</button></td>
-    </tr>`).join('');
+  $('#posRows').innerHTML = rows.map(r => {
+    const manca = r.shares == null || r.price == null;
+    return `<div class="row">
+      <div class="main">
+        <div class="t">${esc(r.ticker)}</div>
+        <div class="s">
+          <span class="pill">${CATS[r.cat].label}</span>
+          <span>${eur(r.amount)} dal ${dispDate(r.date)}</span>
+          ${manca ? `<span>${r.shares == null ? `<input data-ms="${r.id}" type="number" step="any" placeholder="quote" style="width:72px;padding:3px 6px;font-size:11.5px">` : ''}
+            ${r.price == null ? `<input data-mp="${r.id}" type="number" step="any" placeholder="prezzo" style="width:74px;padding:3px 6px;font-size:11.5px">` : ''}</span>` : ''}
+        </div>
+      </div>
+      <div class="amt">${r.value != null ? eur(r.value) : '—'}
+        ${r.pl != null ? `<small class="${cls(r.pl)}">${(r.pl >= 0 ? '+' : '−') + eur(Math.abs(r.pl))} · ${pct(r.plp, 1)}</small>` : ''}</div>
+      <div class="acts"><button class="iconbtn danger" data-del="${r.id}" title="Elimina">✕</button></div>
+    </div>`;
+  }).join('');
 
-  foot.innerHTML = `<tr>
-    <td>Totale</td><td></td><td></td><td></td><td></td>
-    <td class="num">${eur(tot.inv)}</td><td class="num">${eur(tot.val)}</td>
-    <td class="num ${cls(tot.pl)}">${(tot.pl >= 0 ? '+' : '−') + eur(Math.abs(tot.pl))}</td>
-    <td class="num ${cls(tot.plp)}">${pct(tot.plp, 1)}</td><td></td><td></td></tr>`;
-
-  $$('#posBody [data-del]').forEach(b => b.onclick = () => {
+  $$('#posRows [data-del]').forEach(b => b.onclick = () => {
     const r = POS.find(p => p.id === b.dataset.del);
-    if (confirm(`Eliminare ${r.ticker} (${eur(r.amount)} dal ${dispDate(r.date)})?`)) {
-      const delId = b.dataset.del;
-      POS = POS.filter(p => p.id !== delId); savePos(); tomb('pos', delId); boot(false);
+    if (confirm(`Eliminare ${r.ticker} (${eur(r.amount)})?`)) {
+      const id = b.dataset.del;
+      POS = POS.filter(p => p.id !== id); savePos(); tomb('pos', id); boot(false);
     }
   });
-  $$('#posBody [data-mp]').forEach(inp => inp.onchange = () => {
+  $$('#posRows [data-mp]').forEach(inp => inp.onchange = () => {
     const p = POS.find(x => x.id === inp.dataset.mp);
     p.manualPrice = parseFloat(String(inp.value).replace(',', '.')) || null; savePos(); stamp('pos', p.id); refresh();
   });
-  $$('#posBody [data-ms]').forEach(inp => inp.onchange = () => {
+  $$('#posRows [data-ms]').forEach(inp => inp.onchange = () => {
     const p = POS.find(x => x.id === inp.dataset.ms);
     p.shares = parseFloat(String(inp.value).replace(',', '.')) || null; savePos(); stamp('pos', p.id); refresh();
   });
 }
+
+
 
 
 function renderTargets() {
@@ -1302,7 +1262,7 @@ function refresh() {
   const hist = portfolioHistory(rows);
   STATE = { rows, tot, hist };
 
-  renderHero(tot, rows);
+  renderInvSummary(tot, rows);
   renderTable(rows, tot);
   drawPortfolio(hist);
   drawAllocation(tot);
@@ -1342,9 +1302,8 @@ async function loadAll(showSpinner = true) {
 
   const when = new Date().toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   const okCount = list.length - errs.length - unknown.length;
-  setStatus(`<span>Aggiornato ${when}</span><span class="muted">·</span>` +
-    `<span class="muted">${okCount}/${list.length} strumenti in ${((performance.now() - t0) / 1000).toFixed(1)}s · Yahoo Finance via ${workingChannel || '—'}</span>` +
-    `<button class="ghost" id="btnDiag" style="padding:2px 8px;font-size:11.5px;margin-left:4px">diagnostica</button>`);
+  setStatus(`<span>Aggiornato ${when} · ${okCount}/${list.length}</span>` +
+    `<button class="quiet" id="btnDiag" title="Diagnostica del canale dati">ⓘ</button>`);
   const bd = $('#btnDiag'); if (bd) bd.onclick = showDiag;
   refresh();
 }
@@ -1486,13 +1445,14 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(cur === 'auto' ? 'light' : cur === 'light' ? 'dark' : 'auto');
   };
   $('#btnData').onclick = () => { const d = $('#dataPanel'); d.classList.toggle('hidden'); if (!d.classList.contains('hidden')) renderSyncPanel(); };
+  $('#btnCancelAdd').onclick = () => toggleAdd(false);
   $('#btnCloseData').onclick = () => $('#dataPanel').classList.add('hidden');
   $('#btnExport').onclick = exportBackup;
   $('#btnImport').onclick = importBackup;
   $('#btnReset').onclick = resetAll;
+  $('#btnDiag2').onclick = showDiag;
   $('#btnAddToggle').onclick = () => toggleAdd();
   $('#btnAddFirst').onclick = () => toggleAdd(true);
-  $('#btnCancelAdd').onclick = () => toggleAdd(false);
   $('#btnAdd').onclick = addPosition;
   $('#btnDemo').onclick = e => { e.preventDefault(); loadDemo(); };
   $('#btnTargets').onclick = () => { renderTargets(); $('#targetEditor').classList.toggle('hidden'); };
@@ -1507,9 +1467,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* =====================================================================
-   PAGINA SPESE — spese variabili, spese fisse ricorrenti, categorie,
-   calcoli, grafici e lista degli acquisti desiderati.
-   Riusa formattatori, helper SVG e localStorage della pagina Investimenti.
+   SPESE — registro di quello che è già uscito
+   FUTURO  — quello che deve ancora uscire: cose che servono, cose che
+             piacerebbero, e scadenze con una data
    ===================================================================== */
 
 const KE = { EXP: 'inv.expenses.v1', CAT: 'inv.expcats.v1', WISH: 'inv.wishlist.v1',
@@ -1519,7 +1479,6 @@ const KE = { EXP: 'inv.expenses.v1', CAT: 'inv.expcats.v1', WISH: 'inv.wishlist.
 const CAT_DEFAULT = ['Mezzi', 'Ale', 'Coop Voce', 'Collecto', 'Investimenti', 'Benzina', 'Fumo',
   'Cibo Asporto', 'Ristoranti', 'Bar', 'Abbonamenti', 'Cinema&Libri', 'Corea',
   'Assicurazione', 'Bollo', 'Vacanze', 'Vestiti', 'Regali', 'Altro'];
-/* categorie generiche della prima versione: se sono ancora quelle, le sostituisco */
 const CAT_LEGACY = ['Casa', 'Alimentari', 'Trasporti', 'Utenze', 'Salute',
   'Abbonamenti', 'Svago', 'Ristoranti', 'Abbigliamento', 'Assicurazioni', 'Altro'];
 
@@ -1531,39 +1490,33 @@ let ECATS = (() => {
   return st;
 })();
 let WISH = store.get(KE.WISH, []);
-let INCOME = store.get(KE.INC, {});          // { 'AAAA-MM': stipendio }
+let INCOME = store.get(KE.INC, {});
 const saveExp = () => store.set(KE.EXP, EXP);
 const saveCats = () => store.set(KE.CAT, ECATS);
 const saveWish = () => store.set(KE.WISH, WISH);
 const saveIncome = () => store.set(KE.INC, INCOME);
 const incomeOf = ym => +(INCOME[ym] || 0);
 
-/* frequenze: passo e quanti mesi copre una ricorrenza (per l'equivalente mensile) */
 const FREQ = {
-  settimanale:  { label: 'ogni settimana', days: 7,   perMonth: 52 / 12 },
-  mensile:      { label: 'ogni mese',      months: 1, perMonth: 1 },
-  bimestrale:   { label: 'ogni 2 mesi',    months: 2, perMonth: 1 / 2 },
-  trimestrale:  { label: 'ogni 3 mesi',    months: 3, perMonth: 1 / 3 },
-  semestrale:   { label: 'ogni 6 mesi',    months: 6, perMonth: 1 / 6 },
-  annuale:      { label: 'ogni anno',      months: 12, perMonth: 1 / 12 }
+  settimanale:  { label: 'ogni settimana', short: 'sett.', days: 7,   perMonth: 52 / 12 },
+  mensile:      { label: 'ogni mese',      short: 'mese',  months: 1, perMonth: 1 },
+  bimestrale:   { label: 'ogni 2 mesi',    short: '2 mesi', months: 2, perMonth: 1 / 2 },
+  trimestrale:  { label: 'ogni 3 mesi',    short: '3 mesi', months: 3, perMonth: 1 / 3 },
+  semestrale:   { label: 'ogni 6 mesi',    short: '6 mesi', months: 6, perMonth: 1 / 6 },
+  annuale:      { label: 'ogni anno',      short: 'anno',  months: 12, perMonth: 1 / 12 }
 };
 
-/* ------------------------------------------------------- date, senza fusi */
+/* ------------------------------------------------------------- date */
 const ymOf = d => d.slice(0, 7);
 const ymNow = () => iso(Date.now()).slice(0, 7);
-const monthLabel = ym => {
-  const [y, m] = ym.split('-');
-  return ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'][+m - 1] + ' ' + y.slice(2);
-};
-const monthLabelLong = ym => {
-  const [y, m] = ym.split('-');
-  return ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio',
-    'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'][+m - 1] + ' ' + y;
-};
+const MESI_B = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
+const MESI_L = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio',
+  'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+const monthLabel = ym => MESI_B[+ym.split('-')[1] - 1] + ' ' + ym.split('-')[0].slice(2);
+const monthLabelLong = ym => MESI_L[+ym.split('-')[1] - 1] + ' ' + ym.split('-')[0];
 const lastDay = ym => { const [y, m] = ym.split('-').map(Number); return new Date(Date.UTC(y, m, 0)).getUTCDate(); };
 const monthStart = ym => ym + '-01';
 const monthEnd = ym => ym + '-' + String(lastDay(ym)).padStart(2, '0');
-/** aggiunge n mesi a una data ISO tenendo il giorno, con taglio a fine mese corto */
 function addMonths(isoDate, n) {
   const [y, m, d] = isoDate.split('-').map(Number);
   const tot = (y * 12 + (m - 1)) + n;
@@ -1572,43 +1525,45 @@ function addMonths(isoDate, n) {
   return `${ny}-${String(nm).padStart(2, '0')}-${String(nd).padStart(2, '0')}`;
 }
 const addDays = (isoDate, n) => iso(new Date(isoDate + 'T12:00:00Z').getTime() + n * 864e5);
-/** elenco dei mesi da `n` mesi fa a oggi, in ordine */
 function lastMonths(n) {
-  const out = [];
-  const [y, m] = ymNow().split('-').map(Number);
+  const out = [], [y, m] = ymNow().split('-').map(Number);
   for (let i = n - 1; i >= 0; i--) {
     const tot = y * 12 + (m - 1) - i;
     out.push(`${Math.floor(tot / 12)}-${String((tot % 12) + 1).padStart(2, '0')}`);
   }
   return out;
 }
+/** mesi pieni che mancano a una data, minimo 1 */
+const monthsUntil = d => {
+  const t = iso(Date.now());
+  if (d <= t) return 0;
+  const [ay, am] = t.split('-').map(Number), [by, bm] = d.split('-').map(Number);
+  return Math.max(1, (by * 12 + bm) - (ay * 12 + am));
+};
+const dayShort = d => { const [, m, g] = d.split('-'); return +g + ' ' + MESI_B[+m - 1]; };
 
-/* --------------------------------------- espansione delle spese ricorrenti */
-/** date in cui la spesa fissa `e` ricade nell'intervallo [from, to].
-    Ogni scadenza è calcolata dalla data iniziale (start + k periodi) e non
-    dalla precedente: così una spesa del 31 gennaio resta al 31 nei mesi lunghi
-    invece di slittare al 28 per sempre dopo il primo febbraio. */
+/* ------------------------------ ricorrenze ------------------------------ */
+/** date in cui la spesa fissa ricade nell'intervallo; ogni scadenza è
+    calcolata dalla data iniziale, non dalla precedente, così il 31 non slitta */
 function occurrences(e, from, to) {
   const out = [];
   const stop = e.end && e.end < to ? e.end : to;
   const f = FREQ[e.freq] || FREQ.mensile;
   if (e.date > stop) return out;
-
+  let k = 0;
   if (f.days) {
-    let k = 0;
     if (e.date < from) k = Math.max(0, Math.floor((new Date(from + 'T12:00:00Z') - new Date(e.date + 'T12:00:00Z')) / (864e5 * f.days)));
-    for (let guard = 0; guard < 5000; guard++, k++) {
+    for (let g = 0; g < 5000; g++, k++) {
       const d = addDays(e.date, k * f.days);
       if (d > stop) break;
       if (d >= from) out.push(d);
     }
   } else {
-    let k = 0;
     if (e.date < from) {
       const [fy, fm] = from.split('-').map(Number), [dy, dm] = e.date.split('-').map(Number);
       k = Math.max(0, Math.floor(((fy * 12 + fm) - (dy * 12 + dm)) / f.months));
     }
-    for (let guard = 0; guard < 5000; guard++, k++) {
+    for (let g = 0; g < 5000; g++, k++) {
       const d = addMonths(e.date, k * f.months);
       if (d > stop) break;
       if (d >= from) out.push(d);
@@ -1617,168 +1572,199 @@ function occurrences(e, from, to) {
   return out;
 }
 
-/** tutti i movimenti (variabili + occorrenze delle fisse) in un mese */
 function movementsIn(ym) {
-  const a = monthStart(ym), b = monthEnd(ym);
-  const out = [];
+  const a = monthStart(ym), b = monthEnd(ym), out = [];
   for (const e of EXP) {
-    if (!e.fixed) {
-      if (e.date >= a && e.date <= b) out.push({ ...e, when: e.date, type: 'variabile' });
-    } else {
-      for (const d of occurrences(e, a, b)) out.push({ ...e, when: d, type: 'fissa' });
-    }
+    if (!e.fixed) { if (e.date >= a && e.date <= b) out.push({ ...e, when: e.date, type: 'variabile' }); }
+    else for (const d of occurrences(e, a, b)) out.push({ ...e, when: d, type: 'fissa' });
   }
   return out.sort((x, y) => y.when.localeCompare(x.when) || x.desc.localeCompare(y.desc));
 }
 const sum = arr => arr.reduce((a, x) => a + (+x.amount || 0), 0);
 function monthTotals(ym) {
   const mv = movementsIn(ym);
-  const fx = mv.filter(m => m.type === 'fissa'), vr = mv.filter(m => m.type === 'variabile');
-  return { ym, mv, fixed: sum(fx), variable: sum(vr), total: sum(mv) };
+  return { ym, mv, fixed: sum(mv.filter(m => m.type === 'fissa')), variable: sum(mv.filter(m => m.type === 'variabile')), total: sum(mv) };
 }
 const fixedMonthlyEquivalent = () =>
   EXP.filter(e => e.fixed && (!e.end || e.end >= iso(Date.now())))
     .reduce((a, e) => a + (+e.amount || 0) * ((FREQ[e.freq] || FREQ.mensile).perMonth), 0);
 
-/** totali per categoria in un intervallo di mesi */
 function byCategory(months) {
   const acc = {};
   for (const ym of months) for (const m of movementsIn(ym)) acc[m.cat] = (acc[m.cat] || 0) + (+m.amount || 0);
   return Object.entries(acc).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
 }
 
-/* =====================================================================
-   RENDER
-   ===================================================================== */
 let SELMONTH = ymNow();
 
-/** mesi in cui c'è qualcosa da contare: da quello del primo dato a oggi, max 12 */
 function activeMonths() {
   const months = lastMonths(12);
   const dates = EXP.map(e => ymOf(e.date)).concat(Object.keys(INCOME));
   const first = dates.length ? dates.sort()[0] : null;
   return months.filter(m => !first || m >= first);
 }
-
-function renderExpStats() {
-  const cur = monthTotals(SELMONTH);
-  const inc = incomeOf(SELMONTH);
-  const saving = inc - cur.total;
-  const rate = inc > 0 ? saving / inc : null;
-
-  const active = activeMonths();
-  const avg = active.length ? active.reduce((a, m) => a + monthTotals(m).total, 0) / active.length : 0;
-  // risparmio cumulato sui mesi tracciati, come la colonna del tuo foglio
-  const upto = active.filter(m => m <= SELMONTH);
-  const anyIncome = upto.some(m => incomeOf(m) > 0);
-  const cum = upto.reduce((a, m) => a + (incomeOf(m) - monthTotals(m).total), 0);
-
-  const mese = monthLabelLong(SELMONTH).split(' ')[0];
-  const items = [
-    { k: 'Spese di ' + mese, v: eur(cur.total), s: `${cur.mv.length} movimenti` },
-    { k: 'Stipendio', v: inc > 0 ? eur(inc) : '—', s: inc > 0 ? 'entrate del mese' : 'da inserire qui sotto' },
-    { k: 'Risparmio del mese', v: inc > 0 ? (saving >= 0 ? '' : '−') + eur(Math.abs(saving)) : '—',
-      s: rate == null ? 'inserisci lo stipendio del mese' : dec(rate * 100, 1) + '% dello stipendio',
-      c: inc > 0 ? (saving >= 0 ? 'pos' : 'neg') : '' },
-    { k: 'Risparmio cumulato', v: anyIncome ? (cum >= 0 ? '' : '−') + eur(Math.abs(cum)) : '—',
-      s: anyIncome ? (() => { const n = active.filter(m => m <= SELMONTH).length; return `su ${n} mes${n === 1 ? 'e' : 'i'}`; })() : 'nessuno stipendio registrato',
-      c: anyIncome ? (cum >= 0 ? 'pos' : 'neg') : '' },
-    { k: 'Fisse al mese', v: eur(fixedMonthlyEquivalent()), s: 'equivalente mensile' },
-    { k: 'Media spese mensili', v: eur(avg), s: active.length ? `su ${active.length} mes${active.length === 1 ? 'e' : 'i'}` : 'nessun dato' }
-  ];
-  $('#expStats').innerHTML = items.map(i =>
-    `<div class="stat"><div class="k">${i.k}</div><div class="v ${i.c || ''}">${i.v}</div><div class="s">${i.s}</div></div>`).join('');
+/** risparmio medio mensile, sui mesi in cui c'è uno stipendio registrato */
+function avgMonthlySaving() {
+  const act = activeMonths().filter(m => incomeOf(m) > 0);
+  if (!act.length) return null;
+  const v = act.reduce((a, m) => a + (incomeOf(m) - monthTotals(m).total), 0) / act.length;
+  return v > 0 ? v : null;
 }
 
-/* ---------------------------------------------- grafico: spese per mese */
+/* =====================================================================
+   PAGINA SPESE
+   ===================================================================== */
+function renderExpSummary() {
+  const t = monthTotals(SELMONTH);
+  const inc = incomeOf(SELMONTH);
+  const saving = inc - t.total;
+  const rate = inc > 0 ? saving / inc : null;
+  const avg = (() => { const a = activeMonths(); return a.length ? a.reduce((x, m) => x + monthTotals(m).total, 0) / a.length : 0; })();
+
+  $('#expSummary').innerHTML = `
+    <div>
+      <div class="biglab">Speso in ${MESI_L[+SELMONTH.split('-')[1] - 1]}</div>
+      <div class="big">${eur(t.total)}</div>
+    </div>
+    <div class="facts">
+      <div class="fact"><span class="k">Risparmio</span>
+        <span class="v ${inc > 0 ? (saving >= 0 ? 'up' : 'down') : ''}">${inc > 0 ? (saving >= 0 ? '' : '−') + eur(Math.abs(saving)) : '—'}</span></div>
+      <div class="fact"><span class="k">% stipendio</span>
+        <span class="v ${rate == null ? '' : rate >= 0 ? 'up' : 'down'}">${rate == null ? '—' : dec(rate * 100, 0) + '%'}</span></div>
+      <div class="fact"><span class="k">Fisse/mese</span><span class="v">${eur(fixedMonthlyEquivalent())}</span></div>
+      <div class="fact"><span class="k">Media mensile</span><span class="v">${eur(avg)}</span></div>
+    </div>`;
+}
+
+function renderMovements() {
+  const t = monthTotals(SELMONTH);
+  $('#movEmpty').classList.toggle('hidden', t.mv.length > 0);
+  $('#movRows').innerHTML = t.mv.map(m => `
+    <div class="row">
+      <div class="main">
+        <div class="t">${esc(m.desc)}</div>
+        <div class="s"><span>${dayShort(m.when)}</span><span class="pill">${esc(m.cat)}</span>${m.type === 'fissa' ? '<span class="pill">fissa</span>' : ''}</div>
+      </div>
+      <div class="amt">${eur(m.amount)}</div>
+      <div class="acts">${m.type === 'variabile'
+        ? `<button class="iconbtn danger" data-delexp="${m.id}" title="Elimina">✕</button>`
+        : `<button class="iconbtn" data-jumpfix="1" title="Si gestisce fra le spese fisse">↗</button>`}</div>
+    </div>`).join('');
+  $('#monthSummary').textContent = t.mv.length
+    ? `${t.mv.length} movimenti · ${eur(t.variable)} + ${eur(t.fixed)} fisse` : '';
+  wireExpActions();
+}
+
+function renderFixed() {
+  const rows = EXP.filter(e => e.fixed);
+  const today = iso(Date.now());
+  $('#fixEmpty').classList.toggle('hidden', rows.length > 0);
+  $('#fixRows').innerHTML = rows.map(e => {
+    const f = FREQ[e.freq] || FREQ.mensile;
+    const over = e.end && e.end < today;
+    return `<div class="row ${over ? 'done' : ''}">
+      <div class="main">
+        <div class="t">${esc(e.desc)}</div>
+        <div class="s"><span class="pill">${esc(e.cat)}</span><span>ogni ${f.short}</span>${over ? '<span>terminata</span>' : ''}</div>
+      </div>
+      <div class="amt">${eur(e.amount)}<small>${eur(e.amount * f.perMonth)}/mese</small></div>
+      <div class="acts"><button class="iconbtn danger" data-delexp="${e.id}" title="Elimina">✕</button></div>
+    </div>`;
+  }).join('');
+  const m = fixedMonthlyEquivalent();
+  $('#fixSummary').textContent = rows.length ? `· ${eur(m)} al mese` : '';
+  wireExpActions();
+}
+
+function wireExpActions() {
+  $$('[data-delexp]').forEach(b => b.onclick = () => {
+    const e = EXP.find(x => x.id === b.dataset.delexp); if (!e) return;
+    if (!confirm(`Eliminare "${e.desc}" (${eur(e.amount)})?`)) return;
+    EXP = EXP.filter(x => x.id !== e.id); saveExp(); tomb('exp', e.id); renderExpenses();
+  });
+  $$('[data-jumpfix]').forEach(b => b.onclick = () => {
+    $('#foldFix').open = true;
+    $('#foldFix').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+}
+
+/* -------------------------------------------- grafico: spese per mese */
 function drawMonths() {
   const svg = $('#emChart'), wrap = $('#emWrap'), tip = $('#emTip');
   svg.textContent = ''; $('#emLegend').textContent = '';
-  const months = lastMonths(12);
-  const data = months.map(monthTotals);
-  const max = Math.max(...data.map(d => d.total), ...months.map(incomeOf), 1);
+  const months = lastMonths(12), data = months.map(monthTotals);
   if (!EXP.length && !Object.keys(INCOME).length) {
     svg.setAttribute('viewBox', '0 0 10 10'); svg.setAttribute('height', 0);
-    $('#emLegend').innerHTML = '<span class="muted">Registra qualche spesa per vedere l\'andamento mensile.</span>';
+    $('#emLegend').innerHTML = '<span class="muted">Registra qualche spesa e qui vedi come vanno i mesi.</span>';
     return;
   }
   svg.removeAttribute('height');
-
-  const W = Math.max(300, wrap.clientWidth || 520);
-  const H = clamp(Math.round(W * 0.58), 230, 300);
-  const M = { t: 16, r: 8, b: 28, l: 52 };
-  const iw = W - M.l - M.r, ih = H - M.t - M.b;
-  const hi = max * 1.14;
+  const max = Math.max(...data.map(d => d.total), ...months.map(incomeOf), 1);
+  const W = Math.max(280, wrap.clientWidth || 480);
+  const H = clamp(Math.round(W * 0.5), 180, 250);
+  const M = { t: 14, r: 6, b: 24, l: 42 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b, hi = max * 1.16;
   const y = v => M.t + (1 - v / hi) * ih;
-  const bw = Math.min(38, iw / months.length * 0.66);
-  const cx = i => M.l + (i + 0.5) * (iw / months.length);
-  // con 12 mesi le etichette si sovrappongono: ne mostro una ogni `step`,
-  // ancorando il conteggio all'ultimo mese così quello resta sempre etichettato
-  const step = Math.ceil(months.length / Math.max(3, Math.floor(iw / 42)));
+  const slot = iw / months.length;
+  const bw = Math.min(30, slot * 0.6);
+  const cx = i => M.l + (i + 0.5) * slot;
+  const step = Math.ceil(months.length / Math.max(3, Math.floor(iw / 40)));
 
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H);
   const g = el('g'); svg.appendChild(g);
-
-  niceTicks(0, hi, 4).forEach(v => {
+  niceTicks(0, hi, 3).forEach(v => {
     g.appendChild(el('line', { x1: M.l, x2: M.l + iw, y1: y(v), y2: y(v), class: 'gridline' }));
-    const t = el('text', { x: M.l - 8, y: y(v) + 4, 'text-anchor': 'end', class: 'axis-lbl' });
-    t.textContent = (v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1) + 'k' : Math.round(v)) + ' €';
+    const t = el('text', { x: M.l - 7, y: y(v) + 3.5, 'text-anchor': 'end', class: 'axis-lbl' });
+    t.textContent = v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1) + 'k' : Math.round(v);
     g.appendChild(t);
   });
 
-  const C1 = cssv('--series-1'), C2 = cssv('--series-2'), C3 = cssv('--series-3');
-  // linea dello stipendio: stessa unità di misura delle barre, quindi stesso asse
+  const C1 = cssv('--s1'), C2 = cssv('--s2'), C3 = cssv('--s3');
   const incPts = months.map((m, i) => ({ i, v: incomeOf(m) })).filter(o => o.v > 0);
+
   data.forEach((d, i) => {
     const x = cx(i) - bw / 2;
-    // impilate: variabili sotto, fisse sopra, con 2px di superficie a separarle
-    const hv = Math.max(0, y(0) - y(d.variable));
-    const hf = Math.max(0, y(0) - y(d.fixed));
-    if (d.variable > 0) g.appendChild(el('rect', { x, y: y(d.variable), width: bw, height: hv, fill: C1, rx: 4 }));
-    if (d.fixed > 0) g.appendChild(el('rect', { x, y: y(d.total) , width: bw, height: Math.max(0, hf - (d.variable > 0 ? 2 : 0)), fill: C2, rx: 4 }));
+    if (d.variable > 0) g.appendChild(el('rect', { x, y: y(d.variable), width: bw, height: Math.max(0, y(0) - y(d.variable)), fill: C1, rx: 4 }));
+    if (d.fixed > 0) g.appendChild(el('rect', { x, y: y(d.total), width: bw, height: Math.max(0, (y(0) - y(d.fixed)) - (d.variable > 0 ? 2 : 0)), fill: C2, rx: 4 }));
     if ((data.length - 1 - i) % step === 0) {
-      const lbl = el('text', { x: cx(i), y: H - 9, 'text-anchor': 'middle', class: 'axis-lbl' });
+      const lbl = el('text', { x: cx(i), y: H - 8, 'text-anchor': 'middle', class: 'axis-lbl' });
       lbl.textContent = monthLabel(d.ym); g.appendChild(lbl);
     }
-    if (i === data.length - 1 && d.total > 0) {
-      const v = el('text', { x: cx(i), y: y(d.total) - 7, 'text-anchor': 'middle', 'font-size': 11.5, 'font-weight': 700, fill: cssv('--text-primary') });
+    if (d.ym === SELMONTH && d.total > 0) {
+      const v = el('text', { x: cx(i), y: y(d.total) - 6, 'text-anchor': 'middle', 'font-size': 11, 'font-weight': 680, fill: cssv('--ink') });
       v.textContent = eur(d.total); g.appendChild(v);
     }
-    const hit = el('rect', { x: cx(i) - iw / months.length / 2, y: M.t, width: iw / months.length, height: ih, fill: 'transparent' });
+    const hit = el('rect', { x: cx(i) - slot / 2, y: M.t, width: slot, height: ih, fill: 'transparent', style: 'cursor:pointer' });
     hit.addEventListener('mouseenter', () => {
       const inc = incomeOf(d.ym), sv = inc - d.total;
       tip.innerHTML = `<div class="th">${monthLabelLong(d.ym)}</div>
         <div class="tr"><span><i class="swatch" style="display:inline-block;background:${C1}"></i> Variabili</span><b>${eur(d.variable)}</b></div>
         <div class="tr"><span><i class="swatch" style="display:inline-block;background:${C2}"></i> Fisse</span><b>${eur(d.fixed)}</b></div>
-        <div class="tr" style="margin-top:3px"><span>Spese totali</span><b>${eur(d.total)}</b></div>
-        ${inc > 0 ? `<div class="tr"><span><i class="swatch" style="display:inline-block;background:${C3}"></i> Stipendio</span><b>${eur(inc)}</b></div>
-        <div class="tr"><span>Risparmio</span><b class="${sv >= 0 ? 'pos' : 'neg'}">${(sv >= 0 ? '' : '−') + eur(Math.abs(sv))}</b></div>` : ''}`;
+        <div class="tr" style="margin-top:3px"><span>Totale</span><b>${eur(d.total)}</b></div>
+        ${inc > 0 ? `<div class="tr"><span>Risparmio</span><b class="${sv >= 0 ? 'up' : 'down'}">${(sv >= 0 ? '' : '−') + eur(Math.abs(sv))}</b></div>` : ''}`;
       tip.style.opacity = 1;
-      const r = svg.getBoundingClientRect(), tw = tip.offsetWidth || 170;
+      const r = svg.getBoundingClientRect(), tw = tip.offsetWidth || 150;
       tip.style.left = clamp(cx(i) / W * r.width - tw / 2, 4, r.width - tw - 4) + 'px';
-      tip.style.top = '4px';
+      tip.style.top = '2px';
     });
     hit.addEventListener('mouseleave', () => { tip.style.opacity = 0; });
-    hit.addEventListener('click', () => { SELMONTH = d.ym; $('#monthSel').value = d.ym; renderMonthView(); });
+    hit.addEventListener('click', () => { SELMONTH = d.ym; $('#monthSel').value = d.ym; renderMonthView(); drawMonths(); });
     g.appendChild(hit);
   });
 
-  // la linea dello stipendio va disegnata sopra le barre ma sotto le aree sensibili
   if (incPts.length) {
-    let dPath = '';
-    incPts.forEach((o, k) => { dPath += (k ? ' L ' : 'M ') + cx(o.i) + ' ' + y(o.v); });
-    g.appendChild(el('path', { d: dPath, fill: 'none', stroke: C3, 'stroke-width': 2, 'stroke-dasharray': '6 4', 'stroke-linejoin': 'round' }));
-    incPts.forEach(o => g.appendChild(el('circle', { cx: cx(o.i), cy: y(o.v), r: 4, fill: C3, stroke: cssv('--surface-1'), 'stroke-width': 2 })));
+    let p = '';
+    incPts.forEach((o, k) => { p += (k ? ' L ' : 'M ') + cx(o.i) + ' ' + y(o.v); });
+    g.appendChild(el('path', { d: p, fill: 'none', stroke: C3, 'stroke-width': 2, 'stroke-dasharray': '5 4' }));
   }
-
   $('#emLegend').innerHTML =
     `<span><i class="swatch sq" style="background:${C1}"></i>Variabili</span>` +
     `<span><i class="swatch sq" style="background:${C2}"></i>Fisse</span>` +
     (incPts.length ? `<span><i class="swatch" style="background:${C3}"></i>Stipendio</span>` : '') +
-    `<span class="muted">Clicca un mese per vederne i movimenti.</span>`;
+    `<span class="muted">tocca un mese</span>`;
 }
 
-/* ------------------------------------------- grafico: spese per categoria */
+/* ---------------------------------------------- grafico: per categoria */
 function drawCategories() {
   const svg = $('#ecChart'), wrap = $('#ecWrap'), tip = $('#ecTip');
   svg.textContent = ''; $('#ecLegend').textContent = '';
@@ -1793,114 +1779,34 @@ function drawCategories() {
     return;
   }
   svg.removeAttribute('height');
-
-  const W = Math.max(300, wrap.clientWidth || 520);
-  const narrow = W < 470;
-  const rowH = narrow ? 44 : 34;
-  const H = rows.length * rowH + 12;
-  const M = { t: 6, r: narrow ? 8 : 116, l: narrow ? 4 : 128 };
+  const W = Math.max(280, wrap.clientWidth || 480);
+  const narrow = W < 440;
+  const rowH = narrow ? 40 : 30;
+  const H = rows.length * rowH + 6;
+  const M = { t: 4, r: narrow ? 6 : 108, l: narrow ? 2 : 118 };
   const iw = W - M.l - M.r;
-  const tot = rows.reduce((a, r) => a + r[1], 0);
-  const max = rows[0][1] * 1.02;
-  const x = v => (v / max) * iw;
-
+  const tot = rows.reduce((a, r) => a + r[1], 0), max = rows[0][1] * 1.02;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H);
   const g = el('g'); svg.appendChild(g);
-  const C = cssv('--series-1');
+  const C = cssv('--s1');
 
   rows.forEach(([cat, v], i) => {
-    const yTop = M.t + i * rowH;
-    const bh = 14;
-    const by = yTop + (narrow ? 18 : (rowH - bh) / 2);
+    const yTop = M.t + i * rowH, bh = 12;
+    const by = yTop + (narrow ? 16 : (rowH - bh) / 2);
     const lbl = el('text', narrow
-      ? { x: M.l, y: yTop + 12, 'font-size': 12.5, 'font-weight': 600, fill: cssv('--text-primary') }
-      : { x: M.l - 10, y: by + bh - 3, 'text-anchor': 'end', 'font-size': 12.5, 'font-weight': 600, fill: cssv('--text-primary') });
+      ? { x: M.l, y: yTop + 11, 'font-size': 12.5, 'font-weight': 600, fill: cssv('--ink') }
+      : { x: M.l - 9, y: by + bh - 2, 'text-anchor': 'end', 'font-size': 12.5, 'font-weight': 600, fill: cssv('--ink') });
     lbl.textContent = cat; g.appendChild(lbl);
-
-    const w = Math.max(2, x(v));
+    const w = Math.max(2, v / max * iw);
     g.appendChild(el('rect', { x: M.l, y: by, width: w, height: bh, fill: C, rx: 4 }));
     const t = el('text', narrow
-      ? { x: W - 4, y: yTop + 12, 'text-anchor': 'end', 'font-size': 11.5, 'font-weight': 600, fill: cssv('--text-secondary') }
-      : { x: M.l + w + 8, y: by + bh - 2, 'font-size': 11.5, 'font-weight': 600, fill: cssv('--text-secondary') });
+      ? { x: W - 4, y: yTop + 11, 'text-anchor': 'end', 'font-size': 11.5, 'font-weight': 600, fill: cssv('--ink-2') }
+      : { x: M.l + w + 8, y: by + bh - 1.5, 'font-size': 11.5, 'font-weight': 600, fill: cssv('--ink-2') });
     t.textContent = eur(v) + '  ·  ' + dec(v / tot * 100, 0) + '%';
     g.appendChild(t);
-
-    const hit = el('rect', { x: 0, y: yTop, width: W, height: rowH, fill: 'transparent' });
-    hit.addEventListener('mouseenter', () => {
-      tip.innerHTML = `<div class="th">${cat}</div>
-        <div class="tr"><span>Totale</span><b>${eur(v)}</b></div>
-        <div class="tr"><span>Quota</span><b>${dec(v / tot * 100, 1)}%</b></div>
-        <div class="tr"><span>Al mese</span><b>${eur(v / months.length)}</b></div>`;
-      tip.style.opacity = 1;
-      const r = svg.getBoundingClientRect(), tw = tip.offsetWidth || 160;
-      tip.style.left = clamp(W * 0.4 / W * r.width, 4, r.width - tw - 4) + 'px';
-      tip.style.top = clamp(yTop / H * r.height - 6, 2, r.height - 90) + 'px';
-    });
-    hit.addEventListener('mouseleave', () => { tip.style.opacity = 0; });
-    g.appendChild(hit);
   });
-
-  const per = mode === 'month' ? monthLabelLong(SELMONTH) : mode === 'year' ? 'anno ' + ymNow().slice(0, 4) : 'ultimi 12 mesi';
-  $('#ecLegend').innerHTML = `<span><i class="swatch sq" style="background:${C}"></i>Totale per categoria — ${per}</span><span class="muted">Totale ${eur(tot)}</span>`;
-}
-
-/* ------------------------------------------------------- tabella fisse */
-function renderFixed() {
-  const rows = EXP.filter(e => e.fixed);
-  $('#fixEmpty').classList.toggle('hidden', rows.length > 0);
-  $('#fixTable').classList.toggle('hidden', rows.length === 0);
-  const today = iso(Date.now());
-  $('#fixBody').innerHTML = rows.map(e => {
-    const f = FREQ[e.freq] || FREQ.mensile;
-    const over = e.end && e.end < today;
-    return `<tr data-id="${e.id}" style="${over ? 'opacity:.55' : ''}">
-      <td class="name"><b>${esc(e.desc)}</b>${over ? '<small>terminata</small>' : ''}</td>
-      <td class="tal">${esc(e.cat)}</td>
-      <td class="num">${eur(e.amount)}</td>
-      <td class="tal">${f.label}</td>
-      <td class="num">${dispDate(e.date)}</td>
-      <td class="num">${e.end ? dispDate(e.end) : '—'}</td>
-      <td class="num">${eur(e.amount * f.perMonth)}</td>
-      <td><button class="danger ghost" data-delexp="${e.id}" style="padding:3px 8px;font-size:12px" title="Elimina">✕</button></td>
-    </tr>`;
-  }).join('');
-  const mth = fixedMonthlyEquivalent();
-  $('#fixFoot').innerHTML = rows.length ? `<tr><td>Totale</td><td></td><td></td><td></td><td></td><td></td>
-    <td class="num">${eur(mth)}</td><td></td></tr>` : '';
-  $('#fixSummary').textContent = rows.length ? `${eur(mth)} al mese · ${eur(mth * 12)} all'anno` : '';
-  wireDelete();
-}
-
-/* --------------------------------------------------- movimenti del mese */
-function renderMovements() {
-  const t = monthTotals(SELMONTH);
-  $('#movEmpty').classList.toggle('hidden', t.mv.length > 0);
-  $('#movTable').classList.toggle('hidden', t.mv.length === 0);
-  $('#movBody').innerHTML = t.mv.map(m => `<tr>
-      <td class="num">${dispDate(m.when)}</td>
-      <td class="name"><b>${esc(m.desc)}</b></td>
-      <td class="tal">${esc(m.cat)}</td>
-      <td class="tal"><span class="pill">${m.type === 'fissa' ? 'FISSA' : 'VAR'}</span></td>
-      <td class="num">${eur(m.amount)}</td>
-      <td>${m.type === 'variabile'
-        ? `<button class="danger ghost" data-delexp="${m.id}" style="padding:3px 8px;font-size:12px" title="Elimina">✕</button>`
-        : `<span class="muted" style="font-size:11px" title="Si elimina dalla tabella delle spese fisse">ricorrente</span>`}</td>
-    </tr>`).join('');
-  $('#movFoot').innerHTML = t.mv.length
-    ? `<tr><td>Totale</td><td></td><td></td><td></td><td class="num">${eur(t.total)}</td><td></td></tr>` : '';
-  $('#monthSummary').textContent = t.mv.length
-    ? `${eur(t.variable)} variabili + ${eur(t.fixed)} fisse` : '';
-  wireDelete();
-}
-
-function wireDelete() {
-  $$('[data-delexp]').forEach(b => b.onclick = () => {
-    const e = EXP.find(x => x.id === b.dataset.delexp);
-    if (!e) return;
-    if (confirm(`Eliminare "${e.desc}" (${eur(e.amount)}${e.fixed ? ', spesa fissa ' + (FREQ[e.freq] || FREQ.mensile).label : ''})?`)) {
-      EXP = EXP.filter(x => x.id !== e.id); saveExp(); tomb('exp', e.id); renderExpenses();
-    }
-  });
+  const per = mode === 'month' ? monthLabelLong(SELMONTH) : mode === 'year' ? ymNow().slice(0, 4) : 'ultimi 12 mesi';
+  $('#ecLegend').innerHTML = `<span class="muted">${per} · totale ${eur(tot)}</span>`;
 }
 
 /* --------------------------------------------------------- categorie */
@@ -1909,34 +1815,34 @@ function renderCats() {
   for (const e of EXP) used[e.cat] = (used[e.cat] || 0) + 1;
   $('#catChips').innerHTML = ECATS.map(c =>
     `<span class="chip">${esc(c)}${used[c] ? `<span class="muted" style="font-weight:400">${used[c]}</span>` : ''}
-      <button class="x" data-delcat="${esc(c)}" title="${used[c] ? 'In uso da ' + used[c] + ' spese' : 'Elimina'}">✕</button></span>`).join('');
+      <button class="x" data-delcat="${esc(c)}" title="${used[c] ? 'In uso' : 'Elimina'}">✕</button></span>`).join('');
   $$('#catChips [data-delcat]').forEach(b => b.onclick = () => {
     const c = b.dataset.delcat;
-    if (used[c]) return alert(`"${c}" è usata da ${used[c]} spes${used[c] === 1 ? 'a' : 'e'}. Riassegnale prima di eliminarla.`);
+    if (used[c]) return alert(`"${c}" è usata da ${used[c]} spes${used[c] === 1 ? 'a' : 'e'}. Riassegnale prima.`);
     if (ECATS.length <= 1) return alert('Serve almeno una categoria.');
     ECATS = ECATS.filter(x => x !== c); saveCats(); stampScalar('cats'); renderCats(); refreshAllCombos();
   });
 }
-/* ---------------------------------------------------------------------
-   Menù categorie con ricerca: un campo di testo che filtra l'elenco
-   mentre scrivi, navigabile da tastiera, e che permette di creare al volo
-   una categoria che non esiste ancora.
-   `input.value` resta sempre il nome di una categoria valida, così il
-   resto del codice continua a leggerlo come faceva col menù a tendina.
-   --------------------------------------------------------------------- */
+function addCategory() {
+  const v = $('#newCat').value.trim();
+  if (!v) return;
+  if (ECATS.some(c => c.toLowerCase() === v.toLowerCase())) return alert('Categoria già presente.');
+  ECATS.push(v); saveCats(); stampScalar('cats'); $('#newCat').value = '';
+  renderCats(); refreshAllCombos(); toast('Categoria creata: ' + v);
+}
+
+/* ---------------------------------------------------- menù con ricerca */
 const COMBOS = [];
-const normTxt = x => String(x || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+const normTxt = x => String(x || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
 
 function initCombo(inputId, listId) {
   const input = $('#' + inputId), list = $('#' + listId);
   if (!input || !list) return null;
   let items = [], active = -1, last = '';
-
   const isOpen = () => !list.classList.contains('hidden');
 
   function build(q) {
-    const n = normTxt(q);
-    const starts = [], has = [];
+    const n = normTxt(q), starts = [], has = [];
     for (const c of ECATS) {
       const nc = normTxt(c);
       if (!n || nc.startsWith(n)) starts.push(c); else if (nc.includes(n)) has.push(c);
@@ -1944,45 +1850,28 @@ function initCombo(inputId, listId) {
     items = starts.concat(has);
     const exact = ECATS.some(c => normTxt(c) === n);
     const rows = items.map((c, i) =>
-      `<li role="option" id="${listId}-o${i}" data-v="${esc(c)}" class="${i === active ? 'on' : ''}" aria-selected="${i === active}">${esc(c)}</li>`);
-    if (n && !exact) rows.push(`<li role="option" id="${listId}-o${items.length}" data-new="${esc(q.trim())}" class="create ${items.length === active ? 'on' : ''}">Crea categoria «${esc(q.trim())}»</li>`);
+      `<li role="option" id="${listId}-o${i}" data-v="${esc(c)}" class="${i === active ? 'on' : ''}">${esc(c)}</li>`);
+    if (n && !exact) rows.push(`<li role="option" data-new="${esc(q.trim())}" class="create ${items.length === active ? 'on' : ''}">Crea «${esc(q.trim())}»</li>`);
     if (!rows.length) rows.push('<li class="none">Nessuna categoria</li>');
     list.innerHTML = rows.join('');
-    const act = list.querySelector('.on');
-    input.setAttribute('aria-activedescendant', act ? act.id : '');
-    list.querySelectorAll('li[data-v],li[data-new]').forEach(li => {
+    list.querySelectorAll('li[data-v],li[data-new]').forEach((li, i) => {
       li.addEventListener('mousedown', ev => { ev.preventDefault(); choose(li); });
       li.addEventListener('mouseenter', () => {
         list.querySelectorAll('li').forEach(x => x.classList.remove('on'));
-        li.classList.add('on');
-        active = [...list.querySelectorAll('li[data-v],li[data-new]')].indexOf(li);
+        li.classList.add('on'); active = i;
       });
     });
   }
-
-  /** se sotto non c'è spazio (tipico sul telefono) l'elenco si apre verso l'alto */
   function place() {
     const r = input.getBoundingClientRect();
-    const need = Math.min(244, list.scrollHeight + 10);
+    const need = Math.min(238, list.scrollHeight + 10);
     list.classList.toggle('up', r.bottom + need > innerHeight && r.top > need + 8);
   }
-  function open(q) {
-    active = 0;
-    build(q === undefined ? '' : q);
-    list.classList.remove('hidden');
-    input.setAttribute('aria-expanded', 'true');
-    place();
-  }
-  function close() {
-    list.classList.add('hidden');
-    input.setAttribute('aria-expanded', 'false');
-    input.removeAttribute('aria-activedescendant');
-    active = -1;
-  }
-  /** se il testo scritto non è una categoria valida, torna all'ultima buona */
+  function open(q) { active = 0; build(q === undefined ? '' : q); list.classList.remove('hidden'); input.setAttribute('aria-expanded', 'true'); place(); }
+  function close() { list.classList.add('hidden'); input.setAttribute('aria-expanded', 'false'); active = -1; }
   function revert() {
-    const match = ECATS.find(c => normTxt(c) === normTxt(input.value));
-    input.value = match || (ECATS.includes(last) ? last : (ECATS[0] || ''));
+    const m = ECATS.find(c => normTxt(c) === normTxt(input.value));
+    input.value = m || (ECATS.includes(last) ? last : (ECATS[0] || ''));
     last = input.value;
   }
   function choose(li) {
@@ -1991,24 +1880,16 @@ function initCombo(inputId, listId) {
       if (!ECATS.some(c => normTxt(c) === normTxt(name))) {
         ECATS.push(name); saveCats(); stampScalar('cats');
         if ($('#catChips')) renderCats();
-        refreshAllCombos();
-        toast('Categoria creata: ' + name);
+        refreshAllCombos(); toast('Categoria creata: ' + name);
       }
       input.value = name;
-    } else {
-      input.value = li.dataset.v;
-    }
-    last = input.value;
-    close();
+    } else input.value = li.dataset.v;
+    last = input.value; close();
   }
 
   input.addEventListener('focus', () => open(''));
   input.addEventListener('click', () => { if (!isOpen()) open(''); });
-  input.addEventListener('input', () => {
-    active = 0; build(input.value);
-    if (!isOpen()) { list.classList.remove('hidden'); input.setAttribute('aria-expanded', 'true'); }
-    place();
-  });
+  input.addEventListener('input', () => { active = 0; build(input.value); list.classList.remove('hidden'); input.setAttribute('aria-expanded', 'true'); place(); });
   input.addEventListener('blur', () => setTimeout(() => { if (isOpen()) close(); revert(); }, 120));
   input.addEventListener('keydown', e => {
     const opts = list.querySelectorAll('li[data-v],li[data-new]');
@@ -2020,7 +1901,6 @@ function initCombo(inputId, listId) {
       build(input.value);
       const on = list.querySelector('.on'); if (on) on.scrollIntoView({ block: 'nearest' });
     } else if (e.key === 'Enter') {
-      // mai lasciar passare l'invio: dentro la finestra rapida chiuderebbe il modulo
       e.preventDefault(); e.stopPropagation();
       if (isOpen() && opts[active]) choose(opts[active]); else revert();
     } else if (e.key === 'Escape') {
@@ -2030,11 +1910,10 @@ function initCombo(inputId, listId) {
   const caret = document.querySelector(`.caret[data-combo="${inputId}"]`);
   if (caret) caret.addEventListener('mousedown', e => {
     e.preventDefault();
-    if (isOpen()) { close(); } else { input.focus(); open(''); }
+    if (isOpen()) close(); else { input.focus(); open(''); }
   });
 
   const api = {
-    id: inputId,
     get value() { return input.value; },
     set value(v) { if (ECATS.includes(v)) { input.value = v; last = v; } },
     refresh() {
@@ -2043,98 +1922,11 @@ function initCombo(inputId, listId) {
       if (isOpen()) build(input.value);
     }
   };
-  COMBOS.push(api);
-  return api;
+  COMBOS.push(api); return api;
 }
 function refreshAllCombos() { COMBOS.forEach(c => c.refresh()); }
 
-function fillCatSelect() { refreshAllCombos(); }
-
-/* =====================================================================
-   PAGINA DESIDERI
-   ===================================================================== */
-const PRIO_ORDER = { alta: 0, media: 1, bassa: 2 };
-const wishPrio = w => w.prio || 'media';
-
-/** risparmio medio mensile: serve a tradurre un prezzo in "quanti mesi" */
-function avgMonthlySaving() {
-  const active = activeMonths().filter(m => incomeOf(m) > 0);
-  if (!active.length) return null;
-  const v = active.reduce((a, m) => a + (incomeOf(m) - monthTotals(m).total), 0) / active.length;
-  return v > 0 ? v : null;
-}
-const monthsToAfford = amount => {
-  const s = avgMonthlySaving();
-  return s ? amount / s : null;
-};
-const monthsLabel = m => m == null ? '—' : m < 1 ? 'meno di 1' : dec(m, 1);
-
-
-function renderWish() {
-  const open = WISH.filter(w => !w.bought)
-    .sort((a, b) => PRIO_ORDER[wishPrio(a)] - PRIO_ORDER[wishPrio(b)] || (+b.amount || 0) - (+a.amount || 0));
-  const done = WISH.filter(w => w.bought);
-
-  $('#wishEmpty').classList.toggle('hidden', open.length > 0);
-  $('#wishTable').classList.toggle('hidden', open.length === 0);
-  $('#wishBody').innerHTML = open.map(w => `<tr>
-      <td class="name"><b>${esc(w.name)}</b></td>
-      <td class="tal"><span class="prio" data-p="${esc(wishPrio(w))}">${esc(wishPrio(w).toUpperCase())}</span></td>
-      <td class="num">${eur(w.amount)}</td>
-      <td class="tal muted" style="max-width:240px;overflow:hidden;text-overflow:ellipsis">${esc(w.note || '')}</td>
-      <td class="num muted">${monthsLabel(monthsToAfford(+w.amount || 0))}</td>
-      <td style="white-space:nowrap">
-        <button class="ghost" data-buy="${w.id}" style="padding:3px 8px;font-size:12px" title="Segna come comprato">✓</button>
-        <button class="danger ghost" data-delwish="${w.id}" style="padding:3px 8px;font-size:12px" title="Elimina">✕</button>
-      </td>
-    </tr>`).join('');
-  const tot = open.reduce((a, w) => a + (+w.amount || 0), 0);
-  $('#wishFoot').innerHTML = open.length
-    ? `<tr><td>Totale</td><td></td><td class="num">${eur(tot)}</td><td></td><td class="num">${monthsLabel(monthsToAfford(tot))}</td><td></td></tr>` : '';
-  $('#wishSummary').textContent = open.length ? `${open.length} in lista · ${eur(tot)}` : '';
-
-  $('#boughtCard').classList.toggle('hidden', done.length === 0);
-  $('#boughtBody').innerHTML = done.map(w => `<tr class="bought">
-      <td class="name"><b>${esc(w.name)}</b></td>
-      <td class="num">${eur(w.amount)}</td>
-      <td class="tal muted">${esc(w.note || '')}</td>
-      <td style="white-space:nowrap">
-        <button class="ghost" data-unbuy="${w.id}" style="padding:3px 8px;font-size:12px" title="Rimetti in lista">↩</button>
-        <button class="danger ghost" data-delwish="${w.id}" style="padding:3px 8px;font-size:12px" title="Elimina">✕</button>
-      </td>
-    </tr>`).join('');
-  $('#boughtSummary').textContent = done.length ? `${done.length} · ${eur(done.reduce((a, w) => a + (+w.amount || 0), 0))}` : '';
-
-  $$('#pageWish [data-delwish]').forEach(b => b.onclick = () => {
-    const w = WISH.find(x => x.id === b.dataset.delwish); if (!w) return;
-    if (!confirm(`Eliminare "${w.name}" dalla lista?`)) return;
-    WISH = WISH.filter(x => x.id !== w.id); saveWish(); tomb('wish', w.id); renderWishPage();
-  });
-  $$('#pageWish [data-buy]').forEach(b => b.onclick = () => {
-    const w = WISH.find(x => x.id === b.dataset.buy); if (!w) return;
-    w.bought = true; w.boughtAt = iso(Date.now()); saveWish(); stamp('wish', w.id); renderWishPage();
-  });
-  $$('#pageWish [data-unbuy]').forEach(b => b.onclick = () => {
-    const w = WISH.find(x => x.id === b.dataset.unbuy); if (!w) return;
-    w.bought = false; delete w.boughtAt; saveWish(); stamp('wish', w.id); renderWishPage();
-  });
-}
-
-function renderWishPage() { renderWish(); }
-
-function addWish() {
-  const name = $('#wName').value.trim();
-  const amount = parseFloat(($('#wAmount').value || '').replace(',', '.'));
-  if (!name) return alert('Scrivi cosa vorresti comprare.');
-  if (!(amount > 0)) return alert('Inserisci il prezzo previsto.');
-  const nw = { id: uid(), name, amount, prio: $('#wPrio').value, note: $('#wNote').value.trim(), bought: false };
-  WISH.push(nw);
-  saveWish(); stamp('wish', nw.id);
-  $('#wName').value = ''; $('#wAmount').value = ''; $('#wNote').value = '';
-  renderWishPage(); $('#wName').focus();
-}
-
-/* ------------------------------------------------------------- helpers */
+/* --------------------------------------------------------- helpers */
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
 function fillMonthSel() {
@@ -2145,72 +1937,186 @@ function fillMonthSel() {
   if (!list.includes(SELMONTH)) SELMONTH = list[0] || ymNow();
   $('#monthSel').value = SELMONTH;
 }
-
-/** tutto ciò che dipende dal mese selezionato */
 function renderMonthView() {
   $('#incomeInput').value = INCOME[SELMONTH] != null ? INCOME[SELMONTH] : '';
-  renderExpStats(); renderMovements(); drawCategories();
+  renderExpSummary(); renderMovements(); drawCategories();
 }
-
 function renderExpenses() {
-  fillCatSelect(); renderCats(); fillMonthSel();
+  refreshAllCombos(); renderCats(); fillMonthSel();
   renderFixed(); drawMonths(); renderMonthView();
 }
 
-/* ------------------------------------------------------- inserimento */
-function addCategory() {
-  const v = $('#newCat').value.trim();
-  if (!v) return;
-  if (ECATS.some(c => c.toLowerCase() === v.toLowerCase())) return alert('Categoria già presente.');
-  ECATS.push(v); saveCats(); stampScalar('cats'); $('#newCat').value = '';
-  renderCats(); refreshAllCombos();
-  toast('Categoria creata: ' + v);
+/* =====================================================================
+   PAGINA FUTURO
+   Tre tipi: 'need' mi serve · 'want' mi piacerebbe · 'due' da pagare
+   ===================================================================== */
+const KIND = {
+  need: { label: 'Mi serve', tag: 'SERVE', order: 0 },
+  want: { label: 'Mi piacerebbe', tag: 'PIACE', order: 2 },
+  due:  { label: 'Da pagare', tag: 'SCADE', order: 1 }
+};
+/** i vecchi desideri diventano voci del futuro senza perdere niente */
+const kindOf = w => w.kind || (w.prio === 'alta' ? 'need' : 'want');
+let FUTFILTER = 'all';
+
+/** quanto accantonare al mese per arrivare in tempo */
+function perMonth(w) {
+  if (!w.due) return null;
+  const m = monthsUntil(w.due);
+  if (m <= 0) return null;
+  return (+w.amount || 0) / m;
 }
 
+function renderFutSummary() {
+  const open = WISH.filter(w => !w.bought);
+  const need = open.filter(w => kindOf(w) === 'need'), due = open.filter(w => kindOf(w) === 'due');
+  const totNeed = sum(need) + sum(due);
+  const totAll = sum(open);
+  const monthly = open.reduce((a, w) => a + (perMonth(w) || 0), 0);
+  const sav = avgMonthlySaving();
+  const ok = sav != null && monthly > 0 ? monthly <= sav : null;
+
+  $('#futSummary').innerHTML = `
+    <div>
+      <div class="biglab">Da accantonare al mese</div>
+      <div class="big ${ok === null ? '' : ok ? 'up' : 'down'}">${monthly > 0 ? eur(monthly) : '—'}</div>
+      <div class="muted" style="font-size:11.5px;margin-top:2px">${
+        monthly <= 0 ? 'metti una data alle voci per vederlo'
+        : sav == null ? 'registra stipendio e spese per il confronto'
+        : ok ? `ci stai: risparmi ${eur(sav)} al mese` : `ti mancano ${eur(monthly - sav)} al mese`}</div>
+    </div>
+    <div class="facts">
+      <div class="fact"><span class="k">Serve e scade</span><span class="v">${eur(totNeed)}</span></div>
+      <div class="fact"><span class="k">Tutto</span><span class="v">${eur(totAll)}</span></div>
+      <div class="fact"><span class="k">Voci</span><span class="v">${open.length}</span></div>
+    </div>`;
+}
+
+function futSort(a, b) {
+  const ka = KIND[kindOf(a)].order, kb = KIND[kindOf(b)].order;
+  if (ka !== kb) return ka - kb;
+  if (a.due && b.due) return a.due.localeCompare(b.due);
+  if (a.due) return -1;
+  if (b.due) return 1;
+  return (+b.amount || 0) - (+a.amount || 0);
+}
+
+function renderFut() {
+  const today = iso(Date.now());
+  const open = WISH.filter(w => !w.bought)
+    .filter(w => FUTFILTER === 'all' || kindOf(w) === FUTFILTER)
+    .sort(futSort);
+  const done = WISH.filter(w => w.bought);
+
+  $('#futEmpty').classList.toggle('hidden', open.length > 0);
+  $('#futRows').innerHTML = open.map(w => {
+    const k = kindOf(w), pm = perMonth(w);
+    const late = w.due && w.due < today;
+    return `<div class="row">
+      <div class="main">
+        <div class="t">${esc(w.name)}</div>
+        <div class="s">
+          <span class="tag ${late ? 'late' : ''}" data-k="${k}">${KIND[k].tag}</span>
+          ${w.due ? `<span>${late ? 'scaduto il ' : 'entro il '}${dayShort(w.due)}</span>` : ''}
+          ${w.note ? `<span>${esc(w.note)}</span>` : ''}
+        </div>
+      </div>
+      <div class="amt">${eur(w.amount)}${pm ? `<small>${eur(pm)}/mese</small>` : ''}</div>
+      <div class="acts">
+        <button class="iconbtn" data-edit="${w.id}" title="Modifica">✎</button>
+        <button class="iconbtn" data-buy="${w.id}" title="Fatto">✓</button>
+        <button class="iconbtn danger" data-delwish="${w.id}" title="Elimina">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('#foldDone').classList.toggle('hidden', done.length === 0);
+  $('#doneSummary').textContent = done.length ? `· ${done.length} · ${eur(sum(done))}` : '';
+  $('#doneRows').innerHTML = done.map(w => `
+    <div class="row done">
+      <div class="main"><div class="t">${esc(w.name)}</div>
+        <div class="s">${w.boughtAt ? '<span>' + dayShort(w.boughtAt) + '</span>' : ''}</div></div>
+      <div class="amt">${eur(w.amount)}</div>
+      <div class="acts">
+        <button class="iconbtn" data-unbuy="${w.id}" title="Rimetti in lista">↩</button>
+        <button class="iconbtn danger" data-delwish="${w.id}" title="Elimina">✕</button>
+      </div>
+    </div>`).join('');
+
+  $$('#pageFut [data-delwish]').forEach(b => b.onclick = () => {
+    const w = WISH.find(x => x.id === b.dataset.delwish); if (!w) return;
+    if (!confirm(`Eliminare "${w.name}"?`)) return;
+    WISH = WISH.filter(x => x.id !== w.id); saveWish(); tomb('wish', w.id); renderFutPage();
+  });
+  $$('#pageFut [data-buy]').forEach(b => b.onclick = () => {
+    const w = WISH.find(x => x.id === b.dataset.buy); if (!w) return;
+    w.bought = true; w.boughtAt = iso(Date.now()); saveWish(); stamp('wish', w.id);
+    renderFutPage(); toast('Fatto: ' + w.name);
+  });
+  $$('#pageFut [data-unbuy]').forEach(b => b.onclick = () => {
+    const w = WISH.find(x => x.id === b.dataset.unbuy); if (!w) return;
+    w.bought = false; delete w.boughtAt; saveWish(); stamp('wish', w.id); renderFutPage();
+  });
+  $$('#pageFut [data-edit]').forEach(b => b.onclick = () => openFut(b.dataset.edit));
+}
+
+function renderFutPage() { renderFutSummary(); renderFut(); }
+
 /* =====================================================================
-   NAVIGAZIONE FRA LE SEZIONI
+   NAVIGAZIONE
    ===================================================================== */
 function showTab(t) {
   store.set(KE.TAB, t);
   $$('#tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
+  $$('#bottomnav button[data-tab]').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
   $('#pageInv').classList.toggle('hidden', t !== 'inv');
   $('#pageExp').classList.toggle('hidden', t !== 'exp');
-  $('#pageWish').classList.toggle('hidden', t !== 'wish');
+  $('#pageFut').classList.toggle('hidden', t !== 'fut');
   $('#btnRefresh').classList.toggle('hidden', t !== 'inv');
   $('#statusLine').classList.toggle('hidden', t !== 'inv');
-  $('#notices').classList.toggle('hidden', t !== 'inv');   // gli avvisi riguardano il caricamento dei prezzi
+  $('#notices').classList.toggle('hidden', t !== 'inv');
   $('#footQuotes').classList.toggle('hidden', t !== 'inv');
-  // i grafici si misurano sulla larghezza reale: vanno ridisegnati quando la pagina diventa visibile
   if (t === 'exp') renderExpenses();
-  else if (t === 'wish') renderWishPage();
+  else if (t === 'fut') renderFutPage();
   else if (STATE && STATE.tot) { drawPortfolio(STATE.hist); drawAllocation(STATE.tot); }
   scrollTo({ top: 0, behavior: 'instant' });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   $$('#tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+  $$('#bottomnav button[data-tab]').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+  $('#navData').onclick = () => {
+    const d = $('#dataPanel'); d.classList.remove('hidden'); renderSyncPanel();
+    d.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
   $('#btnAddCat').onclick = addCategory;
-  $('#btnAddWish').onclick = addWish;
   $('#newCat').addEventListener('keydown', e => { if (e.key === 'Enter') addCategory(); });
-  $('#wName').addEventListener('keydown', e => { if (e.key === 'Enter') $('#wAmount').focus(); });
-  ['#wAmount', '#wNote'].forEach(sel => $(sel).addEventListener('keydown', e => { if (e.key === 'Enter') addWish(); }));
-  $('#monthSel').onchange = e => { SELMONTH = e.target.value; renderMonthView(); };
+  $('#monthSel').onchange = e => { SELMONTH = e.target.value; renderMonthView(); drawMonths(); };
   $('#ecPeriod').onchange = drawCategories;
+  $('#foldCat').addEventListener('toggle', () => { if ($('#foldCat').open) drawCategories(); });
   $('#incomeInput').onchange = e => {
     const v = parseFloat(String(e.target.value).replace(',', '.'));
     if (v > 0) { INCOME[SELMONTH] = v; stamp('inc', SELMONTH); } else { delete INCOME[SELMONTH]; tomb('inc', SELMONTH); }
-    saveIncome(); renderExpStats(); drawMonths();
+    saveIncome(); renderExpSummary(); drawMonths();
   };
+  $$('#futFilter button').forEach(b => b.onclick = () => {
+    FUTFILTER = b.dataset.f;
+    $$('#futFilter button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    renderFut();
+  });
   initCombo('qCat', 'qCatList');
   refreshAllCombos();
 
-  let rt2;
+  let rt;
   addEventListener('resize', () => {
-    clearTimeout(rt2);
-    rt2 = setTimeout(() => { if (!$('#pageExp').classList.contains('hidden')) { drawMonths(); drawCategories(); } }, 170);
+    clearTimeout(rt);
+    rt = setTimeout(() => {
+      if (!$('#pageExp').classList.contains('hidden')) { drawMonths(); if ($('#foldCat').open) drawCategories(); }
+      if (!$('#pageInv').classList.contains('hidden') && STATE && STATE.tot) { drawPortfolio(STATE.hist); drawAllocation(STATE.tot); }
+    }, 170);
   });
 
-  showTab(store.get(KE.TAB, 'inv'));
+  showTab(store.get(KE.TAB, 'exp'));
 });
 
 /* =====================================================================
@@ -2500,6 +2406,7 @@ async function afterSync() {
   const missing = [...needed].filter(t => !SERIES[t]);
   if (missing.length) await loadAll(true); else refresh();
   if (!$('#pageExp').classList.contains('hidden')) renderExpenses();
+  if (!$('#pageFut').classList.contains('hidden')) renderFutPage();
 }
 
 /* ------------------------------------------------------------- pannello UI */
@@ -2576,6 +2483,11 @@ async function syncSelfTest() {
 document.addEventListener('DOMContentLoaded', () => {
   migrateStamps();
 
+  // il service worker serve all'installazione su Android e a far aprire l'app
+  // anche senza rete; da file:// non è disponibile e viene semplicemente saltato
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http'))
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+
   $('#btnSyncSave').onclick = async () => { saveSyncCfg(); await syncNow({ silent: false }); };
   $('#btnSyncNow').onclick = () => syncNow({ silent: false });
   $('#btnSyncTest').onclick = syncSelfTest;
@@ -2605,84 +2517,120 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* =====================================================================
-   AZIONI RAPIDE — due finestre raggiungibili da qualunque sezione,
-   per registrare una spesa o aggiungere un desiderio senza cambiare pagina.
+   AGGIUNTA RAPIDA — il tasto + apre un foglio con due scelte,
+   e ciascuna una finestra breve. Raggiungibile da qualunque sezione.
    ===================================================================== */
 
 let toastTimer = null;
 function toast(msg) {
   const t = $('#toast');
-  t.textContent = msg;
-  t.classList.add('on');
+  t.textContent = msg; t.classList.add('on');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('on'), 2600);
 }
 
-function openDlg(id) {
-  const d = $('#' + id);
-  if (id === 'dlgExp') {
-    refreshAllCombos();
-    $('#qDate').value = iso(Date.now());
-    $('#qDesc').value = ''; $('#qAmount').value = ''; $('#qFreq').value = '';
-  } else {
-    $('#qwName').value = ''; $('#qwAmount').value = ''; $('#qwPrio').value = 'media';
-  }
-  if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
-  setTimeout(() => $(id === 'dlgExp' ? '#qDesc' : '#qwName').focus(), 60);
-}
-function closeDlg(id) {
-  const d = $('#' + id);
-  if (typeof d.close === 'function') d.close(); else d.removeAttribute('open');
-}
+const openD = id => { const d = $('#' + id); if (d.showModal) d.showModal(); else d.setAttribute('open', ''); };
+const closeD = id => { const d = $('#' + id); if (d.close) d.close(); else d.removeAttribute('open'); };
 
-function quickAddExpense() {
+/* ------------------------------------------------------------ spesa */
+function openExpDlg() {
+  refreshAllCombos();
+  $('#qDate').value = iso(Date.now());
+  $('#qDesc').value = ''; $('#qAmount').value = ''; $('#qFreq').value = '';
+  openD('dlgExp');
+  setTimeout(() => $('#qDesc').focus(), 60);
+}
+function saveExpDlg() {
   const desc = $('#qDesc').value.trim();
   const amount = parseFloat(($('#qAmount').value || '').replace(',', '.'));
-  const date = $('#qDate').value;
-  const freq = $('#qFreq').value;
-  if (!desc) return alert('Scrivi una descrizione.');
+  const date = $('#qDate').value, freq = $('#qFreq').value;
+  if (!desc) return alert('Scrivi che spesa è.');
   if (!(amount > 0)) return alert('Inserisci un importo maggiore di zero.');
   if (!date) return alert('Inserisci la data.');
-  const ne = { id: uid(), desc, amount, cat: $('#qCat').value, date,
-               fixed: !!freq, freq: freq || null, end: null };
-  EXP.push(ne);
-  saveExp(); stamp('exp', ne.id);
-  closeDlg('dlgExp');
-  toast(`Spesa registrata: ${desc} · ${eur(amount)}${freq ? ' · ' + FREQ[freq].label : ''}`);
+  const ne = { id: uid(), desc, amount, cat: $('#qCat').value, date, fixed: !!freq, freq: freq || null, end: null };
+  EXP.push(ne); saveExp(); stamp('exp', ne.id);
+  closeD('dlgExp');
+  toast(`${desc} · ${eur(amount)}${freq ? ' · ' + FREQ[freq].label : ''}`);
   if (!$('#pageExp').classList.contains('hidden')) { SELMONTH = ymOf(date); renderExpenses(); }
 }
 
-function quickAddWish() {
-  const name = $('#qwName').value.trim();
-  const amount = parseFloat(($('#qwAmount').value || '').replace(',', '.'));
-  if (!name) return alert('Scrivi cosa vorresti comprare.');
-  if (!(amount > 0)) return alert('Inserisci il prezzo previsto.');
-  const nw = { id: uid(), name, amount, prio: $('#qwPrio').value, note: '', bought: false };
-  WISH.push(nw);
-  saveWish(); stamp('wish', nw.id);
-  closeDlg('dlgWish');
-  toast(`Aggiunto ai desideri: ${name} · ${eur(amount)}`);
-  if (!$('#pageWish').classList.contains('hidden')) renderWishPage();
+/* ----------------------------------------------------------- futuro */
+let futEditId = null, futKind = 'need';
+
+function setFutKind(k) {
+  futKind = k;
+  $$('#futKind button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k));
+  $('#fuHint').textContent = k === 'due'
+    ? 'Bollo, assicurazione, un viaggio già deciso: metti la data e ti dico quanto accantonare al mese.'
+    : k === 'need'
+      ? 'Qualcosa che ti serve davvero. Con una data entro cui ti serve, calcolo quanto mettere via.'
+      : 'Un desiderio, senza fretta. La data è facoltativa.';
 }
 
+function openFut(id) {
+  futEditId = id || null;
+  const w = id ? WISH.find(x => x.id === id) : null;
+  $('#futDlgTitle').textContent = w ? 'Modifica' : 'Nel futuro';
+  $('#fuSave').textContent = w ? 'Salva' : 'Aggiungi';
+  setFutKind(w ? kindOf(w) : 'need');
+  $('#fuName').value = w ? w.name : '';
+  $('#fuAmount').value = w ? w.amount : '';
+  $('#fuDue').value = w && w.due ? w.due : '';
+  $('#fuNote').value = w && w.note ? w.note : '';
+  openD('dlgFut');
+  setTimeout(() => $('#fuName').focus(), 60);
+}
+
+function saveFut() {
+  const name = $('#fuName').value.trim();
+  const amount = parseFloat(($('#fuAmount').value || '').replace(',', '.'));
+  const due = $('#fuDue').value || null;
+  const note = $('#fuNote').value.trim();
+  if (!name) return alert('Scrivi di cosa si tratta.');
+  if (!(amount > 0)) return alert('Inserisci quanto costa.');
+
+  if (futEditId) {
+    const w = WISH.find(x => x.id === futEditId);
+    if (w) {
+      Object.assign(w, { name, amount, due, note, kind: futKind });
+      delete w.prio;
+      saveWish(); stamp('wish', w.id); toast('Aggiornato');
+    }
+  } else {
+    const nw = { id: uid(), name, amount, kind: futKind, due, note, bought: false };
+    WISH.push(nw); saveWish(); stamp('wish', nw.id);
+    toast(`${name} · ${eur(amount)}`);
+  }
+  futEditId = null;
+  closeD('dlgFut');
+  if (!$('#pageFut').classList.contains('hidden')) renderFutPage();
+}
+
+/* ------------------------------------------------------------ avvio */
 document.addEventListener('DOMContentLoaded', () => {
-  $('#qExpense').onclick = () => openDlg('dlgExp');
-  $('#qWish').onclick = () => openDlg('dlgWish');
-  $$('[data-close]').forEach(b => b.onclick = () => closeDlg(b.dataset.close));
-  $('#qExpSave').onclick = quickAddExpense;
-  $('#qWishSave').onclick = quickAddWish;
+  $('#qExpense').onclick = openExpDlg;
+  $('#qWish').onclick = () => openFut(null);
+  $('#fabAdd').onclick = () => openD('dlgPick');
+  $('#pickExp').onclick = () => { closeD('dlgPick'); setTimeout(openExpDlg, 120); };
+  $('#pickFut').onclick = () => { closeD('dlgPick'); setTimeout(() => openFut(null), 120); };
+  $('#btnAddFut').onclick = () => openFut(null);
+  $('#btnAddFut2').onclick = () => openFut(null);
+  $$('[data-close]').forEach(b => b.onclick = () => closeD(b.dataset.close));
+  $('#qExpSave').onclick = saveExpDlg;
+  $('#fuSave').onclick = saveFut;
+  $$('#futKind button').forEach(b => b.onclick = () => setFutKind(b.dataset.k));
 
-  // invio da tastiera dentro le finestre
-  ['#qDesc', '#qAmount'].forEach(sel => $(sel).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); quickAddExpense(); } }));
-  ['#qwName', '#qwAmount'].forEach(sel => $(sel).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); quickAddWish(); } }));
+  ['#qDesc', '#qAmount'].forEach(s => $(s).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveExpDlg(); } }));
+  ['#fuName', '#fuAmount', '#fuNote'].forEach(s => $(s).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveFut(); } }));
 
-  // scorciatoie da tastiera: S per una spesa, D per un desiderio
+  // scorciatoie da tastiera sul computer
   document.addEventListener('keydown', e => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const t = e.target.tagName;
-    if (t === 'INPUT' || t === 'SELECT' || t === 'TEXTAREA' || $('#dlgExp').open || $('#dlgWish').open) return;
-    if (e.key === 's' || e.key === 'S') { e.preventDefault(); openDlg('dlgExp'); }
-    if (e.key === 'd' || e.key === 'D') { e.preventDefault(); openDlg('dlgWish'); }
+    if (t === 'INPUT' || t === 'SELECT' || t === 'TEXTAREA') return;
+    if ($('#dlgExp').open || $('#dlgFut').open || $('#dlgPick').open) return;
+    if (e.key === 's' || e.key === 'S') { e.preventDefault(); openExpDlg(); }
+    if (e.key === 'f' || e.key === 'F') { e.preventDefault(); openFut(null); }
   });
 });
 </script>
