@@ -1,0 +1,117 @@
+---
+/**
+ * Intestazione del sito. Navigazione interamente in HTML e CSS:
+ * nessun JavaScript, i link vanno a capo sugli schermi stretti.
+ */
+import Logo from './Logo.astro';
+import { t } from '../i18n';
+
+const percorsoCorrente = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const voci = [
+  { href: '/', etichetta: t('nav.home') },
+  { href: '/servizi', etichetta: t('nav.servizi') },
+  { href: '/progetti', etichetta: t('nav.progetti') },
+  { href: '/chi-siamo', etichetta: t('nav.chiSiamo') },
+  { href: '/contatti', etichetta: t('nav.contatti') },
+];
+
+const isAttiva = (href: string) =>
+  href === '/' ? percorsoCorrente === '/' : percorsoCorrente.startsWith(href);
+---
+
+<header class="intestazione">
+  <div class="contenitore intestazione__interno">
+    <a class="intestazione__marchio" href="/">
+      <Logo />
+      <span class="solo-screen-reader">— {t('nav.home')}</span>
+    </a>
+
+    <nav class="intestazione__nav" aria-label={t('nav.etichettaPrincipale')}>
+      <ul>
+        {
+          voci.map((voce) => (
+            <li>
+              <a
+                href={voce.href}
+                aria-current={isAttiva(voce.href) ? 'page' : undefined}
+                class:list={['intestazione__link', { 'intestazione__link--attivo': isAttiva(voce.href) }]}
+              >
+                {voce.etichetta}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .intestazione {
+    background-color: var(--colore-superficie);
+    border-bottom: 1px solid var(--colore-bordo);
+  }
+
+  .intestazione__interno {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+  }
+
+  .intestazione__marchio {
+    align-self: flex-start;
+    text-decoration: none;
+  }
+
+  .intestazione__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .intestazione__link {
+    display: inline-block;
+    padding-block: var(--space-1);
+    border-bottom: 2px solid transparent;
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-sm);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color var(--transizione), border-color var(--transizione);
+  }
+
+  .intestazione__link:hover {
+    color: var(--colore-accento);
+    border-bottom-color: var(--colore-accento);
+  }
+
+  .intestazione__link--attivo {
+    color: var(--colore-primario);
+    border-bottom-color: var(--colore-accento);
+  }
+
+  @media (min-width: 40em) {
+    .intestazione__interno {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-5);
+      padding-block: var(--space-5);
+    }
+
+    .intestazione__nav ul {
+      gap: var(--space-5);
+    }
+  }
+
+  @media (min-width: 64em) {
+    .intestazione__nav ul {
+      gap: var(--space-6);
+    }
+  }
+</style>

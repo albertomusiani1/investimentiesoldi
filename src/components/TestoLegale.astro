@@ -1,0 +1,68 @@
+---
+/**
+ * Rende un elenco di sezioni testuali tenute come dati.
+ * Non contiene nessuna stringa: titoli e testi arrivano tutti dalle props.
+ */
+import { applicaSegnaposto, segmenta } from '../lib/testo';
+import type { SezioneLegale } from '../lib/testi-legali';
+
+export interface Props {
+  sezioni: SezioneLegale[];
+  /** Valori per i segnaposto `{nome}` presenti nei testi. */
+  valori: Record<string, string>;
+}
+
+const { sezioni, valori } = Astro.props;
+
+const risolvi = (testo: string) => segmenta(applicaSegnaposto(testo, valori));
+---
+
+{
+  sezioni.map((sezione) => (
+    <>
+      {sezione.titolo && <h2>{sezione.titolo}</h2>}
+      {sezione.blocchi.map((blocco) => {
+        if (blocco.tipo === 'paragrafo') {
+          return (
+            <p>
+              {risolvi(blocco.testo).map((segmento) =>
+                segmento.href ? <a href={segmento.href}>{segmento.testo}</a> : segmento.testo
+              )}
+            </p>
+          );
+        }
+
+        if (blocco.tipo === 'elenco') {
+          return (
+            <ul>
+              {blocco.voci.map((voce) => (
+                <li>
+                  {voce.titolo && <strong>{applicaSegnaposto(voce.titolo, valori)}</strong>}
+                  {voce.titolo && ' — '}
+                  {risolvi(voce.testo).map((segmento) =>
+                    segmento.href ? <a href={segmento.href}>{segmento.testo}</a> : segmento.testo
+                  )}
+                </li>
+              ))}
+            </ul>
+          );
+        }
+
+        return (
+          <dl>
+            {blocco.voci.map((voce) => (
+              <>
+                <dt>{applicaSegnaposto(voce.termine, valori)}</dt>
+                <dd>
+                  {risolvi(voce.testo).map((segmento) =>
+                    segmento.href ? <a href={segmento.href}>{segmento.testo}</a> : segmento.testo
+                  )}
+                </dd>
+              </>
+            ))}
+          </dl>
+        );
+      })}
+    </>
+  ))
+}

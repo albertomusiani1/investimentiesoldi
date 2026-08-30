@@ -1,0 +1,23 @@
+# build
+dist/
+.astro/
+.netlify/
+
+# dipendenze
+node_modules/
+
+# segreti: mai committati, esiste solo .env.example
+.env
+.env.*
+!.env.example
+
+# artefatti delle verifiche
+reports/
+*.log
+npm-debug.log*
+
+# sistema
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

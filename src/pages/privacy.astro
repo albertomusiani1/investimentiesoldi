@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TestoLegale from '../components/TestoLegale.astro';
+import { t } from '../i18n';
+import { azienda, indirizzoCompleto } from '../lib/azienda';
+import { aggiornamentoLegale, privacy } from '../lib/testi-legali';
+
+const valori = {
+  email: azienda.email,
+  pec: azienda.emailPec,
+  nomeLegale: azienda.nomeLegale,
+  indirizzo: indirizzoCompleto,
+  partitaIva: azienda.datiSocietari.partitaIva,
+};
+---
+
+<BaseLayout
+  titolo={t('privacy.metaTitolo')}
+  descrizione={t('privacy.metaDescrizione')}
+  briciole={[{ etichetta: t('nav.privacy') }]}
+>
+  <section class="sezione">
+    <div class="contenitore contenitore--stretto">
+      <h1>{t('privacy.titolo')}</h1>
+      <p class="aggiornamento">{t('comune.aggiornatoIl')} {aggiornamentoLegale}</p>
+      <div class="prosa">
+        <TestoLegale sezioni={privacy} valori={valori} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .aggiornamento {
+    margin-top: var(--space-3);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-sm);
+  }
+
+  .prosa {
+    margin-top: var(--space-6);
+  }
+</style>

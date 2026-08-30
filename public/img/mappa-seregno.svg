@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img">
+  <rect width="800" height="500" fill="#eeeae4"/>
+  <g stroke="#ddd6cc" stroke-width="14" stroke-linecap="square">
+    <path d="M0 120H800M0 260H800M0 390H800"/>
+    <path d="M150 0V500M370 0V500M600 0V500"/>
+  </g>
+  <g stroke="#faf8f5" stroke-width="4" stroke-dasharray="14 12">
+    <path d="M0 120H800M0 260H800M0 390H800"/>
+    <path d="M150 0V500M370 0V500M600 0V500"/>
+  </g>
+  <g fill="#d4cdc2">
+    <rect x="30" y="150" width="90" height="80"/>
+    <rect x="190" y="30" width="140" height="60"/>
+    <rect x="420" y="300" width="140" height="60"/>
+    <rect x="650" y="150" width="110" height="80"/>
+    <rect x="190" y="420" width="140" height="50"/>
+  </g>
+  <rect x="400" y="150" width="170" height="90" fill="#1d3648"/>
+  <circle cx="370" cy="260" r="18" fill="#8f3d18"/>
+  <circle cx="370" cy="260" r="7" fill="#faf8f5"/>
+  <g fill="#16232e" font-family="Georgia, serif" font-size="19">
+    <text x="404" y="205" fill="#faf8f5">Stabilimento</text>
+    <text x="16" y="108">Via dell'Industria</text>
+    <text x="16" y="248">Via Lombardia</text>
+    <text x="388" y="470">Via Ballerini</text>
+  </g>
+</svg>

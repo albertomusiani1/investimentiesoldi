@@ -1,0 +1,67 @@
+---
+/**
+ * Marchio del sito: segno geometrico + nome esteso.
+ * SVG inline, nessuna richiesta di rete, scala con la tipografia.
+ */
+import { t } from '../i18n';
+
+export interface Props {
+  /** true nell'header sopra sfondo chiaro, false nel footer sopra sfondo scuro. */
+  scuro?: boolean;
+}
+
+const { scuro = true } = Astro.props;
+---
+
+<span class:list={['logo', { 'logo--inverso': !scuro }]}>
+  <svg
+    class="logo__segno"
+    width="32"
+    height="32"
+    viewBox="0 0 32 32"
+    role="img"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect x="1" y="1" width="30" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="2"></rect>
+    <rect x="7" y="19" width="5" height="7" fill="currentColor"></rect>
+    <rect x="14" y="13" width="5" height="13" fill="currentColor"></rect>
+    <rect class="logo__accento" x="21" y="7" width="5" height="19"></rect>
+  </svg>
+  <span class="logo__testo">{t('sito.nome')}</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--colore-primario);
+  }
+
+  .logo--inverso {
+    color: var(--colore-testo-inverso);
+  }
+
+  .logo__accento {
+    fill: var(--colore-accento);
+  }
+
+  .logo__segno {
+    flex: none;
+  }
+
+  .logo__testo {
+    font-family: var(--font-serif);
+    font-size: var(--testo-md);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  @media (min-width: 40em) {
+    .logo__testo {
+      font-size: var(--testo-lg);
+    }
+  }
+</style>

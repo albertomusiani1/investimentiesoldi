@@ -1,0 +1,97 @@
+---
+/**
+ * Blocco <head> condiviso: title, description, canonical assoluto,
+ * Open Graph, Twitter Card e JSON-LD. Usato da ogni pagina del sito.
+ */
+import { t, defaultLocale } from '../i18n';
+import { azienda } from '../lib/azienda';
+
+export interface Props {
+  /** Massimo 60 caratteri. */
+  titolo: string;
+  /** Fra 120 e 160 caratteri. */
+  descrizione: string;
+  /** Percorso assoluto dell'immagine social, dalla root del sito. */
+  immagine?: string;
+  tipo?: 'website' | 'article';
+  noindex?: boolean;
+  /** Uno o più oggetti schema.org serializzati come JSON-LD. */
+  jsonLd?: Record<string, unknown>[];
+  /** Data di pubblicazione ISO, solo per tipo "article". */
+  pubblicatoIl?: string;
+}
+
+const {
+  titolo,
+  descrizione,
+  immagine = '/og-default.png',
+  tipo = 'website',
+  noindex = false,
+  jsonLd = [],
+  pubblicatoIl,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const immagineAssoluta = new URL(immagine, Astro.site).href;
+const locale = defaultLocale;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{titolo}</title>
+<meta name="description" content={descrizione} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta name="theme-color" content="#1d3648" />
+<meta name="author" content={azienda.nomeLegale} />
+<meta name="generator" content={Astro.generator} />
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+<link
+  rel="preload"
+  href="/fonts/inter-latin-400.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/inter-latin-600.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/source-serif-4-latin-600.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+
+<meta property="og:type" content={tipo} />
+<meta property="og:site_name" content={t('sito.nome', locale)} />
+<meta property="og:locale" content={t('sito.localeOg', locale)} />
+<meta property="og:title" content={titolo} />
+<meta property="og:description" content={descrizione} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={immagineAssoluta} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={descrizione} />
+{pubblicatoIl && <meta property="article:published_time" content={pubblicatoIl} />}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={titolo} />
+<meta name="twitter:description" content={descrizione} />
+<meta name="twitter:image" content={immagineAssoluta} />
+<meta name="twitter:image:alt" content={descrizione} />
+
+{
+  jsonLd.map((schema) => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+  ))
+}

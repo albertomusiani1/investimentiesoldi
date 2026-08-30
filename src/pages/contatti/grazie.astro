@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t } from '../../i18n';
+import { azienda } from '../../lib/azienda';
+---
+
+<BaseLayout
+  titolo={t('grazie.metaTitolo')}
+  descrizione={t('grazie.metaDescrizione')}
+  noindex={true}
+>
+  <section class="sezione">
+    <div class="contenitore contenitore--stretto">
+      <h1>{t('grazie.titolo')}</h1>
+      <p class="testo">{t('grazie.testo')}</p>
+      <p class="testo">
+        {t('grazie.testoAlternativo')} <a href={`mailto:${azienda.email}`}>{azienda.email}</a>.
+      </p>
+      <div class="gruppo-bottoni">
+        <a class="bottone bottone--primario" href="/">{t('azioni.tornaAllaHome')}</a>
+        <a class="bottone bottone--secondario" href="/progetti">{t('azioni.vediProgetti')}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .testo {
+    margin-top: var(--space-4);
+    max-width: var(--misura);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-md);
+  }
+</style>

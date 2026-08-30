@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FormContatti from '../components/FormContatti.astro';
+import { t } from '../i18n';
+import { azienda, indirizzoCompleto } from '../lib/azienda';
+---
+
+<BaseLayout
+  titolo={t('contatti.metaTitolo')}
+  descrizione={t('contatti.metaDescrizione')}
+  briciole={[{ etichetta: t('nav.contatti') }]}
+>
+  <section class="sezione">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h1>{t('contatti.titolo')}</h1>
+        <p>{t('contatti.introduzione')}</p>
+      </div>
+
+      <div class="contatti">
+        <div class="contatti__dati">
+          <h2 class="contatti__titolo">{t('contatti.datiTitolo')}</h2>
+          <dl class="contatti__elenco">
+            <dt>{t('contatti.telefonoLabel')}</dt>
+            <dd><a href={`tel:${azienda.telefonoLink}`}>{azienda.telefono}</a></dd>
+            <dt>{t('contatti.emailLabel')}</dt>
+            <dd><a href={`mailto:${azienda.email}`}>{azienda.email}</a></dd>
+            <dt>{t('contatti.pecLabel')}</dt>
+            <dd><a href={`mailto:${azienda.emailPec}`}>{azienda.emailPec}</a></dd>
+          </dl>
+
+          <h2 class="contatti__titolo">{t('contatti.sedeTitolo')}</h2>
+          <address class="contatti__indirizzo">
+            {azienda.nomeLegale}<br />
+            {indirizzoCompleto}<br />
+            {azienda.indirizzo.nazioneEstesa}
+          </address>
+
+          <h2 class="contatti__titolo">{t('contatti.orariTitolo')}</h2>
+          <dl class="contatti__elenco">
+            {
+              azienda.orari.map((riga) => (
+                <>
+                  <dt>{riga.giorni}</dt>
+                  <dd>{riga.orario}</dd>
+                </>
+              ))
+            }
+          </dl>
+        </div>
+
+        <div class="contatti__mappa">
+          <img
+            src="/img/mappa-seregno.svg"
+            alt={t('contatti.mappaAlt')}
+            width="800"
+            height="500"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione sezione--alt" aria-labelledby="titolo-modulo">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-modulo">{t('contatti.formTitolo')}</h2>
+      </div>
+      <FormContatti />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contatti {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .contatti__titolo {
+    margin-top: var(--space-6);
+    font-family: var(--font-sans);
+    font-size: var(--testo-xs);
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--colore-testo-tenue);
+  }
+
+  .contatti__titolo:first-child {
+    margin-top: 0;
+  }
+
+  .contatti__elenco {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 0;
+  }
+
+  .contatti__elenco dt {
+    font-size: var(--testo-sm);
+    color: var(--colore-testo-tenue);
+  }
+
+  .contatti__elenco dd {
+    margin: 0 0 var(--space-2);
+    font-weight: 600;
+  }
+
+  .contatti__indirizzo {
+    margin-top: var(--space-3);
+    font-style: normal;
+    line-height: var(--interlinea);
+  }
+
+  .contatti__mappa img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+  }
+
+  @media (min-width: 64em) {
+    .contatti {
+      grid-template-columns: 1fr 1.2fr;
+      gap: var(--space-7);
+      align-items: start;
+    }
+  }
+</style>

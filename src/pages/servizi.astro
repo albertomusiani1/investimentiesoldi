@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t } from '../i18n';
+import { servizi } from '../lib/servizi';
+---
+
+<BaseLayout
+  titolo={t('servizi.metaTitolo')}
+  descrizione={t('servizi.metaDescrizione')}
+  briciole={[{ etichetta: t('nav.servizi') }]}
+>
+  <section class="sezione">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h1>{t('servizi.titolo')}</h1>
+        <p>{t('servizi.introduzione')}</p>
+      </div>
+
+      <div class="elenco-servizi">
+        {
+          servizi.map((servizio, indice) => (
+            <article class="servizio" id={servizio.id}>
+              <div class="servizio__numero" aria-hidden="true">
+                {String(indice + 1).padStart(2, '0')}
+              </div>
+              <div class="servizio__corpo">
+                <h2>{servizio.titolo}</h2>
+                {servizio.descrizione.map((paragrafo) => (
+                  <p class="servizio__paragrafo">{paragrafo}</p>
+                ))}
+                <h3 class="servizio__sottotitolo">{t('servizi.cosaComprende')}</h3>
+                <ul class="servizio__punti">
+                  {servizio.punti.map((punto) => (
+                    <li>{punto}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione sezione--scura" aria-labelledby="titolo-cta-servizi">
+    <div class="contenitore contenitore--stretto">
+      <h2 id="titolo-cta-servizi">{t('servizi.ctaTitolo')}</h2>
+      <p class="cta__testo">{t('servizi.ctaTesto')}</p>
+      <div class="gruppo-bottoni">
+        <a class="bottone bottone--secondario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .elenco-servizi {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .servizio {
+    display: grid;
+    gap: var(--space-3);
+    padding-top: var(--space-6);
+    border-top: 2px solid var(--colore-bordo);
+    scroll-margin-top: var(--space-5);
+  }
+
+  .servizio__numero {
+    font-family: var(--font-serif);
+    font-size: var(--testo-lg);
+    font-weight: 600;
+    color: var(--colore-accento);
+  }
+
+  .servizio__corpo {
+    max-width: var(--misura);
+  }
+
+  .servizio__paragrafo {
+    margin-top: var(--space-4);
+    color: var(--colore-testo-tenue);
+  }
+
+  .servizio__sottotitolo {
+    margin-top: var(--space-5);
+    font-family: var(--font-sans);
+    font-size: var(--testo-xs);
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--colore-primario);
+  }
+
+  .servizio__punti {
+    margin-top: var(--space-3);
+    padding-left: var(--space-5);
+  }
+
+  .servizio__punti li + li {
+    margin-top: var(--space-2);
+  }
+
+  .cta__testo {
+    margin-top: var(--space-4);
+    max-width: var(--misura);
+  }
+
+  @media (min-width: 64em) {
+    .servizio {
+      grid-template-columns: 6rem 1fr;
+      gap: var(--space-6);
+    }
+  }
+</style>

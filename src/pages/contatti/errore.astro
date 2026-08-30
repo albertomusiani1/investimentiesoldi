@@ -1,0 +1,70 @@
+---
+/**
+ * Pagina di ricaduta per gli invii del modulo eseguiti senza JavaScript.
+ * La funzione reindirizza qui con ?codice=<motivo> quando l'invio non riesce.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t } from '../../i18n';
+import { azienda } from '../../lib/azienda';
+
+const motivi = [
+  t('form.erroreValidazione'),
+  t('form.erroreConsenso'),
+  t('form.erroreAntispam'),
+  t('form.erroreTroppeRichieste'),
+];
+---
+
+<BaseLayout
+  titolo={t('form.erroreTitolo') + ' | ' + t('sito.nome')}
+  descrizione={t('contatti.metaDescrizione')}
+  noindex={true}
+>
+  <section class="sezione">
+    <div class="contenitore contenitore--stretto">
+      <h1>{t('form.erroreTitolo')}</h1>
+      <p class="testo">
+        {t('form.erroreTesto')} <a href={`mailto:${azienda.email}`}>{azienda.email}</a>.
+      </p>
+
+      <h2 class="motivi__titolo">{t('form.erroreValidazione')}</h2>
+      <ul class="motivi">
+        {motivi.map((motivo) => <li>{motivo}</li>)}
+      </ul>
+
+      <div class="gruppo-bottoni">
+        <a class="bottone bottone--primario" href="/contatti">{t('nav.contatti')}</a>
+        <a class="bottone bottone--secondario" href="/">{t('azioni.tornaAllaHome')}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .testo {
+    margin-top: var(--space-4);
+    max-width: var(--misura);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-md);
+  }
+
+  .motivi__titolo {
+    margin-top: var(--space-7);
+    font-family: var(--font-sans);
+    font-size: var(--testo-xs);
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .motivi {
+    margin: var(--space-4) 0 0;
+    padding-left: var(--space-5);
+    max-width: var(--misura);
+    color: var(--colore-testo-tenue);
+  }
+
+  .motivi li + li {
+    margin-top: var(--space-2);
+  }
+</style>

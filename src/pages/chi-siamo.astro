@@ -1,0 +1,288 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t } from '../i18n';
+import { azienda } from '../lib/azienda';
+
+/** CONTENUTO — SOSTITUIRE: tappe della storia aziendale. */
+const storia = [
+  {
+    anno: '1978',
+    titolo: 'Nasce l\'officina',
+    testo:
+      'Luigi Brambilla apre una piccola officina di tornitura in un capannone di trecento metri quadri a Seregno, con tre torni paralleli e due dipendenti.',
+  },
+  {
+    anno: '1994',
+    titolo: 'Il primo controllo numerico',
+    testo:
+      'L\'ingresso della seconda generazione porta il primo centro di lavoro a controllo numerico e le prime forniture dirette a un costruttore di veicoli industriali.',
+  },
+  {
+    anno: '2009',
+    titolo: 'Certificazione di sistema',
+    testo:
+      'Dopo la crisi del settore l\'azienda sceglie di specializzarsi: certificazione ISO/TS 16949, reparto qualità interno e laboratorio prove.',
+  },
+  {
+    anno: '2019',
+    titolo: 'Ufficio tecnico e banchi prova',
+    testo:
+      'Nasce l\'ufficio di progettazione interno. Da fornitore di lavorazioni l\'azienda diventa interlocutore tecnico, capace di prendersi il componente dal requisito alla serie.',
+  },
+  {
+    anno: '2024',
+    titolo: 'Elettrificazione',
+    testo:
+      'Il reparto retrofit consegna la prima flotta convertita a trazione elettrica e apre la linea di piastre di raffreddamento per pacchi batteria.',
+  },
+];
+
+/** CONTENUTO — SOSTITUIRE: valori aziendali. */
+const valori = [
+  {
+    titolo: 'Numeri, non impressioni',
+    testo:
+      'Ogni affermazione tecnica che facciamo è accompagnata dal dato che la sostiene. Se un dato non ce l\'abbiamo, lo diciamo e proponiamo come misurarlo.',
+  },
+  {
+    titolo: 'Un solo referente',
+    testo:
+      'Chi vi risponde in offerta è la stessa persona che seguirà la commessa. Non passiamo la pratica ad altri dopo la firma.',
+  },
+  {
+    titolo: 'Tempi che teniamo',
+    testo:
+      'Preferiamo una data più lontana ma rispettata a una data comoda che salta. Nel 2025 abbiamo consegnato in data il 96% delle commesse.',
+  },
+  {
+    titolo: 'Conoscenza che resta',
+    testo:
+      'Consegniamo sorgenti, disegni e dati grezzi. Quello che progettiamo per un cliente resta del cliente, anche se un giorno cambierà fornitore.',
+  },
+];
+
+/** CONTENUTO — SOSTITUIRE: persone di riferimento. */
+const team = [
+  { nome: 'Chiara Brambilla', ruolo: 'Direzione generale' },
+  { nome: 'Marco Terzaghi', ruolo: 'Responsabile ufficio tecnico' },
+  { nome: 'Anna Riva', ruolo: 'Responsabile qualità' },
+  { nome: 'Youssef El Amrani', ruolo: 'Responsabile produzione' },
+];
+
+/** CONTENUTO — SOSTITUIRE: certificazioni realmente possedute. */
+const certificazioni = [
+  { sigla: 'IATF 16949:2016', testo: 'Sistema di gestione qualità per la filiera automotive.' },
+  { sigla: 'ISO 14001:2015', testo: 'Sistema di gestione ambientale dello stabilimento.' },
+  { sigla: 'ISO 45001:2018', testo: 'Salute e sicurezza sul lavoro.' },
+  { sigla: 'EN ISO 3834-2', testo: 'Requisiti di qualità per la saldatura per fusione.' },
+];
+
+const iniziali = (nome: string) =>
+  nome
+    .split(' ')
+    .map((parte) => parte.charAt(0))
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+---
+
+<BaseLayout
+  titolo={t('chiSiamo.metaTitolo')}
+  descrizione={t('chiSiamo.metaDescrizione')}
+  briciole={[{ etichetta: t('nav.chiSiamo') }]}
+>
+  <section class="sezione">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h1>{t('chiSiamo.titolo')}</h1>
+        <p>{t('chiSiamo.introduzione')}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione sezione--alt" aria-labelledby="titolo-storia">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-storia">{t('chiSiamo.storiaTitolo')}</h2>
+      </div>
+      <ol class="storia">
+        {
+          storia.map((tappa) => (
+            <li class="tappa">
+              <span class="tappa__anno">{tappa.anno}</span>
+              <div class="tappa__corpo">
+                <h3 class="tappa__titolo">{tappa.titolo}</h3>
+                <p>{tappa.testo}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="sezione" aria-labelledby="titolo-valori">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-valori">{t('chiSiamo.valoriTitolo')}</h2>
+      </div>
+      <ul class="griglia griglia--2 elenco-piatto">
+        {
+          valori.map((valore) => (
+            <li class="scheda">
+              <div class="scheda__corpo">
+                <h3 class="scheda__titolo">{valore.titolo}</h3>
+                <p class="scheda__testo">{valore.testo}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione sezione--alt" aria-labelledby="titolo-team">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-team">{t('chiSiamo.teamTitolo')}</h2>
+      </div>
+      <ul class="griglia griglia--2 griglia--3 elenco-piatto">
+        {
+          team.map((persona) => (
+            <li class="persona">
+              <svg
+                class="persona__monogramma"
+                width="72"
+                height="72"
+                viewBox="0 0 72 72"
+                role="img"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <rect width="72" height="72" rx="6" fill="#1d3648" />
+                <text
+                  x="36"
+                  y="47"
+                  text-anchor="middle"
+                  font-family="Georgia, serif"
+                  font-size="28"
+                  fill="#faf8f5"
+                >
+                  {iniziali(persona.nome)}
+                </text>
+              </svg>
+              <div>
+                <h3 class="persona__nome">{persona.nome}</h3>
+                <p class="persona__ruolo">{persona.ruolo}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione" aria-labelledby="titolo-certificazioni">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-certificazioni">{t('chiSiamo.certificazioniTitolo')}</h2>
+      </div>
+      <dl class="prosa certificazioni">
+        {
+          certificazioni.map((certificazione) => (
+            <>
+              <dt>{certificazione.sigla}</dt>
+              <dd>{certificazione.testo}</dd>
+            </>
+          ))
+        }
+      </dl>
+      <div class="gruppo-bottoni">
+        <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
+      </div>
+      <p class="nota">
+        {`${azienda.nomeLegale} \u00b7 ${t('footer.capitaleSociale')} ${azienda.datiSocietari.capitaleSociale}`}
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .storia {
+    display: grid;
+    gap: var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: tappa;
+  }
+
+  .tappa {
+    display: grid;
+    gap: var(--space-2);
+    padding-top: var(--space-4);
+    border-top: 2px solid var(--colore-bordo);
+  }
+
+  .tappa__anno {
+    font-family: var(--font-serif);
+    font-size: var(--testo-lg);
+    font-weight: 600;
+    color: var(--colore-accento);
+  }
+
+  .tappa__titolo {
+    font-size: var(--testo-md);
+  }
+
+  .tappa__corpo p {
+    margin-top: var(--space-2);
+    max-width: var(--misura);
+    color: var(--colore-testo-tenue);
+  }
+
+  .elenco-piatto {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .persona {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .persona__monogramma {
+    flex: none;
+    border-radius: var(--raggio);
+  }
+
+  .persona__nome {
+    font-size: var(--testo-md);
+  }
+
+  .persona__ruolo {
+    margin-top: var(--space-1);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-sm);
+  }
+
+  .certificazioni {
+    margin-top: 0;
+  }
+
+  .nota {
+    margin-top: var(--space-6);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-sm);
+  }
+
+  @media (min-width: 64em) {
+    .tappa {
+      grid-template-columns: 8rem 1fr;
+      gap: var(--space-5);
+      align-items: baseline;
+    }
+  }
+</style>

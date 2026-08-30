@@ -1,0 +1,202 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SchedaProgetto from '../../components/SchedaProgetto.astro';
+import { t } from '../../i18n';
+import { azienda } from '../../lib/azienda';
+import { schemaProgetto } from '../../lib/schema';
+import { componiDescrizione, validaTitolo } from '../../lib/seo';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const progetti = await getCollection('progetti');
+  return progetti.map((progetto) => ({
+    params: { slug: progetto.id },
+    props: { progetto },
+  }));
+};
+
+interface Props {
+  progetto: CollectionEntry<'progetti'>;
+}
+
+const { progetto } = Astro.props;
+const { titolo, cliente, categoria, data, descrizioneBreve, immagine, immagineAlt } = progetto.data;
+
+const { Content } = await render(progetto);
+
+const site = Astro.site ?? new URL('http://localhost:4321');
+const percorso = `/progetti/${progetto.id}`;
+
+const dataLeggibile = new Intl.DateTimeFormat('it-IT', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(data);
+
+const titoloSeo = validaTitolo(titolo, percorso);
+const descrizioneSeo = componiDescrizione(
+  descrizioneBreve,
+  `Progetto di ${categoria.toLowerCase()} realizzato da ${azienda.nome} per ${cliente}.`,
+  percorso
+);
+
+const altri = (await getCollection('progetti'))
+  .filter((p) => p.id !== progetto.id)
+  .sort((a, b) => b.data.data.getTime() - a.data.data.getTime())
+  .slice(0, 3);
+---
+
+<BaseLayout
+  titolo={titoloSeo}
+  descrizione={descrizioneSeo}
+  immagine={immagine}
+  tipo="article"
+  pubblicatoIl={data.toISOString()}
+  briciole={[{ etichetta: t('nav.progetti'), href: '/progetti' }, { etichetta: titolo }]}
+  jsonLd={[
+    schemaProgetto(
+      { titolo, descrizioneBreve, cliente, categoria, data, immagine, percorso },
+      site
+    ),
+  ]}
+>
+  <article class="sezione progetto">
+    <div class="contenitore">
+      <header class="progetto__testata">
+        <p><span class="etichetta etichetta--accento">{categoria}</span></p>
+        <h1>{titolo}</h1>
+        <p class="progetto__sommario">{descrizioneBreve}</p>
+      </header>
+
+      <img
+        class="progetto__immagine"
+        src={immagine}
+        alt={immagineAlt}
+        width="800"
+        height="500"
+        decoding="async"
+      />
+
+      <div class="progetto__contenuto">
+        <dl class="progetto__dati">
+          <div>
+            <dt>{t('comune.cliente')}</dt>
+            <dd>{cliente}</dd>
+          </div>
+          <div>
+            <dt>{t('comune.categoria')}</dt>
+            <dd>{categoria}</dd>
+          </div>
+          <div>
+            <dt>{t('comune.data')}</dt>
+            <dd><time datetime={data.toISOString().slice(0, 10)}>{dataLeggibile}</time></dd>
+          </div>
+        </dl>
+
+        <div class="prosa">
+          <Content />
+        </div>
+      </div>
+
+      <div class="gruppo-bottoni">
+        <a class="bottone bottone--secondario" href="/progetti">{t('azioni.tornaAiProgetti')}</a>
+        <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
+      </div>
+    </div>
+  </article>
+
+  <section class="sezione sezione--alt" aria-labelledby="titolo-altri-progetti">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-altri-progetti">{t('progetti.altriProgetti')}</h2>
+      </div>
+      <ul class="griglia griglia--2 griglia--3 elenco-altri">
+        {altri.map((altro) => <li><SchedaProgetto progetto={altro} /></li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .progetto__testata {
+    max-width: var(--misura);
+    margin-bottom: var(--space-6);
+  }
+
+  .progetto__testata h1 {
+    margin-top: var(--space-3);
+  }
+
+  .progetto__sommario {
+    margin-top: var(--space-4);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-md);
+  }
+
+  .progetto__immagine {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+  }
+
+  .progetto__contenuto {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+
+  .progetto__dati {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+    margin: 0;
+    padding: var(--space-5);
+    background-color: var(--colore-superficie);
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    font-size: var(--testo-sm);
+  }
+
+  .progetto__dati dt {
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .progetto__dati dd {
+    margin: var(--space-1) 0 0;
+    font-weight: 600;
+    color: var(--colore-primario);
+  }
+
+  .elenco-altri {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .elenco-altri > li {
+    display: flex;
+  }
+
+  .elenco-altri > li > :global(*) {
+    width: 100%;
+  }
+
+  @media (min-width: 64em) {
+    .progetto__contenuto {
+      grid-template-columns: 18rem 1fr;
+      gap: var(--space-7);
+      align-items: start;
+    }
+
+    .progetto__dati {
+      position: sticky;
+      top: var(--space-5);
+    }
+  }
+</style>

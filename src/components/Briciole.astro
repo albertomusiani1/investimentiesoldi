@@ -1,0 +1,35 @@
+---
+/**
+ * Percorso di navigazione. Emette anche il JSON-LD BreadcrumbList
+ * corrispondente, così i due non possono divergere.
+ */
+import { t } from '../i18n';
+
+export interface Voce {
+  etichetta: string;
+  /** Percorso assoluto interno; assente sull'ultima voce (pagina corrente). */
+  href?: string;
+}
+
+export interface Props {
+  voci: Voce[];
+}
+
+const { voci } = Astro.props;
+
+const tutte: Voce[] = [{ etichetta: t('nav.home'), href: '/' }, ...voci];
+---
+
+<nav class="briciole" aria-label={t('comune.breadcrumb')}>
+  <div class="contenitore">
+    <ol>
+      {
+        tutte.map((voce) => (
+          <li>
+            {voce.href ? <a href={voce.href}>{voce.etichetta}</a> : <span aria-current="page">{voce.etichetta}</span>}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</nav>

@@ -1,0 +1,49 @@
+---
+/**
+ * Scheda di un progetto nella griglia. L'intera scheda è cliccabile
+ * grazie allo pseudo-elemento sul link del titolo: gli screen reader
+ * leggono un solo collegamento.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { t } from '../i18n';
+
+export interface Props {
+  progetto: CollectionEntry<'progetti'>;
+  /** Il primo progetto di una griglia carica l'immagine subito, gli altri in differita. */
+  prioritaria?: boolean;
+}
+
+const { progetto, prioritaria = false } = Astro.props;
+const { titolo, descrizioneBreve, immagine, immagineAlt, cliente, categoria, data } = progetto.data;
+
+const anno = data.getFullYear();
+const percorso = `/progetti/${progetto.id}`;
+---
+
+<article class="scheda scheda--collegata">
+  <div class="scheda__media">
+    <img
+      src={immagine}
+      alt={immagineAlt}
+      width="800"
+      height="500"
+      loading={prioritaria ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  </div>
+  <div class="scheda__corpo">
+    <p><span class="etichetta">{categoria}</span></p>
+    <h3 class="scheda__titolo"><a href={percorso}>{titolo}</a></h3>
+    <p class="scheda__testo">{descrizioneBreve}</p>
+    <dl class="scheda__meta">
+      <div>
+        <dt>{t('comune.cliente')}</dt>
+        <dd>{cliente}</dd>
+      </div>
+      <div>
+        <dt>{t('comune.anno')}</dt>
+        <dd>{anno}</dd>
+      </div>
+    </dl>
+  </div>
+</article>

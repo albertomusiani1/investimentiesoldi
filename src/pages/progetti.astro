@@ -1,0 +1,172 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SchedaProgetto from '../components/SchedaProgetto.astro';
+import { getCollection } from 'astro:content';
+import { CATEGORIE_PROGETTO } from '../content.config';
+import { t } from '../i18n';
+
+const progetti = (await getCollection('progetti')).sort((a, b) => {
+  const ordineA = a.data.ordine ?? Number.MAX_SAFE_INTEGER;
+  const ordineB = b.data.ordine ?? Number.MAX_SAFE_INTEGER;
+  if (ordineA !== ordineB) return ordineA - ordineB;
+  return b.data.data.getTime() - a.data.data.getTime();
+});
+
+/** Solo le categorie che hanno almeno un progetto pubblicato. */
+const categorieUsate = CATEGORIE_PROGETTO.filter((categoria) =>
+  progetti.some((progetto) => progetto.data.categoria === categoria)
+);
+
+/** Identificatore CSS/HTML sicuro per una categoria. */
+const idCategoria = (categoria: string) =>
+  `categoria-${categoria.toLowerCase().normalize('NFD').replace(/[^a-z]/g, '')}`;
+---
+
+<BaseLayout
+  titolo={t('progetti.metaTitolo')}
+  descrizione={t('progetti.metaDescrizione')}
+  briciole={[{ etichetta: t('nav.progetti') }]}
+>
+  <section class="sezione">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h1>{t('progetti.titolo')}</h1>
+        <p>{t('progetti.introduzione')}</p>
+      </div>
+
+      {
+        progetti.length === 0 ? (
+          <p>{t('progetti.nessunProgetto')}</p>
+        ) : (
+          <div class="filtro-progetti">
+            <fieldset class="filtro">
+              <legend class="filtro__titolo">{t('comune.filtraPerCategoria')}</legend>
+              <div class="filtro__voci">
+                <input
+                  class="solo-screen-reader filtro__radio"
+                  type="radio"
+                  name="categoria"
+                  id="categoria-tutte"
+                  value="tutte"
+                  checked
+                />
+                <label class="filtro__etichetta" for="categoria-tutte">
+                  {t('comune.tutteLeCategorie')}
+                </label>
+                {categorieUsate.map((categoria) => (
+                  <>
+                    <input
+                      class="solo-screen-reader filtro__radio"
+                      type="radio"
+                      name="categoria"
+                      id={idCategoria(categoria)}
+                      value={categoria}
+                    />
+                    <label class="filtro__etichetta" for={idCategoria(categoria)}>
+                      {categoria}
+                    </label>
+                  </>
+                ))}
+              </div>
+            </fieldset>
+
+            <ul class="griglia griglia--2 griglia--3 elenco-progetti">
+              {progetti.map((progetto, indice) => (
+                <li data-categoria={progetto.data.categoria}>
+                  <SchedaProgetto progetto={progetto} prioritaria={indice < 2} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Il filtro è interamente HTML + CSS: i radio pilotano la visibilità
+     delle schede tramite :has(), senza una riga di JavaScript. */
+  .filtro {
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    border: 0;
+  }
+
+  .filtro__titolo {
+    padding: 0;
+    margin-bottom: var(--space-3);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-xs);
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .filtro__voci {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .filtro__etichetta {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--colore-superficie);
+    border: 1px solid var(--colore-bordo-forte);
+    border-radius: 999px;
+    color: var(--colore-testo);
+    font-size: var(--testo-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color var(--transizione),
+      border-color var(--transizione),
+      color var(--transizione);
+  }
+
+  .filtro__etichetta:hover {
+    border-color: var(--colore-accento);
+    color: var(--colore-accento);
+  }
+
+  .filtro__radio:checked + .filtro__etichetta {
+    background-color: var(--colore-primario);
+    border-color: var(--colore-primario);
+    color: var(--colore-testo-inverso);
+  }
+
+  .filtro__radio:focus-visible + .filtro__etichetta {
+    outline: 3px solid var(--colore-accento);
+    outline-offset: 2px;
+  }
+
+  .elenco-progetti {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .elenco-progetti > li {
+    display: flex;
+  }
+
+  .elenco-progetti > li > :global(*) {
+    width: 100%;
+  }
+
+  .filtro-progetti:has(#categoria-progettazione:checked)
+    .elenco-progetti
+    > li:not([data-categoria='Progettazione']),
+  .filtro-progetti:has(#categoria-produzione:checked)
+    .elenco-progetti
+    > li:not([data-categoria='Produzione']),
+  .filtro-progetti:has(#categoria-validazione:checked)
+    .elenco-progetti
+    > li:not([data-categoria='Validazione']),
+  .filtro-progetti:has(#categoria-elettrificazione:checked)
+    .elenco-progetti
+    > li:not([data-categoria='Elettrificazione']) {
+    display: none;
+  }
+</style>

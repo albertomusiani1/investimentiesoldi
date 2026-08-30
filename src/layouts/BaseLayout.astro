@@ -1,0 +1,65 @@
+---
+/**
+ * Struttura comune a tutte le pagine: <head> via SEO, skip link,
+ * header, contenuto principale, footer.
+ */
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Briciole from '../components/Briciole.astro';
+import type { Voce } from '../components/Briciole.astro';
+import { schemaBriciole } from '../lib/schema';
+import { t, defaultLocale } from '../i18n';
+import '../styles/global.css';
+
+export interface Props {
+  titolo: string;
+  descrizione: string;
+  immagine?: string;
+  tipo?: 'website' | 'article';
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
+  pubblicatoIl?: string;
+  /** Voci intermedie del percorso; la Home viene aggiunta in automatico. */
+  briciole?: Voce[];
+}
+
+const {
+  titolo,
+  descrizione,
+  immagine,
+  tipo,
+  noindex,
+  jsonLd = [],
+  pubblicatoIl,
+  briciole,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('http://localhost:4321');
+
+const schemi = briciole?.length ? [...jsonLd, schemaBriciole(briciole, site)] : jsonLd;
+---
+
+<!doctype html>
+<html lang={defaultLocale}>
+  <head>
+    <SEO
+      titolo={titolo}
+      descrizione={descrizione}
+      immagine={immagine}
+      tipo={tipo}
+      noindex={noindex}
+      jsonLd={schemi}
+      pubblicatoIl={pubblicatoIl}
+    />
+  </head>
+  <body>
+    <a class="salta-al-contenuto" href="#contenuto">{t('azioni.skipLink')}</a>
+    <Header />
+    {briciole?.length ? <Briciole voci={briciole} /> : null}
+    <main id="contenuto">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

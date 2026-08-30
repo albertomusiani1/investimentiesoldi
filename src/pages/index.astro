@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SchedaProgetto from '../components/SchedaProgetto.astro';
+import { getCollection } from 'astro:content';
+import { t } from '../i18n';
+import { servizi } from '../lib/servizi';
+import { schemaAttivita } from '../lib/schema';
+
+const site = Astro.site ?? new URL('http://localhost:4321');
+
+const progetti = await getCollection('progetti');
+const inEvidenza = progetti
+  .filter((p) => p.data.inEvidenza)
+  .sort((a, b) => (a.data.ordine ?? 99) - (b.data.ordine ?? 99))
+  .slice(0, 3);
+
+/** CONTENUTO — SOSTITUIRE: cifre di sintesi mostrate in home. */
+const numeri = [
+  { cifra: '1978', etichetta: "Anno di fondazione dell'officina" },
+  { cifra: '60', etichetta: 'Persone in un unico stabilimento' },
+  { cifra: '14', etichetta: 'Centri di lavoro a controllo numerico' },
+  { cifra: '9', etichetta: 'Paesi europei serviti' },
+];
+---
+
+<BaseLayout
+  titolo={t('home.metaTitolo')}
+  descrizione={t('home.metaDescrizione')}
+  jsonLd={[schemaAttivita(site)]}
+>
+  <section class="eroe">
+    <div class="contenitore eroe__interno">
+      <div class="eroe__testo">
+        <span class="occhiello">{t('home.heroOcchiello')}</span>
+        <h1>{t('home.heroTitolo')}</h1>
+        <p class="eroe__sommario">{t('home.heroTesto')}</p>
+        <div class="gruppo-bottoni">
+          <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
+          <a class="bottone bottone--secondario" href="/servizi">{t('azioni.scopriServizi')}</a>
+        </div>
+      </div>
+      <div class="eroe__media">
+        <img
+          src="/img/hero-officina.svg"
+          alt={t('home.heroImmagineAlt')}
+          width="720"
+          height="540"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione" aria-labelledby="titolo-servizi">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-servizi">{t('home.serviziTitolo')}</h2>
+        <p>{t('home.serviziSottotitolo')}</p>
+      </div>
+      <ul class="griglia griglia--2 griglia--3 elenco-servizi">
+        {
+          servizi.map((servizio) => (
+            <li class="scheda scheda--collegata">
+              <div class="scheda__corpo">
+                <h3 class="scheda__titolo">
+                  <a href={`/servizi#${servizio.id}`}>{servizio.titolo}</a>
+                </h3>
+                <p class="scheda__testo">{servizio.sommario}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione sezione--scura" aria-labelledby="titolo-numeri">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-numeri">{t('home.numeriTitolo')}</h2>
+      </div>
+      <ul class="numeri">
+        {
+          numeri.map((n) => (
+            <li>
+              <span class="numero__cifra">{n.cifra}</span>
+              <span class="numero__etichetta">{n.etichetta}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione sezione--alt" aria-labelledby="titolo-progetti">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-progetti">{t('home.progettiTitolo')}</h2>
+        <p>{t('home.progettiSottotitolo')}</p>
+      </div>
+      <ul class="griglia griglia--2 griglia--3">
+        {
+          inEvidenza.map((progetto, indice) => (
+            <li>
+              <SchedaProgetto progetto={progetto} prioritaria={indice === 0} />
+            </li>
+          ))
+        }
+      </ul>
+      <div class="gruppo-bottoni">
+        <a class="bottone bottone--secondario" href="/progetti">{t('azioni.vediProgetti')}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione" aria-labelledby="titolo-cta">
+    <div class="contenitore contenitore--stretto centrato">
+      <h2 id="titolo-cta">{t('home.ctaTitolo')}</h2>
+      <p class="cta__testo">{t('home.ctaTesto')}</p>
+      <div class="gruppo-bottoni gruppo-bottoni--centrato">
+        <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .eroe {
+    padding-block: var(--space-7);
+    background-color: var(--colore-superficie);
+    border-bottom: 1px solid var(--colore-bordo);
+  }
+
+  .eroe__interno {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .eroe__testo {
+    max-width: var(--misura);
+  }
+
+  .eroe__sommario {
+    margin-top: var(--space-4);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-md);
+  }
+
+  .eroe__media img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--raggio);
+  }
+
+  .elenco-servizi {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cta__testo {
+    margin-top: var(--space-4);
+    margin-inline: auto;
+    max-width: var(--misura);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-md);
+  }
+
+  .gruppo-bottoni--centrato {
+    justify-content: center;
+  }
+
+  .griglia > li {
+    display: flex;
+  }
+
+  .griglia > li > :global(*) {
+    width: 100%;
+  }
+
+  @media (min-width: 64em) {
+    .eroe {
+      padding-block: var(--space-8);
+    }
+
+    .eroe__interno {
+      grid-template-columns: 1.1fr 1fr;
+      gap: var(--space-7);
+    }
+  }
+</style>

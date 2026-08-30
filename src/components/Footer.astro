@@ -1,0 +1,149 @@
+---
+/**
+ * Piè di pagina: descrizione, navigazione, informazioni legali e contatti.
+ */
+import Logo from './Logo.astro';
+import { t } from '../i18n';
+import { azienda, indirizzoCompleto } from '../lib/azienda';
+
+const anno = new Date().getFullYear();
+
+const pagine = [
+  { href: '/servizi', etichetta: t('nav.servizi') },
+  { href: '/progetti', etichetta: t('nav.progetti') },
+  { href: '/chi-siamo', etichetta: t('nav.chiSiamo') },
+  { href: '/contatti', etichetta: t('nav.contatti') },
+];
+
+const legali = [
+  { href: '/privacy', etichetta: t('nav.privacy') },
+  { href: '/cookie-policy', etichetta: t('nav.cookie') },
+];
+---
+
+<footer class="pie">
+  <div class="contenitore">
+    <div class="pie__griglia">
+      <div class="pie__marchio">
+        <Logo scuro={false} />
+        <p>{t('footer.descrizione')}</p>
+      </div>
+
+      <nav class="pie__colonna" aria-label={t('nav.etichettaSecondaria')}>
+        <h2 class="pie__titolo">{t('footer.navigazione')}</h2>
+        <ul>
+          {pagine.map((voce) => <li><a href={voce.href}>{voce.etichetta}</a></li>)}
+        </ul>
+      </nav>
+
+      <div class="pie__colonna">
+        <h2 class="pie__titolo">{t('footer.legale')}</h2>
+        <ul>
+          {legali.map((voce) => <li><a href={voce.href}>{voce.etichetta}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="pie__colonna">
+        <h2 class="pie__titolo">{t('footer.contatti')}</h2>
+        <address>
+          <p>{indirizzoCompleto}</p>
+          <p><a href={`tel:${azienda.telefonoLink}`}>{azienda.telefono}</a></p>
+          <p><a href={`mailto:${azienda.email}`}>{azienda.email}</a></p>
+        </address>
+      </div>
+    </div>
+
+    <div class="pie__coda">
+      <p>{`\u00a9 ${anno} ${azienda.nomeLegale} \u2014 ${t('footer.copyright')}`}</p>
+      <p>
+        {`${t('footer.partitaIva')} ${azienda.datiSocietari.partitaIva} \u00b7 ${t('footer.rea')} ${azienda.datiSocietari.rea}`}
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    margin-top: var(--space-8);
+    padding-block: var(--space-7);
+    background-color: var(--colore-primario);
+    color: var(--colore-testo-inverso-tenue);
+    font-size: var(--testo-sm);
+  }
+
+  .pie__griglia {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .pie__marchio p {
+    max-width: 34ch;
+    margin-top: var(--space-4);
+  }
+
+  .pie__titolo {
+    margin-bottom: var(--space-3);
+    color: var(--colore-testo-inverso);
+    font-family: var(--font-sans);
+    font-size: var(--testo-xs);
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .pie ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pie li + li {
+    margin-top: var(--space-2);
+  }
+
+  .pie a {
+    color: var(--colore-testo-inverso);
+    text-decoration: none;
+  }
+
+  .pie a:hover {
+    color: var(--colore-testo-inverso);
+    text-decoration: underline;
+  }
+
+  .pie :focus-visible {
+    outline-color: var(--colore-testo-inverso);
+  }
+
+  .pie address {
+    font-style: normal;
+  }
+
+  .pie address p + p {
+    margin-top: var(--space-2);
+  }
+
+  .pie__coda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    justify-content: space-between;
+    margin-top: var(--space-7);
+    padding-top: var(--space-5);
+    border-top: 1px solid rgb(255 255 255 / 18%);
+    font-size: var(--testo-xs);
+  }
+
+  @media (min-width: 40em) {
+    .pie__griglia {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64em) {
+    .pie__griglia {
+      grid-template-columns: 2fr 1fr 1fr 1.4fr;
+      gap: var(--space-7);
+    }
+  }
+</style>

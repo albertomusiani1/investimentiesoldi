@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t } from '../i18n';
+
+const collegamenti = [
+  { href: '/', etichetta: t('nav.home') },
+  { href: '/servizi', etichetta: t('nav.servizi') },
+  { href: '/progetti', etichetta: t('nav.progetti') },
+  { href: '/chi-siamo', etichetta: t('nav.chiSiamo') },
+  { href: '/contatti', etichetta: t('nav.contatti') },
+];
+---
+
+<BaseLayout
+  titolo={t('errore404.metaTitolo')}
+  descrizione={t('errore404.metaDescrizione')}
+  noindex={true}
+>
+  <section class="sezione">
+    <div class="contenitore contenitore--stretto">
+      <p class="codice" aria-hidden="true">{t('errore404.codice')}</p>
+      <h1>{t('errore404.titolo')}</h1>
+      <p class="testo">{t('errore404.testo')}</p>
+
+      <h2 class="collegamenti__titolo">{t('errore404.collegamentiTitolo')}</h2>
+      <ul class="collegamenti">
+        {collegamenti.map((voce) => <li><a href={voce.href}>{voce.etichetta}</a></li>)}
+      </ul>
+
+      <div class="gruppo-bottoni">
+        <a class="bottone bottone--primario" href="/">{t('azioni.tornaAllaHome')}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .codice {
+    font-family: var(--font-serif);
+    font-size: var(--testo-3xl);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--colore-accento);
+  }
+
+  h1 {
+    margin-top: var(--space-3);
+  }
+
+  .testo {
+    margin-top: var(--space-4);
+    max-width: var(--misura);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-md);
+  }
+
+  .collegamenti__titolo {
+    margin-top: var(--space-7);
+    font-family: var(--font-sans);
+    font-size: var(--testo-xs);
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .collegamenti {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+    font-weight: 600;
+  }
+</style>

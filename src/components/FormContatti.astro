@@ -1,0 +1,293 @@
+---
+/**
+ * Modulo contatti.
+ *
+ * È l'unico componente del sito che invia JavaScript al browser.
+ * Funziona anche senza: in quel caso il browser esegue una POST normale e
+ * la funzione risponde con un redirect verso la pagina di conferma.
+ *
+ * Le stringhe mostrate dallo script viaggiano in attributi `data-*`, così
+ * restano in `src/i18n/it.json` e non sono scritte dentro il JavaScript.
+ */
+import { t } from '../i18n';
+import { azienda } from '../lib/azienda';
+import { segmenta } from '../lib/testo';
+
+/** Chiave pubblica del servizio antispam. Se assente il widget non viene reso. */
+const chiaveAntispam = import.meta.env['PUBLIC_TURNSTILE_SITE_KEY'] ?? '';
+
+/** L'etichetta del consenso contiene il collegamento all'informativa. */
+const segmentiConsenso = segmenta(t('form.consensoLabel'));
+
+const messaggi = {
+  'data-msg-nome': t('form.erroreNome'),
+  'data-msg-email': t('form.erroreEmail'),
+  'data-msg-azienda': t('form.erroreAzienda'),
+  'data-msg-messaggio': t('form.erroreMessaggio'),
+  'data-msg-consenso': t('form.erroreConsenso'),
+  'data-msg-validazione': t('form.erroreValidazione'),
+  'data-msg-antispam': t('form.erroreAntispam'),
+  'data-msg-troppe-richieste': t('form.erroreTroppeRichieste'),
+  'data-msg-server': t('form.erroreServer'),
+  'data-msg-successo-titolo': t('form.successoTitolo'),
+  'data-msg-successo-testo': t('form.successoTesto'),
+  'data-msg-errore-titolo': t('form.erroreTitolo'),
+  'data-msg-errore-testo': t('form.erroreTesto'),
+  'data-msg-invio': t('azioni.invioInCorso'),
+  'data-msg-invia': t('azioni.invia'),
+  'data-email-contatto': azienda.email,
+};
+---
+
+<form
+  id="modulo-contatti"
+  class="modulo"
+  method="POST"
+  action="/api/contatti"
+  novalidate
+  {...messaggi}
+>
+  <div class="modulo__campo">
+    <label class="modulo__etichetta" for="campo-nome">
+      {t('form.nomeLabel')}{' '}
+      <span class="modulo__obbligatorio" aria-hidden="true">*</span>
+      <span class="solo-screen-reader">({t('form.obbligatorio')})</span>
+    </label>
+    <input
+      class="modulo__controllo"
+      type="text"
+      id="campo-nome"
+      name="nome"
+      autocomplete="name"
+      required
+      maxlength="80"
+      placeholder={t('form.nomePlaceholder')}
+      aria-describedby="errore-nome"
+    />
+    <p class="modulo__errore" id="errore-nome" hidden></p>
+  </div>
+
+  <div class="modulo__campo">
+    <label class="modulo__etichetta" for="campo-email">
+      {t('form.emailLabel')}{' '}
+      <span class="modulo__obbligatorio" aria-hidden="true">*</span>
+      <span class="solo-screen-reader">({t('form.obbligatorio')})</span>
+    </label>
+    <input
+      class="modulo__controllo"
+      type="email"
+      id="campo-email"
+      name="email"
+      autocomplete="email"
+      required
+      maxlength="180"
+      placeholder={t('form.emailPlaceholder')}
+      aria-describedby="errore-email"
+    />
+    <p class="modulo__errore" id="errore-email" hidden></p>
+  </div>
+
+  <div class="modulo__campo">
+    <label class="modulo__etichetta" for="campo-azienda">
+      {t('form.aziendaLabel')}{' '}
+      <span class="modulo__facoltativo">({t('comune.campoFacoltativo')})</span>
+    </label>
+    <input
+      class="modulo__controllo"
+      type="text"
+      id="campo-azienda"
+      name="azienda"
+      autocomplete="organization"
+      maxlength="120"
+      placeholder={t('form.aziendaPlaceholder')}
+      aria-describedby="errore-azienda"
+    />
+    <p class="modulo__errore" id="errore-azienda" hidden></p>
+  </div>
+
+  <div class="modulo__campo">
+    <label class="modulo__etichetta" for="campo-messaggio">
+      {t('form.messaggioLabel')}{' '}
+      <span class="modulo__obbligatorio" aria-hidden="true">*</span>
+      <span class="solo-screen-reader">({t('form.obbligatorio')})</span>
+    </label>
+    <textarea
+      class="modulo__controllo modulo__area"
+      id="campo-messaggio"
+      name="messaggio"
+      rows="7"
+      required
+      maxlength="4000"
+      placeholder={t('form.messaggioPlaceholder')}
+      aria-describedby="errore-messaggio"></textarea>
+    <p class="modulo__errore" id="errore-messaggio" hidden></p>
+  </div>
+
+  {/* Honeypot: nascosto agli umani, compilato dai programmi automatici. */}
+  <div class="modulo__trappola" aria-hidden="true">
+    <label for="campo-sito-web">{t('form.honeypotLabel')}</label>
+    <input type="text" id="campo-sito-web" name="sito_web" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="modulo__campo modulo__campo--consenso">
+    <input
+      class="modulo__spunta"
+      type="checkbox"
+      id="campo-consenso"
+      name="consenso"
+      required
+      aria-describedby="errore-consenso"
+    />
+    <label class="modulo__etichetta-consenso" for="campo-consenso">
+      {
+        segmentiConsenso.map((segmento) =>
+          segmento.href ? <a href={segmento.href}>{segmento.testo}</a> : segmento.testo
+        )
+      }{' '}
+      <span class="modulo__obbligatorio" aria-hidden="true">*</span>
+    </label>
+    <p class="modulo__errore" id="errore-consenso" hidden></p>
+  </div>
+
+  {
+    chiaveAntispam !== '' && (
+      <div class="cf-turnstile" data-sitekey={chiaveAntispam} data-language="it"></div>
+    )
+  }
+
+  <div class="modulo__azioni">
+    <button class="bottone bottone--primario" type="submit">{t('azioni.invia')}</button>
+  </div>
+
+  <p class="modulo__stato" id="stato-modulo" role="status" aria-live="polite" hidden></p>
+
+  <noscript>
+    <p class="modulo__noscript">{t('form.noscript')}</p>
+  </noscript>
+</form>
+
+<script>
+  // Il codice sta in un modulo separato: così Astro lo emette come file
+  // esterno e la Content-Security-Policy può restare senza 'unsafe-inline'.
+  import '../scripts/modulo-contatti.ts';
+</script>
+
+<style>
+  .modulo {
+    display: grid;
+    gap: var(--space-5);
+    max-width: 40rem;
+  }
+
+  .modulo__campo {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .modulo__etichetta {
+    font-size: var(--testo-sm);
+    font-weight: 600;
+    color: var(--colore-primario);
+  }
+
+  .modulo__obbligatorio {
+    color: var(--colore-accento);
+  }
+
+  .modulo__facoltativo {
+    font-weight: 400;
+    color: var(--colore-testo-tenue);
+  }
+
+  .modulo__controllo {
+    width: 100%;
+    padding: var(--space-3);
+    background-color: var(--colore-superficie);
+    border: 1px solid var(--colore-bordo-forte);
+    border-radius: var(--raggio);
+    font-size: var(--testo-base);
+    transition: border-color var(--transizione);
+  }
+
+  .modulo__controllo::placeholder {
+    color: var(--colore-testo-tenue);
+  }
+
+  .modulo__controllo:hover {
+    border-color: var(--colore-primario);
+  }
+
+  .modulo__controllo[aria-invalid='true'] {
+    border-color: var(--colore-errore);
+    border-width: 2px;
+  }
+
+  .modulo__area {
+    resize: vertical;
+    line-height: var(--interlinea);
+  }
+
+  .modulo__trappola {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .modulo__campo--consenso {
+    grid-template-columns: auto 1fr;
+    gap: var(--space-2) var(--space-3);
+    align-items: start;
+  }
+
+  .modulo__spunta {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.15rem 0 0;
+    accent-color: var(--colore-primario);
+  }
+
+  .modulo__etichetta-consenso {
+    font-size: var(--testo-sm);
+    line-height: var(--interlinea-media);
+  }
+
+  .modulo__campo--consenso .modulo__errore {
+    grid-column: 2;
+  }
+
+  .modulo__errore {
+    margin: 0;
+    color: var(--colore-errore);
+    font-size: var(--testo-sm);
+    font-weight: 600;
+  }
+
+  .modulo__azioni {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .modulo__stato {
+    margin: 0;
+    padding: var(--space-4);
+    border-left: 4px solid var(--colore-bordo-forte);
+    background-color: var(--colore-superficie-alt);
+    font-size: var(--testo-sm);
+  }
+
+  .modulo__stato--successo {
+    border-left-color: var(--colore-successo);
+  }
+
+  .modulo__stato--errore {
+    border-left-color: var(--colore-errore);
+  }
+
+  .modulo__noscript {
+    margin: 0;
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-sm);
+  }
+</style>

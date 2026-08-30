@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TestoLegale from '../components/TestoLegale.astro';
+import { t } from '../i18n';
+import { azienda } from '../lib/azienda';
+import { aggiornamentoLegale, cookie } from '../lib/testi-legali';
+
+const valori = {
+  email: azienda.email,
+  pec: azienda.emailPec,
+  nomeLegale: azienda.nomeLegale,
+};
+---
+
+<BaseLayout
+  titolo={t('cookie.metaTitolo')}
+  descrizione={t('cookie.metaDescrizione')}
+  briciole={[{ etichetta: t('nav.cookie') }]}
+>
+  <section class="sezione">
+    <div class="contenitore contenitore--stretto">
+      <h1>{t('cookie.titolo')}</h1>
+      <p class="aggiornamento">{t('comune.aggiornatoIl')} {aggiornamentoLegale}</p>
+      <div class="prosa">
+        <TestoLegale sezioni={cookie} valori={valori} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .aggiornamento {
+    margin-top: var(--space-3);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-sm);
+  }
+
+  .prosa {
+    margin-top: var(--space-6);
+  }
+</style>
