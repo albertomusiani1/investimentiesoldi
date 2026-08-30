@@ -486,8 +486,7 @@ Il lavoro è tutto di traduzione: nessun componente va rifattorizzato.
      (vedi la sezione precedente);
    - gli header di sicurezza (CSP, `X-Frame-Options`, `Referrer-Policy`,
      `Permissions-Policy`, HSTS);
-   - il redirect permanente dagli indirizzi con slash finale a quelli senza, per
-     non avere contenuti duplicati;
+   - la riscrittura di `/api/contatti` verso la funzione del modulo;
    - la cache di un anno per font e file con impronta nel nome.
 
 Se in futuro si aggiunge una risorsa da un dominio terzo (un video, una mappa

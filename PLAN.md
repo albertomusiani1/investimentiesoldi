@@ -10,6 +10,11 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
   collection con 6 progetti, form contatti con funzione Netlify e 14 test verdi, SEO e
   netlify.toml. Build e `astro check` puliti, check-pages 15/15. Restano le verifiche
   finali (fase 9) e la documentazione (README, RESULTS).
+- 2026-08-30 19:20 — Primo deploy reale su Netlify: la home rispondeva con un ciclo
+  di reindirizzamenti. Causa: la regola `from = "/*/"` con `force = true` in
+  `netlify.toml`, in cui lo splat può corrispondere alla stringa vuota e quindi la
+  radice veniva reindirizzata su se stessa. Regola rimossa; la forma canonica resta
+  garantita dal tag `<link rel="canonical">` di ogni pagina.
 - 2026-08-30 12:45 — Predisposto il deploy di prova: indirizzo del sito letto
   dall'ambiente (variabile `URL` di Netlify) invece che fissato nel codice,
   `robots.txt` generato alla build così da non poter divergere dall'indirizzo
@@ -281,7 +286,12 @@ proprietario e non possono essere chiuse da qui:
    coerente con quello che il modulo raccoglie davvero, ma è una base, non un parere
    legale: in particolare vanno indicati per nome i fornitori nominati responsabili del
    trattamento.
-3. **Il modulo contatti non è mai stato provato contro i servizi veri**, perché le chiavi
+3. **`netlify.toml` non è coperto da nessuna verifica automatica.** Le quindici
+   verifiche girano contro `astro preview`, che non legge quel file: redirect e
+   intestazioni non vengono mai eseguiti in locale. È il buco da cui è passato il ciclo
+   di reindirizzamenti del 30 agosto. Ogni modifica a `netlify.toml` va provata su un
+   deploy reale, controllando almeno la home, una pagina interna e `/robots.txt`.
+4. **Il modulo contatti non è mai stato provato contro i servizi veri**, perché le chiavi
    non esistono ancora. La logica è coperta da 14 test con mailer e verifica antispam
    mockati; il primo invio reale va provato subito dopo il deploy, controllando che
    arrivino entrambe le email e che la copia al visitatore non finisca nella posta

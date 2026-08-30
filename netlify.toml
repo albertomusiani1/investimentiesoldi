@@ -21,13 +21,27 @@
   status = 200
   force = true
 
-# Una sola forma canonica dell'URL: quella senza slash finale.
-# Evita che /servizi e /servizi/ siano indicizzate come pagine diverse.
-[[redirects]]
-  from = "/*/"
-  to = "/:splat"
-  status = 301
-  force = true
+# NOTA — qui c'era una regola di reindirizzamento dagli URL con slash finale
+# a quelli senza:
+#
+#     from = "/*/"   to = "/:splat"   status = 301   force = true
+#
+# Era sbagliata e mandava il sito in errore. Sulla home la parte "*" può
+# corrispondere alla stringa vuota, quindi "/" corrispondeva alla regola e
+# veniva reindirizzata a "/": un ciclo infinito, che il browser interrompe con
+# ERR_TOO_MANY_REDIRECTS. Il "force = true" peggiorava le cose, perche applica
+# la regola anche quando il file esiste davvero.
+#
+# La forma canonica dell'URL è comunque garantita, in due modi che non possono
+# innescare cicli:
+#   - Netlify normalizza da sé lo slash finale sui siti pubblicati a cartelle;
+#   - ogni pagina dichiara il proprio <link rel="canonical"> senza slash finale
+#     (vedi src/components/SEO.astro), ed è questo il meccanismo che i motori di
+#     ricerca usano davvero per non contare due volte la stessa pagina.
+#
+# Se un giorno servisse davvero una regola esplicita, va scritta in modo che non
+# possa mai corrispondere alla radice, e va provata in un deploy di prova: le
+# verifiche locali del progetto NON leggono questo file.
 
 # ---------------------------------------------------------------------------
 # BLOCCO DELL'INDICIZZAZIONE — sito di prova
