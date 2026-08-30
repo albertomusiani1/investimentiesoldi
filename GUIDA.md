@@ -27,6 +27,7 @@ tornerai.
 11. [Le verifiche automatiche e perché esistono](#11-le-verifiche-automatiche-e-perché-esistono)
 12. [Glossario](#12-glossario)
 13. [Cosa imparare dopo](#13-cosa-imparare-dopo)
+14. [Rifarlo per un cliente](#14-rifarlo-per-un-cliente)
 
 ---
 
@@ -666,6 +667,132 @@ un colore, ricarica, guarda cosa succede. Poi rompi qualcosa apposta e guarda
 l'errore. Git ti protegge — con `git checkout .` torni all'ultima versione
 salvata e non hai perso niente. È il modo più veloce per imparare, e l'unico che
 resta in testa.
+
+---
+
+## 14. Rifarlo per un cliente
+
+> «Se volessi creare un sito per un'azienda esterna simile a questo, potrei farlo
+> funzionare così?»
+
+**Sì.** Anzi, è esattamente l'uso per cui un progetto così ha senso: la parte
+faticosa — impaginazione, accessibilità, SEO, modulo contatti, verifiche — è già
+fatta e non dipende da chi è il cliente. Ma la parte tecnica è la metà facile.
+Quella che fa danni, quando il sito è di qualcun altro, è l'altra.
+
+### La parte tecnica: mezza giornata di lavoro, più i contenuti
+
+Il progetto è già un modello riutilizzabile. Su GitHub puoi marcare il
+repository come *template* (Settings → spunta «Template repository»): da lì il
+pulsante **Use this template** crea una copia nuova, con storia pulita, in due
+clic.
+
+Poi cambi **solo i contenuti**, in nove file:
+
+| File | Cosa contiene |
+|---|---|
+| `src/lib/azienda.ts` | Ragione sociale, indirizzo, telefono, partita IVA, orari |
+| `src/i18n/it.json` | Tutte le etichette, i titoli, i testi per Google |
+| `src/lib/servizi.ts` | I servizi offerti |
+| `src/lib/testi-legali.ts` | Privacy e cookie policy |
+| `src/content/progetti/*.md` | I casi da mostrare |
+| `src/pages/chi-siamo.astro` | Storia, valori, persone |
+| `src/pages/index.astro` | Le cifre della home |
+| `src/styles/global.css` | Colori, caratteri, spaziature |
+| `astro.config.mjs` | Il dominio |
+
+Più le immagini in `public/img/` e il nome in `package.json`.
+
+**Non tocchi niente** di `src/components/`, `src/layouts/`,
+`netlify/functions/`, `scripts/`, `tests/`: è la macchina, e va bene com'è. È il
+senso di aver tenuto ogni parola fuori dai componenti.
+
+Realisticamente: mezza giornata per la parte tecnica e il cambio di veste
+grafica, più il tempo di scrivere i contenuti veri — che di solito è la cosa che
+allunga i tempi, e che dipende dal cliente più che da te.
+
+### Cosa cambia davvero quando il cliente non sei tu
+
+Qui stanno i problemi veri, e nessuno è di programmazione.
+
+**Chi possiede cosa.** È la domanda più importante e quella che si dimentica
+sempre. Dominio, repository GitHub, account Netlify, caselle email, chiavi dei
+servizi: **intestali al cliente**, e fatti dare accesso come collaboratore.
+Costa dieci minuti in più all'inizio ed evita la situazione classica — il
+cliente cambia fornitore, o voi vi salutate, e il suo sito è appeso a un account
+tuo. Se il dominio è intestato a te, tecnicamente il sito è tuo: è un guaio
+legale ed è un pessimo modo di lavorare.
+
+**Chi aggiorna i contenuti.** Un cliente che non usa Git non può aggiungere un
+progetto. Hai tre strade, in ordine di sforzo:
+
+1. **Lo fai tu.** Onesto e semplice, se sono due o tre modifiche all'anno. Va
+   messo per iscritto: quante, in che tempi, a che condizioni.
+2. **Gli insegni l'editor di GitHub.** Poco noto e sorprendentemente efficace:
+   `github.com` permette di modificare un file `.md` direttamente dal browser —
+   si apre il file, matita in alto a destra, si scrive, *Commit changes*.
+   Netlify se ne accorge e ripubblica da solo. Per aggiungere un progetto a un
+   sito come questo è più che sufficiente, e non richiede di installare niente.
+3. **Aggiungi un CMS.** Esistono pannelli di amministrazione gratuiti che
+   scrivono su Git al posto tuo — *Decap CMS*, *Sveltia CMS*, *TinaCMS*: il
+   cliente vede un modulo con dei campi, salva, e sotto succede un commit. Sono
+   una mezza giornata di configurazione e vanno mantenuti. Ha senso se il sito
+   cambia spesso o se le persone che ci scrivono sono più d'una.
+
+**Chi si prende la responsabilità dei testi legali.** La privacy policy non la
+scrivi tu, e non la scrive nemmeno un modello: la **verifica il cliente**, che è
+il titolare del trattamento e ne risponde. Tu fornisci una base coerente con
+quello che il sito raccoglie davvero — come quella che c'è qui — e la fai
+rileggere a chi di dovere. Vale lo stesso per i dati societari e per qualunque
+affermazione sui prodotti.
+
+**Chi mantiene.** Le librerie invecchiano, Node cambia versione, Netlify
+ridisegna l'interfaccia. Un sito così non marcisce in fretta — è statico, non
+c'è un WordPress da aggiornare ogni mese — ma una passata di `npm update` e una
+build di controllo una o due volte l'anno servono. Decidi in anticipo se è
+compreso o se è a chiamata.
+
+### Quanto costa tenerlo in piedi
+
+| Voce | Costo |
+|---|---|
+| Dominio `.it` | 10–20 € l'anno |
+| Netlify, piano gratuito | 0 € — 100 GB di traffico e 300 minuti di build al mese, per un sito vetrina è abbondante |
+| Servizio di posta transazionale | 0 € nei piani gratuiti, fino a qualche migliaio di email al mese |
+| Antispam | 0 € |
+
+In pratica: **il dominio, e basta**. È uno degli argomenti di vendita più forti
+rispetto a un WordPress in hosting condiviso, che parte da qualche decina di
+euro l'anno e va aggiornato.
+
+### Quando questo impianto NON è la risposta
+
+Non è adatto a tutto. Se il cliente ti chiede una di queste cose, serve
+un'architettura diversa, e conviene dirlo subito:
+
+- **Negozio online.** Carrello, pagamenti, magazzino: servono Shopify o
+  WooCommerce, o almeno un servizio di e-commerce agganciato.
+- **Area riservata con login.** Richiede un server che sappia chi sei.
+- **Prenotazioni, disponibilità in tempo reale.** Idem.
+- **Un blog con molti autori e uscite settimanali.** Tecnicamente si fa, ma
+  senza un CMS diventa un lavoro per te tutte le settimane.
+- **Un cliente che vuole spostare i blocchi da solo**, alla Wix o alla Squarespace.
+  Quella libertà qui non c'è: il layout è deciso nel codice. Per certi clienti è
+  un pregio — il sito non si imbruttisce da solo — per altri è un limite
+  insopportabile. Meglio saperlo prima di firmare.
+
+### Il consiglio pratico
+
+Per il primo cliente, **copia questo progetto e sostituisci i contenuti**. Non
+provare a costruirti subito un modello universale: scoprirai solo lavorando sul
+secondo e sul terzo sito quali parti cambiano davvero e quali no, e a quel punto
+astrarrai le cose giuste invece di quelle che immaginavi.
+
+E tieni la disciplina che c'è già in questo progetto: i contenuti separati dal
+codice, le verifiche che girano prima di pubblicare, il `README` che spiega cosa
+sostituire. Su un sito tuo sembrano pignolerie. Su un sito di qualcun altro, che
+riaprirai fra otto mesi senza ricordarti niente, sono la differenza fra
+mezz'ora e mezza giornata.
 
 ---
 
