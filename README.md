@@ -11,6 +11,12 @@ client tranne l'isola del modulo contatti.
 - **Modulo contatti funzionante** anche senza JavaScript, con doppia email
   (conferma al visitatore, notifica al titolare).
 
+> **Non sai da dove cominciare?** Questo file è il manuale operativo: dice *come*
+> fare le cose. Se prima vuoi capire *perché* sono fatte così — cos'è un sito
+> statico, cosa fanno HTML, CSS e JavaScript, cosa succede fra il tuo computer e
+> il browser di un visitatore — parti da [`GUIDA.md`](./GUIDA.md), scritto per
+> chi non fa il mestiere.
+
 ---
 
 ## Indice
