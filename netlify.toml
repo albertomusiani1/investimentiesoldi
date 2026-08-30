@@ -30,6 +30,32 @@
   force = true
 
 # ---------------------------------------------------------------------------
+# BLOCCO DELL'INDICIZZAZIONE — sito di prova
+#
+# Finché queste righe ci sono, il sito è raggiungibile da chiunque abbia
+# l'indirizzo ma NON compare su Google: l'intestazione X-Robots-Tag chiede ai
+# motori di non inserirlo nei risultati e di non seguirne i collegamenti.
+#
+# Serve perché il sito contiene ancora contenuti segnaposto — ragione sociale,
+# partita IVA, indirizzo e recapiti inventati — che la home dichiara a Google
+# come scheda aziendale (dati strutturati LocalBusiness). Far indicizzare
+# un'anagrafica finta si disfa male: le pagine restano nella cache dei motori
+# per settimane dopo che le hai corrette.
+#
+# COME APRIRE IL SITO A GOOGLE, quando i contenuti sono quelli veri:
+#   1. cancella l'intero blocco [[headers]] qui sotto (dalla riga successiva
+#      fino a "X-Robots-Tag" compresa);
+#   2. fai commit e push: Netlify ripubblica da solo;
+#   3. verifica su https://<il-tuo-sito>/ con Ispeziona → Rete che l'header
+#      X-Robots-Tag non ci sia più;
+#   4. registra il sito su Google Search Console e invia sitemap-index.xml.
+# ---------------------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# ---------------------------------------------------------------------------
 # Intestazioni di sicurezza
 # ---------------------------------------------------------------------------
 [[headers]]

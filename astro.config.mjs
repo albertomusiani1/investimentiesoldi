@@ -3,10 +3,34 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 /**
- * URL pubblica del sito. Va sostituita con il dominio reale prima del deploy:
- * viene usata per canonical, Open Graph, sitemap e robots.txt.
+ * Indirizzo pubblico del sito. Da qui escono gli URL canonici, le anteprime
+ * social, la sitemap e il robots.txt: se è sbagliato, il sito è online ma
+ * "si presenta" con un indirizzo che non esiste.
+ *
+ * Come viene scelto, in ordine:
+ *   1. la variabile SITE_URL, se la imposti tu esplicitamente;
+ *   2. la variabile URL, che Netlify valorizza da sola con l'indirizzo del
+ *      sito durante la build — così un deploy di prova su xxx.netlify.app
+ *      è già coerente senza che tu debba toccare niente;
+ *   3. il dominio definitivo scritto qui sotto, usato in sviluppo locale.
+ *
+ * QUANDO COMPRI IL DOMINIO VERO: sostituisci l'indirizzo in DOMINIO_DEFINITIVO
+ * e, su Netlify, collega il dominio: la variabile URL si aggiorna da sola.
  */
-export const SITE_URL = 'https://www.brambillafuture.it';
+const DOMINIO_DEFINITIVO = 'https://www.brambillafuture.it';
+
+/**
+ * Accetta solo indirizzi http/https: una variabile sporca non deve rompere la build.
+ * @param {unknown} valore
+ * @returns {string | undefined}
+ */
+const indirizzoValido = (valore) =>
+  typeof valore === 'string' && /^https?:\/\/[^\s]+$/.test(valore) ? valore.replace(/\/$/, '') : undefined;
+
+export const SITE_URL =
+  indirizzoValido(process.env.SITE_URL) ??
+  indirizzoValido(process.env.URL) ??
+  DOMINIO_DEFINITIVO;
 
 export default defineConfig({
   site: SITE_URL,

@@ -81,7 +81,7 @@ terminale.
 ├── public/                   File serviti così come sono
 │   ├── fonts/                Caratteri self-hosted in WOFF2
 │   ├── img/                  Illustrazioni SVG
-│   ├── favicon.svg  og-default.png  apple-touch-icon.png  robots.txt
+│   ├── favicon.svg  og-default.png  apple-touch-icon.png
 ├── scripts/                  Script di verifica e di servizio
 └── src/
     ├── components/           Pezzi riutilizzabili (header, schede, modulo…)
@@ -90,7 +90,7 @@ terminale.
     ├── i18n/it.json          Tutte le stringhe di interfaccia
     ├── layouts/              Struttura comune delle pagine
     ├── lib/                  Dati dell'azienda, servizi, testi legali, SEO
-    ├── pages/                Una pagina per file
+    ├── pages/                Una pagina per file (robots.txt incluso, generato)
     ├── scripts/              L'unico JavaScript inviato al browser
     └── styles/global.css     Palette, tipografia, spaziature, componenti
 ```
@@ -208,13 +208,19 @@ strutturati per Google leggono tutti da qui.
 | `datiSocietari` | Partita IVA, REA, capitale sociale |
 | `dipendenti` | Numero di persone |
 
-### 2. Dominio — tre punti
+### 2. Dominio — un punto solo
 
 | File | Che cosa cambiare |
 |---|---|
-| `astro.config.mjs` | `SITE_URL`: da `https://www.brambillafuture.it` al dominio vero |
-| `public/robots.txt` | La riga `Sitemap:` con lo stesso dominio |
-| `netlify.toml` | Niente, se non si aggiungono domini terzi alla CSP |
+| `astro.config.mjs` | `DOMINIO_DEFINITIVO`: da `https://www.brambillafuture.it` al dominio vero |
+
+Il `robots.txt` e la sitemap si allineano da soli: sono generati alla build a
+partire dall'indirizzo del sito, non scritti a mano. Su Netlify non serve
+nemmeno toccare `DOMINIO_DEFINITIVO` per un deploy di prova: la configurazione
+legge la variabile `URL` che Netlify valorizza da sola con l'indirizzo del sito.
+
+L'ordine di precedenza è: variabile `SITE_URL` se la imposti tu → variabile
+`URL` di Netlify → `DOMINIO_DEFINITIVO`.
 
 ### 3. Testi delle pagine
 
@@ -241,6 +247,10 @@ Sono tutte SVG geometriche disegnate a mano, in palette con il sito.
 | `img/progetti/*.svg` | Un'immagine per progetto |
 | `favicon.svg` | Icona del sito |
 | `og-default.png`, `apple-touch-icon.png` | Generate da `npm run immagini:social`, che le ricava dagli SVG scritti in `scripts/genera-immagini-social.mjs` |
+
+Il `robots.txt` non è un file: lo genera `src/pages/robots.txt.ts` a ogni build,
+prendendo l'indirizzo del sito dalla configurazione. Così non può mai puntare a
+un dominio sbagliato.
 
 Sostituendo un'immagine va aggiornato anche il testo alternativo: per i progetti
 è il campo `immagineAlt`, per le altre la chiave corrispondente in `it.json`.
@@ -461,9 +471,13 @@ Il lavoro è tutto di traduzione: nessun componente va rifattorizzato.
    build (`npm run build`), cartella pubblicata (`dist`) e cartella delle
    funzioni (`netlify/functions`).
 2. Impostare le variabili d'ambiente elencate sopra.
-3. Puntare il dominio e aggiornare `SITE_URL` in `astro.config.mjs` e
-   `public/robots.txt`.
+3. Collegare il dominio. Non serve toccare nessun file: `astro.config.mjs`
+   legge la variabile `URL` che Netlify valorizza da sola, e `robots.txt` e
+   sitemap si allineano di conseguenza. Aggiorna `DOMINIO_DEFINITIVO` solo per
+   far coincidere anche le build fatte fuori da Netlify.
 4. `netlify.toml` imposta anche:
+   - il blocco dell'indicizzazione, da togliere quando i contenuti sono veri
+     (vedi la sezione precedente);
    - gli header di sicurezza (CSP, `X-Frame-Options`, `Referrer-Policy`,
      `Permissions-Policy`, HSTS);
    - il redirect permanente dagli indirizzi con slash finale a quelli senza, per
@@ -475,6 +489,39 @@ interattiva) va aggiunta anche alla `Content-Security-Policy`, altrimenti il
 browser la blocca.
 
 ---
+
+## Mettere online un sito di prova senza farsi trovare su Google
+
+Il sito è già configurato per stare online **senza** finire nei risultati di
+ricerca. Serve finché i contenuti sono segnaposto: ragione sociale, partita IVA,
+indirizzo e recapiti sono inventati, e la home li dichiara ai motori come scheda
+aziendale (dati strutturati `LocalBusiness`). Un'anagrafica finta indicizzata si
+toglie male, perché i motori tengono le pagine in cache per settimane.
+
+Il blocco è in `netlify.toml`, nel blocco marcato **BLOCCO DELL'INDICIZZAZIONE**:
+un'intestazione `X-Robots-Tag: noindex, nofollow` su tutte le pagine.
+
+Attenzione a una distinzione che confonde spesso:
+
+| | Che cosa fa | Quando usarlo |
+|---|---|---|
+| `Disallow` in robots.txt | Vieta di **leggere** la pagina | Pagine che non devono essere nemmeno scaricate |
+| `X-Robots-Tag: noindex` | Permette di leggerla, vieta di **pubblicarla** nei risultati | Sito di prova |
+
+Usare `Disallow: /` per nascondere un sito è un errore comune e
+controproducente: un motore che non può leggere la pagina non può nemmeno
+vedere che gli stai chiedendo di non indicizzarla, e l'indirizzo può comparire
+lo stesso nei risultati, solo senza descrizione. Per questo il `robots.txt` di
+questo sito lascia passare tutto e il divieto sta nell'intestazione.
+
+**Per aprire il sito a Google**, quando dentro ci sono i dati veri:
+
+1. cancella il blocco `[[headers]]` marcato *BLOCCO DELL'INDICIZZAZIONE* in
+   `netlify.toml`;
+2. commit e push: Netlify ripubblica da solo;
+3. verifica che l'intestazione sia sparita (in Chrome: F12 → scheda *Rete* →
+   ricarica → clic sulla prima riga → *Intestazioni risposta*);
+4. registra il sito su Google Search Console e invia `sitemap-index.xml`.
 
 ## Verifiche
 

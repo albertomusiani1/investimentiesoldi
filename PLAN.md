@@ -10,6 +10,11 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
   collection con 6 progetti, form contatti con funzione Netlify e 14 test verdi, SEO e
   netlify.toml. Build e `astro check` puliti, check-pages 15/15. Restano le verifiche
   finali (fase 9) e la documentazione (README, RESULTS).
+- 2026-08-30 12:45 — Predisposto il deploy di prova: indirizzo del sito letto
+  dall'ambiente (variabile `URL` di Netlify) invece che fissato nel codice,
+  `robots.txt` generato alla build così da non poter divergere dall'indirizzo
+  reale, e blocco dell'indicizzazione via `X-Robots-Tag` in `netlify.toml`,
+  finché i contenuti sono segnaposto. Verifiche rieseguite: tutte verdi.
 - 2026-08-30 11:40 — Sito separato in un repository dedicato, con storia propria: i tre
   file dell'applicazione preesistente non ne fanno parte. Nessuna modifica al codice del
   sito, quindi i 15 check restano validi.
