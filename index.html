@@ -359,6 +359,18 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
     <button class="ghost" id="btnDiag2" title="Come sta andando il canale dei prezzi">Diagnostica prezzi</button>
   </div>
 
+  <div style="margin-top:18px;border-top:1px solid var(--line);padding-top:16px">
+    <h3 style="margin-bottom:5px">Prova dei prezzi</h3>
+    <p class="sec" style="font-size:13px;margin:0 0 11px;max-width:74ch">
+      Scarica davvero, uno per uno, i simboli che hai in portafoglio più un banco di prova di ETF
+      obbligazionari. Serve a vedere con i tuoi occhi cosa risponde e cosa no.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="ghost" id="btnPriceTest">▶ Prova ora</button>
+    </div>
+    <div class="synctest" id="priceTest"></div>
+  </div>
+
   <div id="syncBox" style="margin-top:18px;border-top:1px solid var(--line);padding-top:16px">
     <h3 style="margin-bottom:5px">Sincronizzazione fra dispositivi</h3>
     <p class="sec" style="font-size:13px;margin:0 0 6px;max-width:74ch">
@@ -428,7 +440,7 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
     <div class="rows" id="movRows"></div>
     <div id="movEmpty" class="empty">
       <h3>Nessun movimento</h3>
-      <p>Tocca <b>+</b> per registrare una spesa: bastano descrizione, importo e categoria.</p>
+      <p>Tocca <b>+</b> per registrare una spesa o un'entrata: bastano descrizione, importo e data.</p>
     </div>
   </section>
 
@@ -462,10 +474,10 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
     </details>
 
     <details class="fold" id="foldFix">
-      <summary>Spese fisse <span class="muted" id="fixSummary" style="font-weight:500"></span></summary>
+      <summary>Voci fisse <span class="muted" id="fixSummary" style="font-weight:500"></span></summary>
       <div class="body">
         <div class="rows" id="fixRows"></div>
-        <div id="fixEmpty" class="empty"><p>Nessuna spesa fissa. Quando registri una spesa scegli una ricorrenza e finisce qui.</p></div>
+        <div id="fixEmpty" class="empty"><p>Niente di ricorrente. Quando registri una spesa o un'entrata scegli una ricorrenza e finisce qui.</p></div>
       </div>
     </details>
 
@@ -498,9 +510,13 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
     </header>
 
     <div id="addForm" class="hidden" style="border:1px dashed var(--line-2);border-radius:12px;padding:13px;margin-bottom:12px;background:var(--card-2)">
+      <div class="seg" id="posMode" style="width:100%;margin-bottom:11px">
+        <button type="button" data-m="auto" aria-pressed="true" style="flex:1">Quotato</button>
+        <button type="button" data-m="manual" aria-pressed="false" style="flex:1">A mano</button>
+      </div>
       <div class="formgrid">
         <div class="field" style="grid-column:span 2;min-width:180px">
-          <label for="fTicker">Ticker <span class="muted" style="font-weight:400">(Yahoo Finance)</span></label>
+          <label for="fTicker" id="fTickerLab">Ticker <span class="muted" style="font-weight:400">(Yahoo Finance)</span></label>
           <input id="fTicker" list="tickerList" placeholder="es. VWCE.DE" autocomplete="off" spellcheck="false">
           <datalist id="tickerList"></datalist>
         </div>
@@ -517,9 +533,12 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
         <div class="field"><label for="fAmount">Investito (€)</label>
           <input id="fAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="5000"></div>
         <div class="field"><label for="fDate">Data</label><input id="fDate" type="date"></div>
-        <div class="field"><label for="fShares">Quote <span class="muted" style="font-weight:400">(auto)</span></label>
+        <div class="field" id="fSharesField"><label for="fShares">Quote <span class="muted" style="font-weight:400">(auto)</span></label>
           <input id="fShares" type="number" inputmode="decimal" step="any" min="0" placeholder="auto"></div>
+        <div class="field hidden" id="fValueField"><label for="fValue">Vale oggi (€)</label>
+          <input id="fValue" type="number" inputmode="decimal" step="0.01" min="0" placeholder="come da estratto conto"></div>
       </div>
+      <div class="muted" style="font-size:12px;margin-top:9px" id="posHint"></div>
       <div style="display:flex;gap:8px;margin-top:11px">
         <button class="primary" id="btnAdd">Aggiungi</button>
         <button class="ghost" id="btnCancelAdd">Annulla</button>
@@ -594,26 +613,35 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
   <div class="mbody" style="padding-bottom:16px">
     <button type="button" class="sheetbtn" id="pickExp"><span class="ic">🧾</span>
       <span>Una spesa<small>l'hai appena fatta</small></span></button>
+    <button type="button" class="sheetbtn" id="pickInc"><span class="ic">💶</span>
+      <span>Un'entrata<small>stipendio, rimborso, un lavoretto</small></span></button>
     <button type="button" class="sheetbtn" id="pickFut"><span class="ic">🎯</span>
       <span>Qualcosa nel futuro<small>da comprare, da pagare, o che ti piacerebbe</small></span></button>
   </div>
 </dialog>
 
 <dialog class="modal" id="dlgExp">
-  <div class="mhead"><h3>Nuova spesa</h3><button type="button" class="x" data-close="dlgExp">✕</button></div>
+  <div class="mhead"><h3 id="expDlgTitle">Nuova spesa</h3><button type="button" class="x" data-close="dlgExp">✕</button></div>
   <div class="mbody">
+    <div class="seg" id="expKind" style="width:100%;margin-bottom:12px">
+      <button type="button" data-k="out" aria-pressed="true" style="flex:1">Spesa</button>
+      <button type="button" data-k="in" aria-pressed="false" style="flex:1">Entrata</button>
+    </div>
     <div class="formgrid">
       <div class="field" style="grid-column:1/-1"><label for="qDesc">Cosa</label>
         <input id="qDesc" placeholder="es. spesa al supermercato" autocomplete="off"></div>
       <div class="field"><label for="qAmount">Quanto (€)</label>
         <input id="qAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00"></div>
-      <div class="field"><label for="qCat">Categoria</label>
+      <div class="field" id="qCatField"><label for="qCat">Categoria</label>
         <div class="combo">
           <input id="qCat" role="combobox" aria-expanded="false" aria-controls="qCatList" aria-autocomplete="list"
                  autocomplete="off" spellcheck="false" placeholder="cerca…">
           <button type="button" class="caret" data-combo="qCat" tabindex="-1" aria-label="Apri l'elenco">▼</button>
           <ul class="combo-list hidden" id="qCatList" role="listbox" aria-label="Categorie"></ul>
         </div>
+      </div>
+      <div class="field hidden" id="qInCatField"><label for="qInCat">Da dove</label>
+        <select id="qInCat"></select>
       </div>
       <div class="field"><label for="qDate">Quando</label><input id="qDate" type="date"></div>
       <div class="field"><label for="qFreq">Si ripete</label>
@@ -628,6 +656,7 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
         </select>
       </div>
     </div>
+    <div class="muted" style="font-size:12px;margin-top:10px" id="qHint"></div>
   </div>
   <div class="mfoot">
     <button type="button" class="ghost" data-close="dlgExp">Annulla</button>
@@ -744,6 +773,8 @@ const SUGGEST = [
   ['VAGF.DE', 'Vanguard Global Aggregate Bond EUR-H — Xetra'],
   ['VGEA.DE', 'Vanguard EUR Eurozone Government Bond — Xetra'],
   ['IBGL.MI', 'iShares € Govt Bond 15-30y — Milano'], ['IBTM.MI', 'iShares $ Treasury 7-10y — Milano'],
+  ['IEAC.MI', 'iShares € Corporate Bond — Milano'], ['IBGM.MI', 'iShares € Govt Bond 3-5y — Milano'],
+  ['XG7S.DE', 'Xtrackers II Global Government Bond EUR-H — Xetra'],
   ['SGLD.MI', 'Invesco Physical Gold — Milano'], ['4GLD.DE', 'Xetra-Gold'],
   ['BTC-EUR', 'Bitcoin'], ['ETH-EUR', 'Ethereum'],
   ['^GSPC', 'Indice S&P 500'], ['^STOXX50E', 'Indice Euro Stoxx 50'],
@@ -826,8 +857,11 @@ async function getChart(url, { tries = 3, ms = 22000 } = {}) {
         const r = await fetch(u, Object.assign({ signal: ctrl.signal, cache: 'no-store' }, opt));
         const txt = await r.text();
         clearTimeout(to);
+        // il simbolo inesistente arriva come 404 con un corpo che lo dice:
+        // va riconosciuto prima di liquidare la risposta come errore di rete
+        if (/"code"\s*:\s*"Not Found"|"result"\s*:\s*null|No data found, symbol may be delisted/.test(txt)) throw new Error('simbolo sconosciuto');
         if (!r.ok) throw new Error('HTTP ' + r.status);
-        if (/"code"\s*:\s*"Not Found"|Invalid Cookie|"result"\s*:\s*null/.test(txt)) throw new Error('simbolo sconosciuto');
+        if (/Invalid Cookie/.test(txt)) throw new Error('simbolo sconosciuto');
         const j = extractChart(txt);
         if (!j) throw new Error(txt.length ? 'risposta non interpretabile' : 'risposta vuota');
         if (workingChannel !== ch.id) { workingChannel = ch.id; store.set('inv.channel', ch.id); }
@@ -966,9 +1000,26 @@ function fxAt(cur, d) {
 }
 function fxLast(cur) { if (cur === 'EUR') return 1; const s = FX[cur]; return s ? (lastPrice(s) || 1) : 1; }
 
+/** posizione senza quotazione: BTP, conto deposito, polizza — qualunque cosa
+    che Yahoo non conosce. Il valore di oggi lo scrive lui a mano. */
+const isManual = p => !!p.manual;
+
 function computePositions() {
   const rows = [];
   for (const p of POS) {
+    if (isManual(p)) {
+      const value = (p.manualValue != null && p.manualValue !== '') ? +p.manualValue : null;
+      const pl = value != null ? value - p.amount : null;
+      const plp = (pl != null && p.amount) ? pl / p.amount : null;
+      const yr = Math.max(daysBetween(p.date, iso(Date.now())) / 365.25, 1 / 365.25);
+      rows.push({
+        ...p, series: null, currency: 'EUR', name: p.ticker,
+        buyPrice: null, shares: null, price: null, value, pl, plp,
+        ann: plp != null ? Math.pow(1 + plp, 1 / yr) - 1 : null, yrs: yr,
+        missing: value == null
+      });
+      continue;
+    }
     const s = SERIES[p.ticker];
     const cur = (s && s.meta.currency) || 'EUR';
     const pAtBuy = s ? priceAt(s, p.date) : null;
@@ -1131,7 +1182,8 @@ function drawPortfolio(hist) {
 
   $('#pfLegend').innerHTML =
     `<span><i class="swatch" style="background:${cssv('--series-1')}"></i>Valore attuale</span>` +
-    `<span><i class="swatch" style="background:${cssv('--series-2')}"></i>Capitale investito</span>`;
+    `<span><i class="swatch" style="background:${cssv('--series-2')}"></i>Capitale investito</span>` +
+    (POS.some(isManual) ? '<span class="muted">le posizioni a mano non hanno storico, qui non compaiono</span>' : '');
 }
 
 /* ------------------------------------------- allocazione a barre */
@@ -1195,13 +1247,16 @@ function renderTable(rows, tot) {
   if (!rows.length) { $('#posRows').innerHTML = ''; return; }
 
   $('#posRows').innerHTML = rows.map(r => {
-    const manca = r.shares == null || r.price == null;
+    const man = isManual(r);
+    const manca = !man && (r.shares == null || r.price == null);
     return `<div class="row">
       <div class="main">
         <div class="t">${esc(r.ticker)}</div>
         <div class="s">
           <span class="pill">${CATS[r.cat].label}</span>
+          ${man ? '<span class="pill">a mano</span>' : ''}
           <span>${eur(r.amount)} dal ${dispDate(r.date)}</span>
+          ${man ? `<span>vale oggi <input data-mv="${r.id}" type="number" step="any" placeholder="0,00" value="${r.manualValue != null ? esc(r.manualValue) : ''}" style="width:92px;padding:3px 6px;font-size:11.5px"> €</span>` : ''}
           ${manca ? `<span>${r.shares == null ? `<input data-ms="${r.id}" type="number" step="any" placeholder="quote" style="width:72px;padding:3px 6px;font-size:11.5px">` : ''}
             ${r.price == null ? `<input data-mp="${r.id}" type="number" step="any" placeholder="prezzo" style="width:74px;padding:3px 6px;font-size:11.5px">` : ''}</span>` : ''}
         </div>
@@ -1222,6 +1277,12 @@ function renderTable(rows, tot) {
   $$('#posRows [data-mp]').forEach(inp => inp.onchange = () => {
     const p = POS.find(x => x.id === inp.dataset.mp);
     p.manualPrice = parseFloat(String(inp.value).replace(',', '.')) || null; savePos(); stamp('pos', p.id); refresh();
+  });
+  $$('#posRows [data-mv]').forEach(inp => inp.onchange = () => {
+    const p = POS.find(x => x.id === inp.dataset.mv);
+    p.manualValue = parseFloat(String(inp.value).replace(',', '.'));
+    if (!(p.manualValue >= 0)) p.manualValue = null;
+    savePos(); stamp('pos', p.id); refresh();
   });
   $$('#posRows [data-ms]').forEach(inp => inp.onchange = () => {
     const p = POS.find(x => x.id === inp.dataset.ms);
@@ -1269,8 +1330,13 @@ function refresh() {
 }
 
 async function loadAll(showSpinner = true) {
-  const need = new Set(POS.map(p => p.ticker));
-  if (!need.size) { setStatus('<span class="muted">Nessuna posizione. Aggiungine una per iniziare.</span>'); refresh(); return; }
+  const need = new Set(POS.filter(p => !isManual(p)).map(p => p.ticker));
+  if (!need.size) {
+    setStatus(POS.length
+      ? '<span class="muted">Solo posizioni a mano: niente da scaricare.</span>'
+      : '<span class="muted">Nessuna posizione. Aggiungine una per iniziare.</span>');
+    refresh(); return;
+  }
 
   const list = [...need];
   const errs = [], unknown = [];
@@ -1287,7 +1353,7 @@ async function loadAll(showSpinner = true) {
 
   // valute estere, anch'esse in sequenza
   const curs = new Set();
-  for (const p of POS) { const s = SERIES[p.ticker]; if (s && s.meta.currency !== 'EUR') curs.add(s.meta.currency); }
+  for (const p of POS) { if (isManual(p)) continue; const s = SERIES[p.ticker]; if (s && s.meta.currency !== 'EUR') curs.add(s.meta.currency); }
   for (const c of curs) {
     if (showSpinner) setStatus(`<span class="spinner"></span><span>Cambio ${esc(c)}/EUR…</span>`);
     FX[c] = await loadFx(c);
@@ -1306,6 +1372,60 @@ async function loadAll(showSpinner = true) {
     `<button class="quiet" id="btnDiag" title="Diagnostica del canale dati">ⓘ</button>`);
   const bd = $('#btnDiag'); if (bd) bd.onclick = showDiag;
   refresh();
+}
+
+/* =====================================================================
+   PROVA DEI PREZZI — scarica davvero, uno per uno, e dice cosa risponde.
+   Banco di prova fisso di ETF obbligazionari + i simboli in portafoglio.
+   ===================================================================== */
+const BOND_BENCH = [
+  ['AGGH.MI', 'Global Aggregate EUR-H · Milano'],
+  ['EUNA.DE', 'Global Aggregate EUR-H · Xetra'],
+  ['VAGF.DE', 'Vanguard Global Aggregate EUR-H'],
+  ['VGEA.DE', 'Vanguard EUR Government'],
+  ['IBGL.MI', 'iShares € Govt 15-30y'],
+  ['IBTM.MI', 'iShares $ Treasury 7-10y'],
+  ['IEAC.MI', 'iShares € Corporate Bond'],
+  ['XEON.DE', 'Monetario EUR overnight']
+];
+
+async function priceSelfTest() {
+  const box = $('#priceTest'), btn = $('#btnPriceTest');
+  const mine = [...new Set(POS.filter(p => !isManual(p)).map(p => p.ticker))];
+  const list = mine.map(t => [t, 'tuo']).concat(BOND_BENCH.filter(([t]) => !mine.includes(t)));
+  const res = [];
+  const show = (running) => {
+    box.innerHTML =
+      `<div style="margin-bottom:7px">Canale in uso: <b>${esc(workingChannel || '—')}</b> · pagina <code>${location.protocol}</code></div>` +
+      `<div class="tbl-scroll"><table style="font-size:12.5px"><thead><tr>
+         <th style="text-align:left">Simbolo</th><th style="text-align:left">Che cos'è</th>
+         <th style="text-align:left">Esito</th><th class="num">Ultimo prezzo</th><th style="text-align:left">Del</th></tr></thead><tbody>` +
+      res.map(r => `<tr><td><b>${esc(r.t)}</b></td><td>${esc(r.what)}</td>
+         <td>${r.ok ? '<span class="up">✓ trovato</span>' : `<span class="down">✗ ${esc(r.err)}</span>`}</td>
+         <td class="num">${r.px != null ? dec(r.px, 2) + ' ' + esc(r.cur || '') : '—'}</td>
+         <td>${r.d ? dispDate(r.d) : '—'}</td></tr>`).join('') +
+      (running ? `<tr><td colspan="5"><span class="spinner"></span> ${esc(running)}…</td></tr>` : '') +
+      `</tbody></table></div>` +
+      (running ? '' : `<div style="margin-top:8px">${res.filter(r => r.ok).length} su ${res.length} rispondono.
+         ${res.some(r => !r.ok) ? 'Quelli che non rispondono o hanno il suffisso di borsa sbagliato, oppure non sono quotati: i singoli BTP e le obbligazioni non stanno su Yahoo, vanno aggiunti con «A mano».' : 'Il canale dati funziona.'}</div>`);
+  };
+
+  btn.disabled = true; show('avvio');
+  for (const [t, what] of list) {
+    show(t);
+    try {
+      delete SERIES[t];               // niente scorciatoie: la prova deve andare in rete
+      const s = await loadSeries(t);
+      const d = s.dates[s.dates.length - 1];
+      if (s.stale) res.push({ t, what, ok: false, err: 'nessuna risposta, mostro la copia salvata', px: lastPrice(s), cur: s.meta.currency, d });
+      else res.push({ t, what, ok: true, px: lastPrice(s), cur: s.meta.currency, d });
+    } catch (e) {
+      const m = String(e.message);
+      res.push({ t, what, ok: false, err: m.includes('sconosciuto') ? 'simbolo sconosciuto' : m.slice(0, 46) });
+    }
+  }
+  show(null);
+  btn.disabled = false;
 }
 
 /** pannello diagnostico: cosa ha risposto ogni canale, richiesta per richiesta */
@@ -1332,24 +1452,59 @@ function fillSelects() {
 function toggleAdd(show) {
   const f = $('#addForm');
   f.classList.toggle('hidden', show === false ? true : show === true ? false : !f.classList.contains('hidden'));
-  if (!f.classList.contains('hidden')) { if (!$('#fDate').value) $('#fDate').value = iso(Date.now()); $('#fTicker').focus(); }
+  if (!f.classList.contains('hidden')) {
+    if (!$('#fDate').value) $('#fDate').value = iso(Date.now());
+    setPosMode(POSMODE); $('#fTicker').focus();
+  }
+}
+
+let POSMODE = 'auto';
+function setPosMode(m) {
+  POSMODE = m === 'manual' ? 'manual' : 'auto';
+  const man = POSMODE === 'manual';
+  $$('#posMode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === POSMODE));
+  $('#fTickerLab').innerHTML = man
+    ? 'Nome <span class="muted" style="font-weight:400">(come vuoi chiamarlo)</span>'
+    : 'Ticker <span class="muted" style="font-weight:400">(Yahoo Finance)</span>';
+  $('#fTicker').placeholder = man ? 'es. BTP 1/8/2033 4,40%' : 'es. VWCE.DE';
+  $('#fTicker').setAttribute('list', man ? '' : 'tickerList');
+  $('#fSharesField').classList.toggle('hidden', man);
+  $('#fValueField').classList.toggle('hidden', !man);
+  $('#posHint').textContent = man
+    ? 'Per i singoli BTP, i conti deposito e le polizze: Yahoo non li quota. Scrivi quanto valgono oggi (il controvalore che vedi in banca) e aggiornalo quando ti va.'
+    : 'ETF, azioni, indici e crypto: scarico io il prezzo. Il suffisso è la borsa — .MI Milano, .DE Xetra, .AS Amsterdam, .L Londra.';
 }
 
 async function addPosition() {
-  const ticker = $('#fTicker').value.trim().toUpperCase();
+  const manual = POSMODE === 'manual';
+  const raw = $('#fTicker').value.trim();
+  const ticker = manual ? raw : raw.toUpperCase();
   const amount = parseFloat(($('#fAmount').value || '').replace(',', '.'));
   const date = $('#fDate').value;
   const shares = parseFloat(($('#fShares').value || '').replace(',', '.'));
-  if (!ticker) return alert('Inserisci il ticker (es. VWCE.DE).');
+  const mval = parseFloat(($('#fValue').value || '').replace(',', '.'));
+  if (!ticker) return alert(manual ? 'Dai un nome alla posizione (es. BTP 2033).' : 'Inserisci il ticker (es. VWCE.DE).');
   if (!(amount > 0)) return alert('Inserisci l\'importo investito in euro.');
   if (!date) return alert('Inserisci la data di acquisto.');
   if (date > iso(Date.now())) return alert('La data di acquisto è nel futuro.');
+
+  if (manual) {
+    const np = {
+      id: uid(), ticker, cat: $('#fCat').value, amount, date,
+      shares: null, manualPrice: null, manual: true,
+      manualValue: mval > 0 ? mval : amount
+    };
+    POS.push(np); savePos(); stamp('pos', np.id);
+    $('#fTicker').value = ''; $('#fAmount').value = ''; $('#fValue').value = '';
+    toggleAdd(false); fillSelects(); refresh();
+    return;
+  }
 
   const btn = $('#btnAdd'); btn.disabled = true; btn.textContent = 'Verifico…';
   try { await loadSeries(ticker); }
   catch (e) {
     const why = String(e.message).includes('sconosciuto')
-      ? `Yahoo Finance non conosce il simbolo "${ticker}".\n\nQuasi sempre è il suffisso di borsa: .MI per Milano, .DE per Xetra, .AS per Amsterdam, .L per Londra. Esempio: l'iShares Core S&P 500 a Milano è CSSPX.MI, non CSPX.MI.`
+      ? `Yahoo Finance non conosce il simbolo "${ticker}".\n\nSe è un ETF, quasi sempre è il suffisso di borsa: .MI per Milano, .DE per Xetra, .AS per Amsterdam, .L per Londra (l'iShares Core S&P 500 a Milano è CSSPX.MI, non CSPX.MI).\n\nSe invece è un singolo BTP o un'obbligazione, Yahoo non li quota proprio: chiudi qui e usa il tasto "A mano".`
       : `Non riesco a raggiungere il canale dati per "${ticker}" in questo momento.`;
     if (!confirm(why + `\n\nLo aggiungo lo stesso? Potrai inserire quote e prezzo a mano nella tabella.`)) {
       btn.disabled = false; btn.textContent = 'Aggiungi'; return;
@@ -1451,9 +1606,11 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#btnImport').onclick = importBackup;
   $('#btnReset').onclick = resetAll;
   $('#btnDiag2').onclick = showDiag;
+  $('#btnPriceTest').onclick = priceSelfTest;
   $('#btnAddToggle').onclick = () => toggleAdd();
   $('#btnAddFirst').onclick = () => toggleAdd(true);
   $('#btnAdd').onclick = addPosition;
+  $$('#posMode button').forEach(b => b.onclick = () => setPosMode(b.dataset.m));
   $('#btnDemo').onclick = e => { e.preventDefault(); loadDemo(); };
   $('#btnTargets').onclick = () => { renderTargets(); $('#targetEditor').classList.toggle('hidden'); };
   $('#fTicker').addEventListener('keydown', e => { if (e.key === 'Enter') addPosition(); });
@@ -1479,6 +1636,8 @@ const KE = { EXP: 'inv.expenses.v1', CAT: 'inv.expcats.v1', WISH: 'inv.wishlist.
 const CAT_DEFAULT = ['Mezzi', 'Ale', 'Coop Voce', 'Collecto', 'Investimenti', 'Benzina', 'Fumo',
   'Cibo Asporto', 'Ristoranti', 'Bar', 'Abbonamenti', 'Cinema&Libri', 'Corea',
   'Assicurazione', 'Bollo', 'Vacanze', 'Vestiti', 'Regali', 'Altro'];
+/* da dove arrivano i soldi che entrano */
+const INC_CATS = ['Stipendio', 'Tredicesima', 'Rimborso', 'Lavoretto', 'Regalo', 'Vendita', 'Interessi', 'Altro'];
 const CAT_LEGACY = ['Casa', 'Alimentari', 'Trasporti', 'Utenze', 'Salute',
   'Abbonamenti', 'Svago', 'Ristoranti', 'Abbigliamento', 'Assicurazioni', 'Altro'];
 
@@ -1572,21 +1731,48 @@ function occurrences(e, from, to) {
   return out;
 }
 
-function movementsIn(ym) {
+/** true se la voce è un'entrata e non una spesa */
+const isIn = e => !!e.inc;
+
+/** espande le voci (fisse comprese) che cadono nel mese; `wantIn` sceglie
+    se restituire le entrate o le uscite */
+function expandIn(ym, wantIn) {
   const a = monthStart(ym), b = monthEnd(ym), out = [];
   for (const e of EXP) {
+    if (isIn(e) !== !!wantIn) continue;
     if (!e.fixed) { if (e.date >= a && e.date <= b) out.push({ ...e, when: e.date, type: 'variabile' }); }
     else for (const d of occurrences(e, a, b)) out.push({ ...e, when: d, type: 'fissa' });
   }
-  return out.sort((x, y) => y.when.localeCompare(x.when) || x.desc.localeCompare(y.desc));
+  return out.sort((x, y) => y.when.localeCompare(x.when) || String(x.desc).localeCompare(String(y.desc)));
 }
+/** solo le uscite: tutto ciò che parla di "spese" continua a usare questa */
+const movementsIn = ym => expandIn(ym, false);
+/** solo le entrate registrate come voci */
+const incomeRowsIn = ym => expandIn(ym, true);
+
 const sum = arr => arr.reduce((a, x) => a + (+x.amount || 0), 0);
+
+/** entrate totali del mese: stipendio scritto nella casella + voci in entrata */
+function incomeTotal(ym) { return incomeOf(ym) + sum(incomeRowsIn(ym)); }
+
 function monthTotals(ym) {
   const mv = movementsIn(ym);
-  return { ym, mv, fixed: sum(mv.filter(m => m.type === 'fissa')), variable: sum(mv.filter(m => m.type === 'variabile')), total: sum(mv) };
+  const inRows = incomeRowsIn(ym);
+  const total = sum(mv);
+  const income = incomeOf(ym) + sum(inRows);
+  return {
+    ym, mv, inRows,
+    fixed: sum(mv.filter(m => m.type === 'fissa')),
+    variable: sum(mv.filter(m => m.type === 'variabile')),
+    total, income, saving: income - total
+  };
 }
 const fixedMonthlyEquivalent = () =>
-  EXP.filter(e => e.fixed && (!e.end || e.end >= iso(Date.now())))
+  EXP.filter(e => e.fixed && !isIn(e) && (!e.end || e.end >= iso(Date.now())))
+    .reduce((a, e) => a + (+e.amount || 0) * ((FREQ[e.freq] || FREQ.mensile).perMonth), 0);
+/** entrate ricorrenti riportate al mese, per capire quanto entra di norma */
+const fixedIncomeMonthly = () =>
+  EXP.filter(e => e.fixed && isIn(e) && (!e.end || e.end >= iso(Date.now())))
     .reduce((a, e) => a + (+e.amount || 0) * ((FREQ[e.freq] || FREQ.mensile).perMonth), 0);
 
 function byCategory(months) {
@@ -1603,11 +1789,11 @@ function activeMonths() {
   const first = dates.length ? dates.sort()[0] : null;
   return months.filter(m => !first || m >= first);
 }
-/** risparmio medio mensile, sui mesi in cui c'è uno stipendio registrato */
+/** risparmio medio mensile, sui mesi in cui è entrato qualcosa */
 function avgMonthlySaving() {
-  const act = activeMonths().filter(m => incomeOf(m) > 0);
+  const act = activeMonths().filter(m => incomeTotal(m) > 0);
   if (!act.length) return null;
-  const v = act.reduce((a, m) => a + (incomeOf(m) - monthTotals(m).total), 0) / act.length;
+  const v = act.reduce((a, m) => a + (incomeTotal(m) - monthTotals(m).total), 0) / act.length;
   return v > 0 ? v : null;
 }
 
@@ -1616,8 +1802,8 @@ function avgMonthlySaving() {
    ===================================================================== */
 function renderExpSummary() {
   const t = monthTotals(SELMONTH);
-  const inc = incomeOf(SELMONTH);
-  const saving = inc - t.total;
+  const inc = t.income;
+  const saving = t.saving;
   const rate = inc > 0 ? saving / inc : null;
   const avg = (() => { const a = activeMonths(); return a.length ? a.reduce((x, m) => x + monthTotals(m).total, 0) / a.length : 0; })();
 
@@ -1627,52 +1813,61 @@ function renderExpSummary() {
       <div class="big">${eur(t.total)}</div>
     </div>
     <div class="facts">
+      <div class="fact"><span class="k">Entrate</span>
+        <span class="v ${inc > 0 ? 'up' : ''}">${inc > 0 ? eur(inc) : '—'}</span></div>
       <div class="fact"><span class="k">Risparmio</span>
         <span class="v ${inc > 0 ? (saving >= 0 ? 'up' : 'down') : ''}">${inc > 0 ? (saving >= 0 ? '' : '−') + eur(Math.abs(saving)) : '—'}</span></div>
-      <div class="fact"><span class="k">% stipendio</span>
+      <div class="fact"><span class="k">% entrate</span>
         <span class="v ${rate == null ? '' : rate >= 0 ? 'up' : 'down'}">${rate == null ? '—' : dec(rate * 100, 0) + '%'}</span></div>
       <div class="fact"><span class="k">Fisse/mese</span><span class="v">${eur(fixedMonthlyEquivalent())}</span></div>
-      <div class="fact"><span class="k">Media mensile</span><span class="v">${eur(avg)}</span></div>
+      <div class="fact"><span class="k">Media spesa</span><span class="v">${eur(avg)}</span></div>
     </div>`;
 }
 
 function renderMovements() {
   const t = monthTotals(SELMONTH);
-  $('#movEmpty').classList.toggle('hidden', t.mv.length > 0);
-  $('#movRows').innerHTML = t.mv.map(m => `
+  const all = t.mv.concat(t.inRows)
+    .sort((x, y) => y.when.localeCompare(x.when) || String(x.desc).localeCompare(String(y.desc)));
+  $('#movEmpty').classList.toggle('hidden', all.length > 0);
+  $('#movRows').innerHTML = all.map(m => `
     <div class="row">
       <div class="main">
         <div class="t">${esc(m.desc)}</div>
-        <div class="s"><span>${dayShort(m.when)}</span><span class="pill">${esc(m.cat)}</span>${m.type === 'fissa' ? '<span class="pill">fissa</span>' : ''}</div>
+        <div class="s"><span>${dayShort(m.when)}</span><span class="pill">${esc(m.cat)}</span>${m.type === 'fissa' ? `<span class="pill">${isIn(m) ? 'ricorrente' : 'fissa'}</span>` : ''}</div>
       </div>
-      <div class="amt">${eur(m.amount)}</div>
+      <div class="amt ${isIn(m) ? 'up' : ''}">${isIn(m) ? '+' : ''}${eur(m.amount)}</div>
       <div class="acts">${m.type === 'variabile'
         ? `<button class="iconbtn danger" data-delexp="${m.id}" title="Elimina">✕</button>`
-        : `<button class="iconbtn" data-jumpfix="1" title="Si gestisce fra le spese fisse">↗</button>`}</div>
+        : `<button class="iconbtn" data-jumpfix="1" title="Si gestisce fra le voci fisse">↗</button>`}</div>
     </div>`).join('');
-  $('#monthSummary').textContent = t.mv.length
-    ? `${t.mv.length} movimenti · ${eur(t.variable)} + ${eur(t.fixed)} fisse` : '';
+  const bits = [];
+  if (t.mv.length) bits.push(`${eur(t.total)} usciti`);
+  if (t.inRows.length) bits.push(`${eur(sum(t.inRows))} entrati`);
+  $('#monthSummary').textContent = all.length ? `${all.length} movimenti · ${bits.join(' · ')}` : '';
   wireExpActions();
 }
 
 function renderFixed() {
-  const rows = EXP.filter(e => e.fixed);
+  const rows = EXP.filter(e => e.fixed)
+    .sort((a, b) => (isIn(a) === isIn(b) ? 0 : isIn(a) ? -1 : 1));
   const today = iso(Date.now());
   $('#fixEmpty').classList.toggle('hidden', rows.length > 0);
   $('#fixRows').innerHTML = rows.map(e => {
     const f = FREQ[e.freq] || FREQ.mensile;
     const over = e.end && e.end < today;
+    const inn = isIn(e);
     return `<div class="row ${over ? 'done' : ''}">
       <div class="main">
         <div class="t">${esc(e.desc)}</div>
         <div class="s"><span class="pill">${esc(e.cat)}</span><span>ogni ${f.short}</span>${over ? '<span>terminata</span>' : ''}</div>
       </div>
-      <div class="amt">${eur(e.amount)}<small>${eur(e.amount * f.perMonth)}/mese</small></div>
+      <div class="amt ${inn ? 'up' : ''}">${inn ? '+' : ''}${eur(e.amount)}<small>${inn ? '+' : ''}${eur(e.amount * f.perMonth)}/mese</small></div>
       <div class="acts"><button class="iconbtn danger" data-delexp="${e.id}" title="Elimina">✕</button></div>
     </div>`;
   }).join('');
-  const m = fixedMonthlyEquivalent();
-  $('#fixSummary').textContent = rows.length ? `· ${eur(m)} al mese` : '';
+  const m = fixedMonthlyEquivalent(), mi = fixedIncomeMonthly();
+  $('#fixSummary').textContent = rows.length
+    ? '· ' + [mi > 0 ? `+${eur(mi)}` : null, `${eur(m)} al mese`].filter(Boolean).join(' / ') : '';
   wireExpActions();
 }
 
@@ -1699,7 +1894,7 @@ function drawMonths() {
     return;
   }
   svg.removeAttribute('height');
-  const max = Math.max(...data.map(d => d.total), ...months.map(incomeOf), 1);
+  const max = Math.max(...data.map(d => d.total), ...data.map(d => d.income), 1);
   const W = Math.max(280, wrap.clientWidth || 480);
   const H = clamp(Math.round(W * 0.5), 180, 250);
   const M = { t: 14, r: 6, b: 24, l: 42 };
@@ -1720,7 +1915,7 @@ function drawMonths() {
   });
 
   const C1 = cssv('--s1'), C2 = cssv('--s2'), C3 = cssv('--s3');
-  const incPts = months.map((m, i) => ({ i, v: incomeOf(m) })).filter(o => o.v > 0);
+  const incPts = data.map((d, i) => ({ i, v: d.income })).filter(o => o.v > 0);
 
   data.forEach((d, i) => {
     const x = cx(i) - bw / 2;
@@ -1736,12 +1931,13 @@ function drawMonths() {
     }
     const hit = el('rect', { x: cx(i) - slot / 2, y: M.t, width: slot, height: ih, fill: 'transparent', style: 'cursor:pointer' });
     hit.addEventListener('mouseenter', () => {
-      const inc = incomeOf(d.ym), sv = inc - d.total;
+      const inc = d.income, sv = d.saving;
       tip.innerHTML = `<div class="th">${monthLabelLong(d.ym)}</div>
         <div class="tr"><span><i class="swatch" style="display:inline-block;background:${C1}"></i> Variabili</span><b>${eur(d.variable)}</b></div>
         <div class="tr"><span><i class="swatch" style="display:inline-block;background:${C2}"></i> Fisse</span><b>${eur(d.fixed)}</b></div>
         <div class="tr" style="margin-top:3px"><span>Totale</span><b>${eur(d.total)}</b></div>
-        ${inc > 0 ? `<div class="tr"><span>Risparmio</span><b class="${sv >= 0 ? 'up' : 'down'}">${(sv >= 0 ? '' : '−') + eur(Math.abs(sv))}</b></div>` : ''}`;
+        ${inc > 0 ? `<div class="tr"><span>Entrate</span><b>${eur(inc)}</b></div>
+        <div class="tr"><span>Risparmio</span><b class="${sv >= 0 ? 'up' : 'down'}">${(sv >= 0 ? '' : '−') + eur(Math.abs(sv))}</b></div>` : ''}`;
       tip.style.opacity = 1;
       const r = svg.getBoundingClientRect(), tw = tip.offsetWidth || 150;
       tip.style.left = clamp(cx(i) / W * r.width - tw / 2, 4, r.width - tw - 4) + 'px';
@@ -1760,7 +1956,7 @@ function drawMonths() {
   $('#emLegend').innerHTML =
     `<span><i class="swatch sq" style="background:${C1}"></i>Variabili</span>` +
     `<span><i class="swatch sq" style="background:${C2}"></i>Fisse</span>` +
-    (incPts.length ? `<span><i class="swatch" style="background:${C3}"></i>Stipendio</span>` : '') +
+    (incPts.length ? `<span><i class="swatch" style="background:${C3}"></i>Entrate</span>` : '') +
     `<span class="muted">tocca un mese</span>`;
 }
 
@@ -2532,25 +2728,53 @@ function toast(msg) {
 const openD = id => { const d = $('#' + id); if (d.showModal) d.showModal(); else d.setAttribute('open', ''); };
 const closeD = id => { const d = $('#' + id); if (d.close) d.close(); else d.removeAttribute('open'); };
 
-/* ------------------------------------------------------------ spesa */
-function openExpDlg() {
+/* --------------------------------------------------- spesa / entrata */
+let expKind = 'out';
+const isInKind = () => expKind === 'in';
+
+function setExpKind(k) {
+  expKind = k === 'in' ? 'in' : 'out';
+  const inn = isInKind();
+  $$('#expKind button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === expKind));
+  $('#expDlgTitle').textContent = inn ? 'Nuova entrata' : 'Nuova spesa';
+  $('#qCatField').classList.toggle('hidden', inn);
+  $('#qInCatField').classList.toggle('hidden', !inn);
+  $('#qDesc').placeholder = inn ? 'es. stipendio · rimborso benzina' : 'es. spesa al supermercato';
+  $('#qExpSave').textContent = 'Registra';
+  $('#qHint').textContent = inn
+    ? 'Se è lo stipendio, scegli «ogni mese»: da lì in poi lo conto da solo tutti i mesi.'
+    : 'Se si ripete (affitto, abbonamento, bollo) scegli ogni quanto: lo ritrovi in ogni mese senza riscriverlo.';
+}
+
+function openExpDlg(kind) {
   refreshAllCombos();
+  const sel = $('#qInCat');
+  if (!sel.options.length) sel.innerHTML = INC_CATS.map(c => `<option>${esc(c)}</option>`).join('');
+  sel.value = INC_CATS[0];
   $('#qDate').value = iso(Date.now());
   $('#qDesc').value = ''; $('#qAmount').value = ''; $('#qFreq').value = '';
+  setExpKind(kind === 'in' ? 'in' : 'out');
   openD('dlgExp');
   setTimeout(() => $('#qDesc').focus(), 60);
 }
+
 function saveExpDlg() {
+  const inn = isInKind();
   const desc = $('#qDesc').value.trim();
   const amount = parseFloat(($('#qAmount').value || '').replace(',', '.'));
   const date = $('#qDate').value, freq = $('#qFreq').value;
-  if (!desc) return alert('Scrivi che spesa è.');
+  if (!desc) return alert(inn ? 'Scrivi che entrata è.' : 'Scrivi che spesa è.');
   if (!(amount > 0)) return alert('Inserisci un importo maggiore di zero.');
   if (!date) return alert('Inserisci la data.');
-  const ne = { id: uid(), desc, amount, cat: $('#qCat').value, date, fixed: !!freq, freq: freq || null, end: null };
+  const ne = {
+    id: uid(), desc, amount, date,
+    cat: inn ? ($('#qInCat').value || 'Altro') : $('#qCat').value,
+    fixed: !!freq, freq: freq || null, end: null
+  };
+  if (inn) ne.inc = true;
   EXP.push(ne); saveExp(); stamp('exp', ne.id);
   closeD('dlgExp');
-  toast(`${desc} · ${eur(amount)}${freq ? ' · ' + FREQ[freq].label : ''}`);
+  toast(`${inn ? '+ ' : ''}${desc} · ${eur(amount)}${freq ? ' · ' + FREQ[freq].label : ''}`);
   if (!$('#pageExp').classList.contains('hidden')) { SELMONTH = ymOf(date); renderExpenses(); }
 }
 
@@ -2608,11 +2832,13 @@ function saveFut() {
 
 /* ------------------------------------------------------------ avvio */
 document.addEventListener('DOMContentLoaded', () => {
-  $('#qExpense').onclick = openExpDlg;
+  $('#qExpense').onclick = () => openExpDlg('out');
   $('#qWish').onclick = () => openFut(null);
   $('#fabAdd').onclick = () => openD('dlgPick');
-  $('#pickExp').onclick = () => { closeD('dlgPick'); setTimeout(openExpDlg, 120); };
+  $('#pickExp').onclick = () => { closeD('dlgPick'); setTimeout(() => openExpDlg('out'), 120); };
+  $('#pickInc').onclick = () => { closeD('dlgPick'); setTimeout(() => openExpDlg('in'), 120); };
   $('#pickFut').onclick = () => { closeD('dlgPick'); setTimeout(() => openFut(null), 120); };
+  $$('#expKind button').forEach(b => b.onclick = () => setExpKind(b.dataset.k));
   $('#btnAddFut').onclick = () => openFut(null);
   $('#btnAddFut2').onclick = () => openFut(null);
   $$('[data-close]').forEach(b => b.onclick = () => closeD(b.dataset.close));
@@ -2629,7 +2855,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const t = e.target.tagName;
     if (t === 'INPUT' || t === 'SELECT' || t === 'TEXTAREA') return;
     if ($('#dlgExp').open || $('#dlgFut').open || $('#dlgPick').open) return;
-    if (e.key === 's' || e.key === 'S') { e.preventDefault(); openExpDlg(); }
+    if (e.key === 's' || e.key === 'S') { e.preventDefault(); openExpDlg('out'); }
+    if (e.key === 'e' || e.key === 'E') { e.preventDefault(); openExpDlg('in'); }
     if (e.key === 'f' || e.key === 'F') { e.preventDefault(); openFut(null); }
   });
 });
