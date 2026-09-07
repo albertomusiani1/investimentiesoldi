@@ -3,10 +3,16 @@
    2) tiene una copia della pagina, così l'app si apre anche senza rete
    Strategia: prima la rete, la copia salvata solo se la rete non risponde,
    così un aggiornamento della dashboard si vede subito. */
-const CACHE = 'conti-v5';
+const CACHE = 'conti-v6';
 
 self.addEventListener('install', () => self.skipWaiting());
-self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+self.addEventListener('activate', e => e.waitUntil(
+  // via le copie vecchie: caches.match() cerca in tutte le cache,
+  // quindi una vecchia copia offline coprirebbe la dashboard aggiornata
+  caches.keys()
+    .then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))
+    .then(() => self.clients.claim())
+));
 
 self.addEventListener('fetch', e => {
   const req = e.request;
