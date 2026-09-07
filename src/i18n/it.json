@@ -48,8 +48,8 @@
     "metaTitolo": "Brambilla Future | Componenti e ingegneria automotive",
     "metaDescrizione": "Brambilla Future progetta, produce e valida componenti per l'industria automotive: prototipazione rapida, serie certificate IATF 16949 e retrofit elettrico.",
     "heroOcchiello": "Fornitore Tier 2 dal 1978",
-    "heroTitolo": "Componenti automotive progettati, prodotti e validati in un unico stabilimento",
-    "heroTesto": "Dalla prima ipotesi di progetto alla serie omologata: quarantasette anni di lavorazioni meccaniche al servizio di costruttori e sistemisti europei.",
+    "heroTitolo": "Dal disegno al pezzo finito",
+    "heroTesto": "Progettazione, produzione e validazione di componenti per l'automotive. Quarantasette anni di lavorazioni meccaniche in un unico stabilimento in Brianza.",
     "serviziTitolo": "Che cosa facciamo",
     "serviziSottotitolo": "Cinque aree di competenza che coprono l'intero ciclo di vita di un componente.",
     "progettiTitolo": "Progetti in evidenza",
@@ -57,7 +57,8 @@
     "numeriTitolo": "Brambilla Future in cifre",
     "ctaTitolo": "Parliamo del vostro componente",
     "ctaTesto": "Inviateci il disegno o una descrizione del problema: rispondiamo con una prima valutazione di fattibilità entro due giorni lavorativi.",
-    "heroImmagineAlt": "Illustrazione geometrica di un componente circolare quotato affiancato da tre barre che rappresentano le fasi di progettazione, produzione e validazione."
+    "heroScorri": "Scorri",
+    "heroVideoDescrizione": "Animazione del modello a filo di ferro di una flangia che ruota su un fondo a griglia da tavolo da disegno."
   },
   "servizi": {
     "metaTitolo": "Servizi | Brambilla Future",
@@ -163,5 +164,32 @@
     "partitaIva": "P. IVA",
     "rea": "REA",
     "capitaleSociale": "Capitale sociale"
+  },
+  "disegni": {
+    "titolo": "Disegni e modelli",
+    "sottotitolo": "Le tavole e i modelli 3D prodotti dal nostro ufficio tecnico per questa commessa. I modelli si ruotano col mouse, col dito o inclinando il telefono.",
+    "scegli": "Scegli il disegno",
+    "tipo2d": "Tavola 2D",
+    "tipo3d": "Modello 3D",
+    "istruzioni2d": "Trascina per spostare, rotellina o pizzico per ingrandire. Frecce e +/− da tastiera.",
+    "istruzioni3d": "Trascina per ruotare, rotellina o pizzico per ingrandire. Frecce e +/− da tastiera.",
+    "ingrandisci": "Ingrandisci",
+    "riduci": "Riduci",
+    "adatta": "Adatta alla finestra",
+    "reimposta": "Riporta alla vista iniziale",
+    "ombreggiato": "Pieno",
+    "filoDiFerro": "Filo di ferro",
+    "rotazioneAutomatica": "Rotazione automatica",
+    "fermaRotazione": "Ferma la rotazione",
+    "giroscopio": "Inclina il telefono",
+    "giroscopioAttivo": "Inclinazione attiva",
+    "giroscopioNegato": "Permesso negato: il movimento del telefono non è disponibile.",
+    "caricamento": "Caricamento del modello…",
+    "errore": "Non è stato possibile caricare il modello. Il file è comunque scaricabile qui sotto.",
+    "scarica": "Scarica il file originale",
+    "triangoli": "triangoli",
+    "senzaJs": "Con JavaScript disattivato vedi l'anteprima statica: il file originale è scaricabile qui sotto.",
+    "vistaModello": "Vista interattiva del modello tridimensionale",
+    "vistaTavola": "Vista ingrandibile della tavola"
   }
 }

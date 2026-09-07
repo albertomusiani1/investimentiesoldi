@@ -3,6 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SchedaProgetto from '../../components/SchedaProgetto.astro';
+import VisualizzatoreDisegni from '../../components/VisualizzatoreDisegni.astro';
 import { t } from '../../i18n';
 import { azienda } from '../../lib/azienda';
 import { schemaProgetto } from '../../lib/schema';
@@ -21,7 +22,8 @@ interface Props {
 }
 
 const { progetto } = Astro.props;
-const { titolo, cliente, categoria, data, descrizioneBreve, immagine, immagineAlt } = progetto.data;
+const { titolo, cliente, categoria, data, descrizioneBreve, immagine, immagineAlt, disegni } =
+  progetto.data;
 
 const { Content } = await render(progetto);
 
@@ -105,6 +107,8 @@ const altri = (await getCollection('progetti'))
       </div>
     </div>
   </article>
+
+  {disegni && disegni.length > 0 && <VisualizzatoreDisegni disegni={disegni} />}
 
   <section class="sezione sezione--alt" aria-labelledby="titolo-altri-progetti">
     <div class="contenitore">

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import EroeVideo from '../components/EroeVideo.astro';
 import SchedaProgetto from '../components/SchedaProgetto.astro';
 import { getCollection } from 'astro:content';
 import { t } from '../i18n';
@@ -28,30 +29,9 @@ const numeri = [
   descrizione={t('home.metaDescrizione')}
   jsonLd={[schemaAttivita(site)]}
 >
-  <section class="eroe">
-    <div class="contenitore eroe__interno">
-      <div class="eroe__testo">
-        <span class="occhiello">{t('home.heroOcchiello')}</span>
-        <h1>{t('home.heroTitolo')}</h1>
-        <p class="eroe__sommario">{t('home.heroTesto')}</p>
-        <div class="gruppo-bottoni">
-          <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
-          <a class="bottone bottone--secondario" href="/servizi">{t('azioni.scopriServizi')}</a>
-        </div>
-      </div>
-      <div class="eroe__media">
-        <img
-          src="/img/hero-officina.svg"
-          alt={t('home.heroImmagineAlt')}
-          width="720"
-          height="540"
-          decoding="async"
-        />
-      </div>
-    </div>
-  </section>
+  <EroeVideo ancoraSuccessiva="che-cosa-facciamo" />
 
-  <section class="sezione" aria-labelledby="titolo-servizi">
+  <section class="sezione" id="che-cosa-facciamo" aria-labelledby="titolo-servizi">
     <div class="contenitore">
       <div class="intestazione-sezione">
         <h2 id="titolo-servizi">{t('home.serviziTitolo')}</h2>
@@ -125,35 +105,6 @@ const numeri = [
 </BaseLayout>
 
 <style>
-  .eroe {
-    padding-block: var(--space-7);
-    background-color: var(--colore-superficie);
-    border-bottom: 1px solid var(--colore-bordo);
-  }
-
-  .eroe__interno {
-    display: grid;
-    gap: var(--space-6);
-    align-items: center;
-  }
-
-  .eroe__testo {
-    max-width: var(--misura);
-  }
-
-  .eroe__sommario {
-    margin-top: var(--space-4);
-    color: var(--colore-testo-tenue);
-    font-size: var(--testo-md);
-  }
-
-  .eroe__media img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;
-    border-radius: var(--raggio);
-  }
-
   .elenco-servizi {
     margin: 0;
     padding: 0;
@@ -180,14 +131,4 @@ const numeri = [
     width: 100%;
   }
 
-  @media (min-width: 64em) {
-    .eroe {
-      padding-block: var(--space-8);
-    }
-
-    .eroe__interno {
-      grid-template-columns: 1.1fr 1fr;
-      gap: var(--space-7);
-    }
-  }
 </style>

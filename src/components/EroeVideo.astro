@@ -1,0 +1,88 @@
+---
+/**
+ * Hero della home: video a schermo intero, titolo e due chiamate all'azione.
+ *
+ * Come si comporta:
+ *  - senza JavaScript resta il fermo immagine (il poster), che è anche
+ *    l'elemento più grande della pagina e quindi quello che decide la
+ *    velocità percepita: per questo è marcato `fetchpriority="high"`;
+ *  - con JavaScript il video parte quando il hero è in vista e si ferma
+ *    quando lo si è scorso via, per non consumare batteria a vuoto;
+ *  - se il sistema chiede meno animazioni (`prefers-reduced-motion`) il
+ *    video non parte affatto.
+ *
+ * Il video non è contenuto informativo: è decorazione. Per questo è
+ * `aria-hidden` e il poster ha `alt` vuoto — chi usa un lettore di schermo
+ * sente il titolo, non la descrizione di un'animazione.
+ */
+import { t } from '../i18n';
+
+export interface Props {
+  /** Ancora della prima sezione sotto il hero, per il collegamento "Scorri". */
+  ancoraSuccessiva: string;
+}
+
+const { ancoraSuccessiva } = Astro.props;
+---
+
+<section class="eroe" data-eroe>
+  <div class="eroe__sfondo">
+    <picture class="eroe__poster">
+      <source
+        type="image/webp"
+        srcset="/img/hero-poster-900.webp 900w, /img/hero-poster-1600.webp 1600w"
+        sizes="100vw"
+      />
+      <img
+        src="/img/hero-poster.jpg"
+        alt=""
+        width="1600"
+        height="900"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
+    <video
+      class="eroe__video"
+      data-eroe-video
+      muted
+      loop
+      playsinline
+      preload="none"
+      aria-hidden="true"
+      tabindex="-1"
+    >
+      <source src="/video/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="eroe__velo" aria-hidden="true"></div>
+  </div>
+
+  <div class="contenitore eroe__contenuto">
+    <p class="eroe__occhiello">{t('home.heroOcchiello')}</p>
+    <h1 class="eroe__titolo">{t('home.heroTitolo')}</h1>
+    <p class="eroe__sommario">{t('home.heroTesto')}</p>
+    <div class="eroe__azioni">
+      <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
+      <a class="bottone bottone--chiaro" href="/servizi">{t('azioni.scopriServizi')}</a>
+    </div>
+  </div>
+
+  <a class="eroe__scorri" href={`#${ancoraSuccessiva}`}>
+    <span>{t('home.heroScorri')}</span>
+    <svg width="16" height="24" viewBox="0 0 16 24" aria-hidden="true" focusable="false">
+      <path
+        d="M8 2v18M2 14l6 6 6-6"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+  </a>
+</section>
+
+<script>
+  // Il codice sta in un modulo separato: così Astro lo emette come file
+  // esterno e la Content-Security-Policy può restare senza 'unsafe-inline'.
+  import '../scripts/eroe-video.ts';
+</script>

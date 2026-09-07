@@ -17,10 +17,13 @@
     "test": "node --test \"tests/**/*.test.ts\"",
     "check:pages": "node scripts/check-pages.mjs",
     "check:i18n": "node scripts/check-i18n.mjs",
+    "check:js": "node scripts/check-js.mjs",
     "check:responsive": "node scripts/check-responsive.mjs",
     "check:html": "html-validate \"dist/**/*.html\"",
     "check:links": "linkinator dist --recurse --skip \"^https://www\\.brambillafuture\\.it\"",
-    "immagini:social": "node scripts/genera-immagini-social.mjs"
+    "immagini:social": "node scripts/genera-immagini-social.mjs",
+    "disegni": "node scripts/genera-disegni.mjs",
+    "video": "node scripts/genera-video-hero.mjs"
   },
   "dependencies": {
     "@astrojs/check": "0.9.10",

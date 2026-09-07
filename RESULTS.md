@@ -4,7 +4,8 @@ Sito vetrina **Brambilla Future** (settore automotive), costruito con Astro.
 Tutti i comandi sono stati eseguiti davvero; sotto c'è il loro output reale, non
 una stima.
 
-- **Data dell'esecuzione:** 30 agosto 2026
+- **Data dell'esecuzione:** 7 settembre 2026 (rieseguita dopo il rifacimento del
+  hero e l'aggiunta del visualizzatore di disegni)
 - **Ambiente:** Linux x86-64, Node.js v22.22.2, npm 10.9.7
 - **Comando di partenza:** `rm -rf dist && npm run build`
 - **Esito complessivo: 15 check su 15 passati.**
@@ -21,15 +22,15 @@ una stima.
 | 4 | 404 personalizzata | ✅ | stato 404 e contenuto della pagina del sito |
 | 5 | Lighthouse home (mobile) | ✅ | 100 / 100 / 100 / 100 |
 | 6 | Lighthouse dettaglio progetto | ✅ | 100 / 100 / 100 / 100 |
-| 7 | JS al client | ✅ | un solo file JS, 2,4 kB, solo su `/contatti` |
+| 7 | JS al client | ✅ | tre isole dichiarate, 14,6 kB, ognuna solo sulle sue pagine |
 | 8 | HTML valido | ✅ | 0 errori su 16 file |
-| 9 | Link interni | ✅ | 48 link scansionati, 0 rotti |
+| 9 | Link interni | ✅ | 59 link scansionati, 0 rotti |
 | 10 | Test del form | ✅ | 14 test, 14 passati, 0 falliti |
 | 10b | Astrazione mailer | ✅ | nessuna occorrenza di «mailjet» in `contact.ts` |
 | 11 | Schema collection | ✅ | la build si ferma con errore leggibile |
 | 12 | Segreti | ✅ | nessuna corrispondenza per entrambi i grep |
 | 13 | Vulnerabilità | ✅ | 0 problemi high o critical |
-| 14 | Responsive | ✅ | 39/39 combinazioni senza overflow né testo tagliato |
+| 14 | Responsive | ✅ | 42/42 combinazioni senza overflow né testo tagliato |
 | 15 | i18n | ✅ | nessuna stringa di interfaccia scritta a mano |
 
 ---
@@ -213,25 +214,52 @@ Lighthouse 13.4.1 | formFactor mobile | throttling simulate
 
 ### Check 7 — JavaScript al client
 
+Il vincolo iniziale era «zero JavaScript tranne il modulo contatti». Il
+proprietario ha poi chiesto un video che parte e si ferma da sé e un
+visualizzatore 3D: due cose che senza JavaScript non esistono. La regola è
+stata **riscritta in una forma verificabile** invece che abbandonata —
+*nessuno script fuori dalle isole dichiarate, e ogni isola solo sulle pagine
+che la usano* — e il controllo manuale a grep è diventato uno script.
+
 ```console
-$ grep -rho "<script[^>]*>" dist --include="*.html" | sort | uniq -c
-     19 <script type="application/ld+json">
-      1 <script type="module" src="/_astro/FormContatti.astro_astro_type_script_index_0_lang.2ZruAUPZ.js">
+$ npm run check:js
 
-$ grep -rl 'type="module"' dist --include="*.html"
-dist/contatti/index.html
+PAGINA                                             ISOLE                            JSON-LD
+-------------------------------------------------  -------------------------------  -------
+/404                                               —                                      0
+/chi-siamo                                         —                                      1
+/contatti/errore                                   —                                      0
+/contatti/grazie                                   —                                      0
+/contatti                                          FormContatti                           1
+/cookie-policy                                     —                                      1
+/                                                  EroeVideo                              1
+/privacy                                           —                                      1
+/progetti/banco-prova-sospensioni-pneumatiche      —                                      2
+/progetti                                          —                                      1
+/progetti/linea-collaudo-tenuta-serbatoi           VisualizzatoreDisegni                  2
+/progetti/piastra-raffreddamento-pacco-batteria    —                                      2
+/progetti/retrofit-elettrico-navette-aeroportuali  —                                      2
+/progetti/serie-cnc-pinze-freno                    VisualizzatoreDisegni                  2
+/progetti/staffa-portamotore-alluminio             VisualizzatoreDisegni                  2
+/servizi                                           —                                      1
 
-$ find dist -name "*.js" -exec ls -l {} +
--rw-r--r-- 1 root root 2470 dist/_astro/FormContatti.astro_astro_type_script_index_0_lang.2ZruAUPZ.js
+Isole dichiarate:
+  · EroeVideo              avvia e mette in pausa il video del hero, misura l'intestazione
+  · FormContatti           invia il modulo senza ricaricare la pagina
+  · VisualizzatoreDisegni  rende interattive le tavole 2D e i modelli 3D
+
+3 file JavaScript in dist, 14.6 kB in tutto.
+Nessuno script fuori dalle isole dichiarate.
+
+EXIT=0
 ```
 
-In tutto il sito c'è **un solo file JavaScript**, 2,4 kB, ed è caricato da **una
-sola pagina**, `/contatti`. I 19 blocchi `application/ld+json` sono dati
-strutturati per i motori di ricerca: non sono codice eseguibile.
-
-Il widget antispam di Cloudflare non compare nell'HTML: viene richiesto a runtime
-dallo script del modulo, e solo se è configurata la chiave pubblica. Questo tiene
-il resto del sito senza nessuna richiesta a domini terzi.
+`scripts/check-js.mjs` fallisce se una pagina carica un'isola che non le
+compete, se in `dist/` compare un file JavaScript non riconducibile a
+nessuna isola — una libreria entrata di straforo — o se una pagina contiene
+uno script scritto dentro l'HTML, che oltre a essere fuori controllo sarebbe
+bloccato dalla CSP. I blocchi `application/ld+json` sono dati strutturati per
+i motori di ricerca, non codice, e vengono contati a parte.
 
 ### Check 8 — HTML valido
 
@@ -447,7 +475,11 @@ che non contiene nessuna stringa.
 
 ## 3. Punteggi Lighthouse per esteso
 
-| Categoria | Home `/` | Dettaglio progetto | Soglia |
+Misurati dopo l'aggiunta del video e del visualizzatore. La pagina di dettaglio
+scelta è quella che porta **entrambi** i tipi di disegno, tavola 2D e modello
+3D: è il caso peggiore.
+
+| Categoria | Home `/` | `/progetti/serie-cnc-pinze-freno` | Soglia |
 |---|---|---|---|
 | Performance | **100** | **100** | ≥ 95 |
 | Accessibility | **100** | **100** | ≥ 95 |
@@ -457,25 +489,27 @@ che non contiene nessuna stringa.
 
 | Metrica | Home | Dettaglio progetto |
 |---|---|---|
-| First Contentful Paint | 0,9 s | 0,9 s |
-| Largest Contentful Paint | 1,4 s | 1,4 s |
+| First Contentful Paint | 1,2 s | 0,9 s |
+| Largest Contentful Paint | 1,5 s | 1,5 s |
 | Total Blocking Time | 0 ms | 0 ms |
-| Cumulative Layout Shift | 0 | 0 |
-| Speed Index | 0,9 s | 0,9 s |
-| Peso totale della pagina | 80 KiB | 79 KiB |
+| Cumulative Layout Shift | 0,001 | 0 |
+| Peso totale della pagina | 104 KiB | 86 KiB |
 
 Lighthouse 13.4.1, profilo mobile predefinito, throttling simulato, Chromium
-headless. I report completi in JSON sono in `reports/lighthouse-home.json` e
-`reports/lighthouse-progetto.json`.
+headless. I report completi in JSON sono in `reports/`.
 
-**La prima misura non passava**: Performance 84, con Cumulative Layout Shift a
-0,307. Lighthouse attribuiva lo spostamento all'immagine della home
-(«Media element lacking an explicit size») e al carico tardivo del peso 600 del
-font. Le due correzioni — `aspect-ratio` esplicito sull'immagine e `preload`
-anche di `inter-latin-600.woff2` — hanno portato il CLS a 0 e la Performance a
-100.
+**Il video non ha fatto scendere il punteggio, il fermo immagine sì.** La prima
+misura dopo l'aggiunta del hero dava Performance **99**: il collo di bottiglia
+era il poster in JPEG da 74 kB, che è l'elemento più grande della pagina e
+quindi quello che fissa il Largest Contentful Paint. Servendolo in WebP con
+`srcset` — 7,6 kB a 900 px — la home è tornata a 100 e l'LCP è passato da 2,1 s
+a 1,5 s. Il filmato in sé non pesa sulla misura perché è dichiarato
+`preload="none"` e viene chiesto solo quando l'isola decide di avviarlo.
 
----
+**Il visualizzatore 3D non pesa sul caricamento.** L'STL viene scaricato solo
+quando la sezione entra in vista, e la rotazione gira a **60 fotogrammi al
+secondo** su un modello da 2 304 triangoli (misurato in Chromium headless con
+`requestAnimationFrame`).
 
 ## 4. Decisioni prese in autonomia
 
@@ -546,6 +580,22 @@ Ricopiate da `PLAN.md`, dove ognuna ha anche l'alternativa scartata.
 17. **`linkinator` con `--skip` sul dominio di produzione**, che non è
     raggiungibile dalla macchina di build; quegli URL sono verificati davvero dal
     check 3 sul server di anteprima.
+18. **Il vincolo «zero JavaScript» è stato riscritto, non abbandonato**: nessuno
+    script fuori dalle tre isole dichiarate, verificato da `npm run check:js`.
+19. **Il video del hero è calcolato, non filmato** (`npm run video`): 398 kB di
+    H.264 per 8 secondi di ciclo, nessun filmato scaricato.
+20. **Solo MP4**: su contenuto vettoriale piatto l'H.264 pesa metà del VP9 ed è
+    supportato da ogni browser.
+21. **Fermo immagine in WebP con `srcset`**, JPEG come ricaduta: è ciò che ha
+    riportato la home da 99 a 100.
+22. **Terzo carattere solo per il titolo del hero** (Archivo 700, 14,5 kB).
+23. **I modelli 3D sono in STL**, il formato che esporta qualunque CAD: il
+    proprietario può caricare i suoi senza conversioni.
+24. **Resa 3D con l'algoritmo del pittore**, facce e spigoli in una sola lista
+    ordinata per profondità, con sagome calcolate a runtime. 60 fotogrammi al
+    secondo su 2 304 triangoli.
+25. **L'altezza dell'intestazione la misura l'isola**: in CSS non è conoscibile,
+    perché dipende da quante righe occupa il menu.
 
 ---
 
@@ -612,42 +662,37 @@ impronta nel nome.
 
 ```console
 $ du -sh dist
-540K	dist
+1.4M	dist
 ```
 
 | Tipo | File | Peso su disco |
 |---|---|---|
-| HTML | 16 | 210,9 kB |
-| CSS | 12 | 26,1 kB |
-| JavaScript | 1 | 2,4 kB |
-| SVG | 9 | 7,6 kB |
-| PNG | 2 | 21,4 kB |
-| WOFF2 | 3 | 68,0 kB |
+| MP4 (video del hero) | 1 | 398,0 kB |
+| STL (modelli 3D) | 2 | 225,2 kB |
+| HTML | 16 | 223,3 kB |
+| WOFF2 (4 caratteri) | 4 | 82,2 kB |
+| JPEG (fermo immagine) | 1 | 50,7 kB |
+| PNG | 4 | 34,3 kB |
+| CSS | 12 | 32,5 kB |
+| WebP (fermi immagine) | 2 | 23,4 kB |
+| SVG | 11 | 20,3 kB |
+| JavaScript | 3 | 14,6 kB |
+| TXT | 4 | 13,4 kB |
 | XML (sitemap) | 2 | 1,5 kB |
-| TXT | 3 | 8,9 kB |
 
-**Pagina più pesante su disco:** `dist/index.html`, **16,8 kB**. A seguire
-`chi-siamo` (15,8 kB), `servizi` (15,6 kB) e il progetto
-`piastra-raffreddamento-pacco-batteria` (15,1 kB).
+**Pagina più pesante su disco:** `dist/progetti/serie-cnc-pinze-freno/index.html`,
+**19,6 kB**. A seguire `staffa-portamotore-alluminio` (18,5 kB) e la home
+(17,1 kB).
 
 **Pagina più pesante come traffico reale**, misurata da Lighthouse con
-compressione attiva: la home, **80 KiB** in tutto, di cui 69 KiB sono i tre file
-dei font. Le pagine successive ne scaricano **circa 11 KiB**, perché i font
+compressione attiva: la home, **104 KiB**, di cui 82 KiB sono i quattro file dei
+caratteri. Le pagine successive ne scaricano circa 20 KiB, perché i caratteri
 restano in cache per un anno.
 
-```
-home — 80 KiB in totale
-  24,2 kB  /fonts/inter-latin-600.woff2
-  23,4 kB  /fonts/inter-latin-400.woff2
-  21,3 kB  /fonts/source-serif-4-latin-600.woff2
-   4,3 kB  /                        (HTML compresso)
-   3,5 kB  /_astro/BaseLayout.css
-   1,1 kB  /img/progetti/staffa-portamotore-alluminio.svg
-   0,7 kB  /img/hero-officina.svg
-   0,7 kB  /_astro/index.css
-```
-
----
+Le due voci grosse in `dist/` — il video da 398 kB e i due STL da 225 kB — non
+sono sul percorso critico: il video è `preload="none"` e parte solo quando
+l'isola lo avvia, gli STL vengono chiesti solo quando la sezione dei disegni
+entra in vista. Chi apre la home e non scorre non scarica né l'uno né gli altri.
 
 ## 7. Problemi aperti
 

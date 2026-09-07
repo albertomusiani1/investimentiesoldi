@@ -22,6 +22,33 @@ export const CATEGORIE_PROGETTO = [
 
 export type CategoriaProgetto = (typeof CATEGORIE_PROGETTO)[number];
 
+/**
+ * Un disegno allegato al progetto: una tavola 2D o un modello 3D.
+ *
+ * - `disegno2d` vuole un SVG (o un PNG) in `public/disegni/`;
+ * - `modello3d` vuole un **STL**, il formato che ogni CAD esporta, in
+ *   `public/modelli/`, più un'anteprima PNG mostrata quando JavaScript è
+ *   disattivato o mentre il modello si carica.
+ */
+const disegno = z
+  .object({
+    titolo: z.string().min(3).max(90),
+    tipo: z.enum(['disegno2d', 'modello3d']),
+    /** Percorso del file dalla root del sito, es. /modelli/puleggia.stl */
+    file: z.string().startsWith('/'),
+    /** Obbligatoria per i modelli 3D: è la ricaduta senza JavaScript. */
+    anteprima: z.string().startsWith('/').optional(),
+    /** Una riga di contesto: scala, revisione, materiale. */
+    nota: z.string().max(160).optional(),
+  })
+  .strict()
+  .refine((valore) => valore.tipo !== 'modello3d' || valore.anteprima !== undefined, {
+    message: "un disegno di tipo modello3d deve avere anche il campo anteprima (l'immagine mostrata senza JavaScript)",
+    path: ['anteprima'],
+  });
+
+export type Disegno = z.infer<typeof disegno>;
+
 const progetti = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/progetti' }),
   schema: z
@@ -44,6 +71,8 @@ const progetti = defineCollection({
       inEvidenza: z.boolean().default(false),
       /** Ordine crescente nella griglia; se assente si ordina per data decrescente. */
       ordine: z.number().int().positive().optional(),
+      /** Tavole e modelli mostrati nel visualizzatore, in fondo alla pagina. */
+      disegni: z.array(disegno).max(8).optional(),
     })
     .strict(),
 });

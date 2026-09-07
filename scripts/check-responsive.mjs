@@ -30,6 +30,7 @@ const PAGINE = [
   '/servizi',
   '/progetti',
   '/progetti/staffa-portamotore-alluminio',
+  '/progetti/serie-cnc-pinze-freno',
   '/progetti/piastra-raffreddamento-pacco-batteria',
   '/progetti/linea-collaudo-tenuta-serbatoi',
   '/chi-siamo',

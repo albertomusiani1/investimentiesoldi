@@ -57,13 +57,14 @@ interpreta.
 
 > **Prova a vederlo con i tuoi occhi.** Apri il sito, premi `F12` (o tasto destro
 > → *Ispeziona*), vai sulla scheda **Rete** e ricarica la pagina. Vedi l'elenco
-> di tutte le richieste: la pagina, il CSS, i tre file dei caratteri, le
-> immagini. Ognuna col suo codice di stato e il suo peso. Non c'è nient'altro.
+> di tutte le richieste: la pagina, il CSS, i file dei caratteri, le immagini.
+> Ognuna col suo codice di stato e il suo peso. Non c'è nient'altro.
 
-Un dettaglio che conta: le pagine del tuo sito pesano **circa 80 kB in tutto**
-alla prima visita, e 11 kB dalla seconda in poi — perché i caratteri tipografici
-restano nella memoria del browser. Per riferimento, una singola foto scattata col
-telefono pesa cinquanta volte tanto.
+Un dettaglio che conta: la home del tuo sito pesa **circa 104 kB alla prima
+visita** — e più della metà è il fermo immagine del video di apertura. Le altre
+pagine ne chiedono **una ventina**, perché i caratteri tipografici e il foglio di
+stile restano nella memoria del browser. Per riferimento, una singola foto
+scattata col telefono pesa venti volte tanto.
 
 ---
 
@@ -169,10 +170,15 @@ variabili: **un concetto, un posto**.
 È l'unico dei tre che è un vero linguaggio di programmazione: fa succedere cose.
 Reagisce ai clic, cambia la pagina senza ricaricarla, parla con altri computer.
 
-Sul tuo sito ce n'è **2,4 kB in croce, su una pagina sola**: il modulo contatti.
-Tutto il resto è HTML e CSS. È una scelta precisa, non una mancanza — il
-JavaScript va scaricato, letto ed eseguito dal telefono del visitatore, e ogni
-riga costa tempo e batteria. Se un pulsante può funzionare senza, funziona senza.
+Sul tuo sito ce n'è **14,6 kB in tutto, divisi in tre "isole"**, e ogni isola
+viene scaricata solo dalla pagina che la usa davvero: il video del hero (solo in
+home), il modulo contatti (solo in `/contatti`), il visualizzatore dei disegni
+(solo nelle schede progetto). Tutto il resto è HTML e CSS. È una scelta precisa,
+non una mancanza — il JavaScript va scaricato, letto ed eseguito dal telefono del
+visitatore, e ogni riga costa tempo e batteria. Se un pulsante può funzionare
+senza, funziona senza; e infatti anche le tre isole sono facoltative: senza
+JavaScript il video resta un'immagine ferma, il modulo si invia ricaricando la
+pagina e i disegni si vedono comunque, statici.
 
 > **Il filo conduttore.** Il menu di navigazione, il filtro per categoria nella
 > pagina Progetti, gli effetti al passaggio del mouse: tutte cose che di solito
@@ -286,7 +292,8 @@ brambilla-future-sito/
 │   │                          servizi.ts, testi-legali.ts.
 │   └── styles/global.css      Colori, caratteri, spaziature: tutto lo stile.
 │
-├── public/                 ← File copiati così come sono: immagini, caratteri.
+├── public/                 ← File copiati così come sono: immagini, caratteri,
+│                            video del hero, disegni e modelli 3D.
 │
 ├── netlify/functions/      ← Il pezzo "vivo": riceve il modulo contatti.
 │

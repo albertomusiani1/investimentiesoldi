@@ -8,6 +8,16 @@ immagine: /img/progetti/serie-cnc-pinze-freno.svg
 immagineAlt: Rappresentazione geometrica di un disco freno con un settore evidenziato in colore rame e otto riferimenti radiali di misura.
 inEvidenza: true
 ordine: 2
+disegni:
+  - titolo: Sede pistone — sezione A-A
+    tipo: disegno2d
+    file: /disegni/sede-pistone-sezione.svg
+    nota: "Tavola BF-4471-03, revisione C, scala 1:2"
+  - titolo: Boccola di guida del pistone
+    tipo: modello3d
+    file: /modelli/boccola-flangiata.stl
+    anteprima: /modelli/boccola-flangiata.png
+    nota: "STL esportato dal CAD, tolleranza corda 0,02 mm"
 ---
 
 ## Il problema

@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="990" viewBox="0 0 1400 990">
+  
+    <rect width="1400" height="990" fill="#faf8f5"/>
+    <rect x="14" y="14" width="1372" height="962" fill="none" stroke="#16232e" stroke-width="1.6"/>
+
+  <text x="60" y="80" font-family="'DejaVu Sans Mono',monospace" font-size="16" fill="#1d3648">SCHEMA PNEUMATICO — LINEA COLLAUDO TENUTA</text>
+
+  <!-- linea di alimentazione -->
+  <g stroke="#16232e" stroke-width="2.4" fill="none">
+    <path d="M80 200H1300"/>
+  </g>
+  <text x="80" y="186" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#4d5a66">ARIA 6 bar — FILTRATA 5 µm</text>
+
+  
+    <g stroke="#16232e" stroke-width="1.6" fill="none">
+      <path d="M286 188l28 24M286 212l28 -24M286 188v24M314 188v24"/>
+    </g>
+  
+    <g stroke="#16232e" stroke-width="1.6" fill="none">
+      <path d="M686 188l28 24M686 212l28 -24M686 188v24M714 188v24"/>
+    </g>
+  
+    <g stroke="#16232e" stroke-width="1.6" fill="none">
+      <path d="M1086 188l28 24M1086 212l28 -24M1086 188v24M1114 188v24"/>
+    </g>
+
+  <!-- discese verso le tre stazioni -->
+  <g stroke="#16232e" stroke-width="1.8" fill="none">
+    <path d="M300 200V330"/>
+    <path d="M700 200V330"/>
+    <path d="M1100 200V330"/>
+  </g>
+
+  
+    <g>
+      <circle cx="300" cy="300" r="22" fill="#faf8f5" stroke="#16232e" stroke-width="1.6"/>
+      <path d="M278 300h44" stroke="#16232e" stroke-width="1"/>
+      <text x="300" y="294" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#16232e">PT</text>
+      <text x="300" y="315" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">0-10 bar</text>
+    </g>
+  
+    <g>
+      <circle cx="700" cy="300" r="22" fill="#faf8f5" stroke="#16232e" stroke-width="1.6"/>
+      <path d="M678 300h44" stroke="#16232e" stroke-width="1"/>
+      <text x="700" y="294" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#16232e">PT</text>
+      <text x="700" y="315" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">0-10 bar</text>
+    </g>
+  
+    <g>
+      <circle cx="1100" cy="300" r="22" fill="#faf8f5" stroke="#16232e" stroke-width="1.6"/>
+      <path d="M1078 300h44" stroke="#16232e" stroke-width="1"/>
+      <text x="1100" y="294" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#16232e">PT</text>
+      <text x="1100" y="315" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">0-10 bar</text>
+    </g>
+
+  
+    <g>
+      <rect x="210" y="360" width="180" height="120" rx="4" fill="none" stroke="#16232e" stroke-width="1.8"/>
+      <text x="300" y="412" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#16232e">STAZIONE 1</text>
+      <text x="300" y="436" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#4d5a66">precarico 0,5 bar</text>
+    </g>
+  
+    <g>
+      <rect x="610" y="360" width="180" height="120" rx="4" fill="none" stroke="#16232e" stroke-width="1.8"/>
+      <text x="700" y="412" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#16232e">STAZIONE 2</text>
+      <text x="700" y="436" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#4d5a66">prova 4,0 bar</text>
+    </g>
+  
+    <g>
+      <rect x="1010" y="360" width="180" height="120" rx="4" fill="#f2e6df" stroke="#8f3d18" stroke-width="1.8"/>
+      <text x="1100" y="412" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#16232e">STAZIONE 3</text>
+      <text x="1100" y="436" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#4d5a66">caduta 60 s</text>
+    </g>
+
+  <!-- rulliera -->
+  <g stroke="#1d3648" stroke-width="2.6" fill="none">
+    <path d="M80 560H1300"/>
+  </g>
+  <g fill="#1d3648">
+    <circle cx="140" cy="596" r="18"/><circle cx="300" cy="596" r="18"/><circle cx="460" cy="596" r="18"/><circle cx="620" cy="596" r="18"/><circle cx="780" cy="596" r="18"/><circle cx="940" cy="596" r="18"/><circle cx="1100" cy="596" r="18"/><circle cx="1260" cy="596" r="18"/>
+  </g>
+  <text x="80" y="640" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#4d5a66">RULLIERA MOTORIZZATA — 240 pz/h</text>
+
+  <g stroke="#16232e" stroke-width="1.4" stroke-dasharray="6 5" fill="none">
+    <path d="M300 480V554M700 480V554M1100 480V554"/>
+  </g>
+
+  
+    <g stroke="#4d5a66" stroke-width="0.8" fill="none">
+      <path d="M300 695v10M700 695v10"/>
+      <path d="M300 700H700"/>
+      <path d="M300 700l9 -3v6z" fill="#4d5a66" stroke="none"/>
+      <path d="M700 700l-9 -3v6z" fill="#4d5a66" stroke="none"/>
+    </g>
+    <text x="500" y="693" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#16232e">1 600 interasse stazioni</text>
+  
+    <g stroke="#4d5a66" stroke-width="0.8" fill="none">
+      <path d="M80 745v10M1300 745v10"/>
+      <path d="M80 750H1300"/>
+      <path d="M80 750l9 -3v6z" fill="#4d5a66" stroke="none"/>
+      <path d="M1300 750l-9 -3v6z" fill="#4d5a66" stroke="none"/>
+    </g>
+    <text x="690" y="766" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#16232e">5 400 lunghezza utile linea</text>
+
+  
+    <g stroke="#8f3d18" stroke-width="1" fill="none">
+      <path d="M1100 420l90 -110h26"/>
+      <circle cx="1100" cy="420" r="2.5" fill="#8f3d18"/>
+    </g>
+    <text x="1222" y="314" text-anchor="start" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#8f3d18">stazione a caduta di pressione</text>
+
+  <g font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#4d5a66">
+    <text x="80" y="830">LEGENDA</text>
+    <text x="80" y="856">PT   trasduttore di pressione, classe 0,25</text>
+    <text x="80" y="878">↕    valvola 2/2 comandata</text>
+    <text x="80" y="900">– –  interfaccia di presa sul pezzo</text>
+  </g>
+
+  
+    <g>
+      <rect x="1036" y="870" width="340" height="96" fill="none" stroke="#16232e" stroke-width="1.4"/>
+      
+      <text x="1048" y="892" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">DISEGNO</text>
+      <text x="1146" y="892" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#16232e">Linea collaudo — schema</text>
+      <path d="M1036 900H1376" stroke="#c9c2b6" stroke-width="0.6"/>
+      <text x="1048" y="916" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">CODICE</text>
+      <text x="1146" y="916" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#16232e">BF-5120-01</text>
+      <path d="M1036 924H1376" stroke="#c9c2b6" stroke-width="0.6"/>
+      <text x="1048" y="940" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">SCALA</text>
+      <text x="1146" y="940" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#16232e">NON IN SCALA</text>
+      <path d="M1036 948H1376" stroke="#c9c2b6" stroke-width="0.6"/>
+      <text x="1048" y="964" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">REVISIONE</text>
+      <text x="1146" y="964" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#16232e">A — 11/09/2023</text>
+      <path d="M1036 972H1376" stroke="#c9c2b6" stroke-width="0.6"/>
+    </g>
+</svg>

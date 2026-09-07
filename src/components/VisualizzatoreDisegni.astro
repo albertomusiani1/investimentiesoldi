@@ -1,0 +1,188 @@
+---
+/**
+ * Visualizzatore di tavole 2D e modelli 3D.
+ *
+ * La scelta del disegno è fatta con dei radio nascosti e una regola CSS:
+ * funziona anche senza JavaScript, come il filtro della pagina Progetti.
+ *
+ * Senza JavaScript ogni disegno mostra la propria immagine statica — la
+ * tavola per il 2D, l'anteprima resa in fase di build per il 3D — più il
+ * collegamento per scaricare il file originale. Con JavaScript la tavola
+ * diventa ingrandibile e trascinabile, e il modello 3D diventa una vista
+ * che si ruota col mouse, col dito o inclinando il telefono.
+ *
+ * Gli identificatori dei radio sono fissi (`disegno-0` … `disegno-7`) perché
+ * le regole CSS che pilotano i pannelli sono statiche: un foglio di stile
+ * esterno è l'unico modo di stare dentro una CSP senza 'unsafe-inline'.
+ */
+import { t } from '../i18n';
+import type { Disegno } from '../content.config';
+
+export interface Props {
+  disegni: Disegno[];
+}
+
+const { disegni } = Astro.props;
+
+const etichettaTipo = (tipo: Disegno['tipo']) =>
+  tipo === 'modello3d' ? t('disegni.tipo3d') : t('disegni.tipo2d');
+---
+
+{
+  disegni.length > 0 && (
+    <section class="sezione sezione--scura disegni" aria-labelledby="titolo-disegni">
+      <div class="contenitore">
+        <div class="intestazione-sezione">
+          <h2 id="titolo-disegni">{t('disegni.titolo')}</h2>
+          <p>{t('disegni.sottotitolo')}</p>
+        </div>
+
+        {/* I testi dell'isola viaggiano in attributi data-*: restano in it.json
+            e non finiscono scritti dentro il JavaScript. */}
+        <span
+          class="solo-screen-reader"
+          data-testi-disegni
+          data-caricamento={t('disegni.caricamento')}
+          data-errore={t('disegni.errore')}
+          data-triangoli={t('disegni.triangoli')}
+          data-ombreggiato={t('disegni.ombreggiato')}
+          data-filo-di-ferro={t('disegni.filoDiFerro')}
+          data-rotazione-automatica={t('disegni.rotazioneAutomatica')}
+          data-ferma-rotazione={t('disegni.fermaRotazione')}
+          data-giroscopio={t('disegni.giroscopio')}
+          data-giroscopio-attivo={t('disegni.giroscopioAttivo')}
+          data-giroscopio-negato={t('disegni.giroscopioNegato')}
+        />
+
+        <div class="visualizzatore" data-visualizzatore>
+          <fieldset class="visualizzatore__scelta">
+            <legend class="visualizzatore__legenda">{t('disegni.scegli')}</legend>
+            <div class="visualizzatore__voci">
+              {disegni.map((disegno, indice) => (
+                <>
+                  <input
+                    class="solo-screen-reader visualizzatore__radio"
+                    type="radio"
+                    name="disegno"
+                    id={`disegno-${indice}`}
+                    checked={indice === 0}
+                  />
+                  <label class="visualizzatore__etichetta" for={`disegno-${indice}`}>
+                    <span class="visualizzatore__tipo">{etichettaTipo(disegno.tipo)}</span>
+                    <span class="visualizzatore__nome">{disegno.titolo}</span>
+                  </label>
+                </>
+              ))}
+            </div>
+          </fieldset>
+
+          <div class="visualizzatore__pannelli">
+            {disegni.map((disegno, indice) => (
+              <div
+                class="pannello"
+                data-pannello={String(indice)}
+                data-tipo={disegno.tipo}
+                data-file={disegno.file}
+              >
+                <div
+                  class:list={['scena', disegno.tipo === 'modello3d' ? 'scena--3d' : 'scena--2d']}
+                  data-scena
+                >
+                  {disegno.tipo === 'modello3d' && (
+                    <canvas
+                      class="scena__tela"
+                      data-tela
+                      width="1200"
+                      height="800"
+                      role="img"
+                      aria-label={`${t('disegni.vistaModello')} — ${disegno.titolo}`}
+                      tabindex="0"
+                    />
+                  )}
+
+                  <img
+                    class="scena__statica"
+                    data-statica
+                    src={disegno.tipo === 'modello3d' ? disegno.anteprima : disegno.file}
+                    alt={disegno.titolo}
+                    width="1000"
+                    height="700"
+                    loading="lazy"
+                    decoding="async"
+                    tabindex="0"
+                  />
+
+                  <p class="scena__stato" data-stato aria-live="polite" hidden />
+                </div>
+
+                <div class="comandi" data-comandi hidden>
+                  <div class="comandi__gruppo">
+                    <button class="comando" type="button" data-azione="riduci">
+                      <span aria-hidden="true">−</span>
+                      <span class="solo-screen-reader">{t('disegni.riduci')}</span>
+                    </button>
+                    <output class="comandi__zoom" data-zoom>100%</output>
+                    <button class="comando" type="button" data-azione="ingrandisci">
+                      <span aria-hidden="true">+</span>
+                      <span class="solo-screen-reader">{t('disegni.ingrandisci')}</span>
+                    </button>
+                    <button class="comando comando--testo" type="button" data-azione="adatta">
+                      {t('disegni.adatta')}
+                    </button>
+                  </div>
+
+                  {disegno.tipo === 'modello3d' && (
+                    <div class="comandi__gruppo">
+                      <button class="comando comando--testo" type="button" data-azione="resa" aria-pressed="false">
+                        {t('disegni.filoDiFerro')}
+                      </button>
+                      <button
+                        class="comando comando--testo"
+                        type="button"
+                        data-azione="rotazione"
+                        aria-pressed="true"
+                      >
+                        {t('disegni.rotazioneAutomatica')}
+                      </button>
+                      <button
+                        class="comando comando--testo comando--giroscopio"
+                        type="button"
+                        data-azione="giroscopio"
+                        aria-pressed="false"
+                        hidden
+                      >
+                        {t('disegni.giroscopio')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <p class="pannello__piede">
+                  {disegno.nota && <span class="pannello__nota">{disegno.nota}</span>}
+                  <span class="pannello__dati" data-dati />
+                  <a class="pannello__scarica" href={disegno.file} download>
+                    {t('disegni.scarica')}
+                  </a>
+                </p>
+
+                <p class="pannello__istruzioni" data-istruzioni hidden>
+                  {disegno.tipo === 'modello3d' ? t('disegni.istruzioni3d') : t('disegni.istruzioni2d')}
+                </p>
+
+                <noscript>
+                  <p class="pannello__noscript">{t('disegni.senzaJs')}</p>
+                </noscript>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  // Il codice sta in un modulo separato: così Astro lo emette come file
+  // esterno e la Content-Security-Policy può restare senza 'unsafe-inline'.
+  import '../scripts/visualizzatore-disegni.ts';
+</script>

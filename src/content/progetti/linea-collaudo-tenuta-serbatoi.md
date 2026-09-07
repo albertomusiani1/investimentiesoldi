@@ -7,6 +7,11 @@ descrizioneBreve: "Nuova linea di collaudo tenuta a caduta di pressione: da 90 a
 immagine: /img/progetti/linea-collaudo-tenuta-serbatoi.svg
 immagineAlt: Schema di una linea di collaudo con cinque postazioni su rulliera, due stazioni di prova e una terza stazione con il segno di spunta di conformità.
 ordine: 6
+disegni:
+  - titolo: Schema pneumatico della linea
+    tipo: disegno2d
+    file: /disegni/linea-collaudo-schema.svg
+    nota: "Tavola BF-5120-01, revisione A, fuori scala"
 ---
 
 ## Il problema

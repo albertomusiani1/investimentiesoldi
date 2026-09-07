@@ -1,15 +1,25 @@
 # Brambilla Future — sito vetrina
 
 Sito statico in **Astro** per Brambilla Future, ingegneria e componentistica per
-l'automotive. Italiano, corporate, senza framework CSS e senza JavaScript sul
-client tranne l'isola del modulo contatti.
+l'automotive. Italiano, corporate, senza framework CSS e con il JavaScript
+confinato in tre isole dichiarate.
 
 - **CSS puro** con custom properties: chi conosce HTML e CSS può mettere mano ai
   file senza imparare nulla di nuovo.
 - **Sezione Progetti che cresce da sola**: si aggiunge un file Markdown, il sito
   fa il resto.
+- **Video a schermo intero** in home, con titolo e due chiamate all'azione.
+- **Visualizzatore di disegni**: le tavole 2D si ingrandiscono e si trascinano,
+  i modelli 3D in STL si ruotano col mouse, col dito o inclinando il telefono.
 - **Modulo contatti funzionante** anche senza JavaScript, con doppia email
   (conferma al visitatore, notifica al titolare).
+
+**Quanto JavaScript.** Tre isole, 14,6 kB in tutto, ognuna solo sulle pagine
+che la usano: il video del hero (solo `/`), il modulo contatti (solo
+`/contatti`), il visualizzatore (solo le pagine progetto che hanno disegni).
+Tutto il resto del sito — menu, filtro dei progetti, effetti al passaggio del
+mouse — è HTML e CSS. `npm run check:js` lo verifica e fallisce se entra uno
+script non dichiarato.
 
 > **Non sai da dove cominciare?** Questo file è il manuale operativo: dice *come*
 > fare le cose. Se prima vuoi capire *perché* sono fatte così — cos'è un sito
@@ -62,10 +72,13 @@ l'invio del modulo non funziona.
 | `npm test` | Test del modulo contatti (non serve nessuna chiave) |
 | `npm run check:pages` | Tutte le URL della sitemap rispondono 200 e la 404 è quella del sito |
 | `npm run check:i18n` | Nessuna stringa di interfaccia scritta a mano nei componenti |
+| `npm run check:js` | Nessuno script fuori dalle tre isole dichiarate |
 | `npm run check:responsive` | Screenshot a 360, 768 e 1280 px e controllo overflow |
 | `npm run check:html` | Validazione HTML di `dist/` |
 | `npm run check:links` | Nessun collegamento interno rotto |
 | `npm run immagini:social` | Rigenera `og-default.png` e `apple-touch-icon.png` |
+| `npm run disegni` | Rigenera i disegni e i modelli di esempio |
+| `npm run video` | Rigenera il video del hero e i fermi immagine (serve ffmpeg) |
 
 `check:pages`, `check:responsive` e `check:links` vogliono `npm run build` già
 fatto; i primi due vogliono anche `npm run preview` in esecuzione in un altro
@@ -86,7 +99,10 @@ terminale.
 │       └── mailer-mailjet.ts Unica implementazione, sostituibile
 ├── public/                   File serviti così come sono
 │   ├── fonts/                Caratteri self-hosted in WOFF2
-│   ├── img/                  Illustrazioni SVG
+│   ├── img/                  Illustrazioni SVG e fermi immagine del hero
+│   ├── video/hero.mp4        Il filmato del hero
+│   ├── disegni/              Tavole 2D dei progetti (SVG)
+│   ├── modelli/              Modelli 3D (STL) e loro anteprime (PNG)
 │   ├── favicon.svg  og-default.png  apple-touch-icon.png
 ├── scripts/                  Script di verifica e di servizio
 └── src/
@@ -97,7 +113,7 @@ terminale.
     ├── layouts/              Struttura comune delle pagine
     ├── lib/                  Dati dell'azienda, servizi, testi legali, SEO
     ├── pages/                Una pagina per file (robots.txt incluso, generato)
-    ├── scripts/              L'unico JavaScript inviato al browser
+    ├── scripts/              Le tre isole JavaScript inviate al browser
     └── styles/global.css     Palette, tipografia, spaziature, componenti
 ```
 
@@ -237,7 +253,7 @@ L'ordine di precedenza è: variabile `SITE_URL` se la imposti tu → variabile
 | `src/lib/testi-legali.ts` | Privacy policy e cookie policy — **da far verificare a chi tratta i dati** |
 | `src/pages/chi-siamo.astro` | Storia, valori, persone, certificazioni (blocchi `storia`, `valori`, `team`, `certificazioni` in cima al file) |
 | `src/pages/index.astro` | Le quattro cifre della sezione «in cifre» (blocco `numeri` in cima al file) |
-| `src/content/progetti/*.md` | I sei progetti di esempio: sostituirli con commesse vere |
+| `src/content/progetti/*.md` | I sei progetti di esempio: sostituirli con commesse vere, e con le loro tavole e modelli veri nel campo `disegni` |
 
 Ogni blocco da sostituire è marcato nel codice con il commento
 `CONTENUTO — SOSTITUIRE`.
@@ -248,9 +264,10 @@ Sono tutte SVG geometriche disegnate a mano, in palette con il sito.
 
 | File | Che cos'è |
 |---|---|
-| `img/hero-officina.svg` | Illustrazione della home |
 | `img/mappa-seregno.svg` | Mappa statica della pagina contatti (non è una mappa vera) |
 | `img/progetti/*.svg` | Un'immagine per progetto |
+| `video/hero.mp4` + `img/hero-poster*` | Il filmato del hero e i suoi fermi immagine (vedi la sezione dedicata) |
+| `disegni/*.svg`, `modelli/*.stl` + `*.png` | Le tavole e i modelli mostrati nel visualizzatore |
 | `favicon.svg` | Icona del sito |
 | `og-default.png`, `apple-touch-icon.png` | Generate da `npm run immagini:social`, che le ricava dagli SVG scritti in `scripts/genera-immagini-social.mjs` |
 
@@ -528,6 +545,114 @@ questo sito lascia passare tutto e il divieto sta nell'intestazione.
    ricarica → clic sulla prima riga → *Intestazioni risposta*);
 4. registra il sito su Google Search Console e invia `sitemap-index.xml`.
 
+## Il video del hero
+
+La home apre con un video a schermo intero, il titolo e due chiamate all'azione.
+
+**Come si comporta.** Senza JavaScript resta il fermo immagine, che è anche
+l'elemento che decide la velocità percepita della pagina. Con JavaScript il
+video parte quando il hero è in vista e si mette in pausa appena lo si è
+scorso via, per non consumare batteria a vuoto. Se il sistema del visitatore
+chiede meno animazioni (`prefers-reduced-motion`), il video non parte affatto.
+Il filmato è muto, senza traccia audio: non c'è niente da silenziare.
+
+**Sostituirlo con riprese vere.** È l'unica cosa da fare:
+
+1. metti il montaggio in `public/video/hero.mp4` — H.264, muto, pensato per
+   girare in ciclo, **sotto il mezzo megabyte** (quello attuale pesa 398 kB per
+   8 secondi: un video di riprese reali va compresso di conseguenza);
+2. metti un fotogramma rappresentativo in `public/img/hero-poster.jpg` e le sue
+   versioni leggere in `public/img/hero-poster-900.webp` e
+   `hero-poster-1600.webp`;
+3. aggiorna la descrizione in `src/i18n/it.json`, voce
+   `home.heroVideoDescrizione`.
+
+**Il video attuale è generato, non filmato.** `npm run video` lo ricostruisce da
+zero: è un wireframe di flangia che ruota in proiezione ortografica sopra una
+griglia da tavolo da disegno, calcolato in `scripts/genera-video-hero.mjs`.
+Serve `ffmpeg` installato (`FFMPEG=/percorso/ffmpeg npm run video` se non è nel
+PATH). Non è una dipendenza del progetto: si esegue una volta e i file prodotti
+si committano.
+
+> **Attenzione al contrasto.** Il titolo è testo bianco sopra un filmato. I due
+> veli in `.eroe__velo` (uno orizzontale, uno verticale) esistono per garantire
+> la leggibilità: con riprese più chiare di quelle attuali va rialzata la loro
+> opacità, altrimenti il titolo diventa illeggibile e il punteggio di
+> accessibilità crolla.
+
+---
+
+## I disegni dei progetti
+
+Ogni progetto può mostrare in fondo alla sua pagina un elenco di tavole e
+modelli. La sezione compare da sola se il progetto ha il campo `disegni`, e
+sparisce se non ce l'ha.
+
+**Come funziona il visualizzatore.** La scelta fra i disegni è fatta con dei
+radio e una regola CSS: funziona anche senza JavaScript. Senza JavaScript ogni
+disegno mostra la propria immagine statica più il collegamento per scaricare il
+file originale. Con JavaScript:
+
+- le **tavole 2D** si trascinano e si ingrandiscono, con la rotellina che
+  ingrandisce nel punto del puntatore e il pizzico a due dita sul telefono;
+- i **modelli 3D** si ruotano trascinando, col dito, con le frecce della
+  tastiera o **inclinando il telefono** (su iOS il permesso va concesso col
+  pulsante «Inclina il telefono»). Si passa fra vista piena e filo di ferro,
+  e la rotazione automatica si ferma appena si tocca il modello.
+
+### Aggiungere una tavola 2D
+
+1. Esporta la tavola dal CAD in **SVG** (meglio) o PNG e mettila in
+   `public/disegni/`.
+2. Aggiungi la voce al progetto:
+
+```yaml
+disegni:
+  - titolo: Sede pistone — sezione A-A
+    tipo: disegno2d
+    file: /disegni/sede-pistone-sezione.svg
+    nota: "Tavola BF-4471-03, revisione C, scala 1:2"
+```
+
+### Aggiungere un modello 3D
+
+Il formato è **STL**, quello che esportano tutti i CAD: in SolidWorks, Fusion,
+Inventor, Creo, Onshape è *File → Esporta* o *Salva con nome → STL*. Va bene
+sia binario sia ASCII; il binario pesa molto meno. Tieni la tolleranza di corda
+sui **0,02 mm** e il numero di triangoli **sotto i 20.000**: oltre, il disegno
+diventa pesante da scaricare e lento da ruotare sui telefoni.
+
+1. Metti il file in `public/modelli/`.
+2. Serve anche un'**anteprima PNG**, che è quello che si vede senza JavaScript e
+   mentre il modello si carica. Se non ce l'hai, uno screenshot della vista
+   isometrica dal CAD va benissimo.
+3. Aggiungi la voce al progetto:
+
+```yaml
+disegni:
+  - titolo: Puleggia di rinvio del tenditore
+    tipo: modello3d
+    file: /modelli/puleggia-dentata.stl
+    anteprima: /modelli/puleggia-dentata.png
+    nota: "Z=24, passo 8 mm — STL esportato dal CAD"
+```
+
+Se dimentichi `anteprima` su un modello 3D, `npm run build` si ferma e te lo
+dice: è lo schema Zod che lo pretende, perché senza anteprima chi non ha
+JavaScript vedrebbe un buco.
+
+**Come sono resi i modelli.** Nessuna libreria 3D. Il file STL viene letto, le
+facce ordinate per profondità e dipinte dalla più lontana alla più vicina;
+sopra vengono tracciati gli *spigoli vivi* — quelli fra due facce che formano
+un angolo netto — e le *sagome*, cioè il contorno delle superfici curve, che
+cambia a ogni rotazione. È il motivo per cui il risultato somiglia a un disegno
+e non a un rendering.
+
+I quattro disegni di esempio sono generati da `npm run disegni` e sono
+inventati: vanno sostituiti con quelli veri del cliente.
+
+---
+
 ## Verifiche
 
 ```bash
@@ -538,6 +663,7 @@ npm run check:responsive
 npm run check:html
 npm run check:links
 npm run check:i18n
+npm run check:js
 ```
 
 L'esito dell'ultima esecuzione completa, con l'output reale dei comandi e i

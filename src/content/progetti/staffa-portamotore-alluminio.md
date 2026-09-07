@@ -8,6 +8,12 @@ immagine: /img/progetti/staffa-portamotore-alluminio.svg
 immagineAlt: Disegno schematico di una staffa portamotore trapezoidale con due fori di fissaggio e un istogramma che rappresenta la riduzione di peso.
 inEvidenza: true
 ordine: 1
+disegni:
+  - titolo: Puleggia di rinvio del tenditore
+    tipo: modello3d
+    file: /modelli/puleggia-dentata.stl
+    anteprima: /modelli/puleggia-dentata.png
+    nota: "Z=24, passo 8 mm — STL esportato dal CAD"
 ---
 
 ## Il problema

@@ -32,6 +32,17 @@
 }
 
 @font-face {
+  font-family: 'Archivo';
+  src: url('/fonts/archivo-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
   font-family: 'Source Serif 4';
   src: url('/fonts/source-serif-4-latin-600.woff2') format('woff2');
   font-weight: 600;
@@ -70,6 +81,8 @@
   /* Tipografia — due famiglie, scala coerente di ragione ≈ 1.2 */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', Times, serif;
+  /* Solo per il titolo del hero: industriale, stretto, tutto in maiuscolo. */
+  --font-display: 'Archivo', 'Arial Narrow', Impact, var(--font-sans);
 
   --testo-xs: 0.8125rem;
   --testo-sm: 0.9375rem;
@@ -102,6 +115,14 @@
   --raggio: 6px;
   --ombra: 0 1px 2px rgb(22 35 46 / 6%), 0 2px 8px rgb(22 35 46 / 4%);
   --ombra-forte: 0 2px 4px rgb(22 35 46 / 8%), 0 8px 20px rgb(22 35 46 / 8%);
+
+  /* Altezza dell'intestazione: il hero occupa il resto della finestra.
+     Questo è il valore di ricaduta, volutamente generoso (l'altezza vera
+     dipende da quante righe occupa il menu, e su schermi stretti sono due):
+     se sbaglia, sbaglia per difetto sull'altezza del hero, così le due
+     chiamate all'azione restano visibili. L'isola del video lo sostituisce
+     con la misura esatta. */
+  --altezza-intestazione: 10.5rem;
 
   --larghezza-contenitore: 72rem;
   --larghezza-contenitore-stretto: 46rem;
@@ -446,6 +467,18 @@ hr {
   color: var(--colore-primario);
 }
 
+.bottone--chiaro {
+  background-color: var(--colore-superficie);
+  border-color: var(--colore-superficie);
+  color: var(--colore-primario);
+}
+
+.bottone--chiaro:hover {
+  background-color: var(--colore-superficie-alt);
+  border-color: var(--colore-superficie-alt);
+  color: var(--colore-primario-scuro);
+}
+
 .bottone[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
@@ -652,6 +685,7 @@ hr {
    ------------------------------------------------------------------------- */
 @media (min-width: 40em) {
   /* 640px */
+
   .contenitore {
     padding-inline: var(--space-6);
   }
@@ -692,7 +726,404 @@ hr {
 }
 
 /* -------------------------------------------------------------------------
-   9. Movimento ridotto
+   10. Hero della home: video a schermo intero
+   ------------------------------------------------------------------------- */
+.eroe {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: max(30rem, calc(100svh - var(--altezza-intestazione)));
+  overflow: hidden;
+  background-color: var(--colore-primario-scuro);
+  color: var(--colore-testo-inverso);
+  isolation: isolate;
+}
+
+.eroe__sfondo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.eroe__poster,
+.eroe__poster img,
+.eroe__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.eroe__poster {
+  display: block;
+}
+
+/* Il video compare solo quando ha davvero cominciato a scorrere: prima
+   resta il fermo immagine, così non si vede un rettangolo nero. */
+.eroe__video {
+  opacity: 0;
+  transition: opacity 700ms ease-out;
+}
+
+.eroe__video--attivo {
+  opacity: 1;
+}
+
+.eroe__velo {
+  position: absolute;
+  inset: 0;
+  /* Due veli sovrapposti: uno orizzontale che scurisce il lato del testo e
+     lascia leggere il disegno a destra, uno verticale che chiude in basso.
+     Serve al contrasto: sopra un video le linee chiare passerebbero dietro
+     il titolo bianco. */
+  background:
+    linear-gradient(
+      90deg,
+      rgb(19 36 51 / 88%) 0%,
+      rgb(19 36 51 / 62%) 46%,
+      rgb(19 36 51 / 18%) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgb(19 36 51 / 34%) 0%,
+      rgb(19 36 51 / 18%) 45%,
+      rgb(19 36 51 / 86%) 100%
+    );
+}
+
+.eroe__contenuto {
+  position: relative;
+  padding-block: var(--space-8) var(--space-8);
+  max-width: 54rem;
+}
+
+.eroe__occhiello {
+  display: inline-block;
+  margin: 0 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--colore-accento);
+  color: var(--colore-testo-inverso);
+  font-size: var(--testo-xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.eroe__titolo {
+  margin: 0;
+  color: var(--colore-testo-inverso);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 1.2rem + 7.4vw, 5.6rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.eroe__sommario {
+  max-width: 44ch;
+  margin: var(--space-5) 0 0;
+  color: var(--colore-testo-inverso-tenue);
+  font-size: var(--testo-md);
+}
+
+.eroe__azioni {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.eroe__scorri {
+  position: absolute;
+  right: var(--space-6);
+  bottom: var(--space-5);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--colore-testo-inverso-tenue);
+  font-size: var(--testo-xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.eroe__scorri:hover {
+  color: var(--colore-testo-inverso);
+}
+
+.eroe__scorri svg {
+  animation: scorri 2.4s ease-in-out infinite;
+}
+
+@keyframes scorri {
+  0%,
+  100% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+@media (min-width: 48em) {
+  :root {
+    --altezza-intestazione: 5.7rem;
+  }
+
+  .eroe__scorri {
+    display: flex;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   11. Visualizzatore di disegni e modelli
+   ------------------------------------------------------------------------- */
+.visualizzatore {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.visualizzatore__scelta {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.visualizzatore__legenda {
+  padding: 0;
+  margin-bottom: var(--space-3);
+  color: var(--colore-testo-inverso-tenue);
+  font-size: var(--testo-xs);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.visualizzatore__voci {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.visualizzatore__etichetta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: var(--raggio);
+  color: var(--colore-testo-inverso);
+  cursor: pointer;
+  transition: background-color var(--transizione), border-color var(--transizione);
+}
+
+.visualizzatore__etichetta:hover {
+  border-color: var(--colore-testo-inverso);
+  background-color: rgb(255 255 255 / 8%);
+}
+
+.visualizzatore__tipo {
+  color: var(--colore-testo-inverso-tenue);
+  font-size: var(--testo-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.visualizzatore__nome {
+  font-size: var(--testo-sm);
+  font-weight: 600;
+}
+
+.visualizzatore__radio:checked + .visualizzatore__etichetta {
+  background-color: var(--colore-superficie);
+  border-color: var(--colore-superficie);
+  color: var(--colore-primario);
+}
+
+.visualizzatore__radio:checked + .visualizzatore__etichetta .visualizzatore__tipo {
+  color: var(--colore-accento);
+}
+
+.visualizzatore__radio:focus-visible + .visualizzatore__etichetta {
+  outline: 3px solid var(--colore-testo-inverso);
+  outline-offset: 2px;
+}
+
+/* Un pannello per disegno, scelto dai radio: nessun JavaScript coinvolto. */
+.visualizzatore:has(#disegno-0:checked) .pannello:not([data-pannello='0']),
+.visualizzatore:has(#disegno-1:checked) .pannello:not([data-pannello='1']),
+.visualizzatore:has(#disegno-2:checked) .pannello:not([data-pannello='2']),
+.visualizzatore:has(#disegno-3:checked) .pannello:not([data-pannello='3']),
+.visualizzatore:has(#disegno-4:checked) .pannello:not([data-pannello='4']),
+.visualizzatore:has(#disegno-5:checked) .pannello:not([data-pannello='5']),
+.visualizzatore:has(#disegno-6:checked) .pannello:not([data-pannello='6']),
+.visualizzatore:has(#disegno-7:checked) .pannello:not([data-pannello='7']) {
+  display: none;
+}
+
+.scena {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  max-height: 70svh;
+  background-color: var(--colore-superficie);
+  background-image:
+    linear-gradient(to right, rgb(29 54 72 / 7%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(29 54 72 / 7%) 1px, transparent 1px);
+  background-size: 32px 32px;
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: var(--raggio);
+  overflow: hidden;
+  touch-action: none;
+}
+
+.scena--pronta {
+  cursor: grab;
+}
+
+.scena--presa {
+  cursor: grabbing;
+}
+
+.scena__tela {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.scena--pronta .scena__tela {
+  display: block;
+}
+
+.scena__statica {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: var(--space-4);
+  transform-origin: 0 0;
+}
+
+.scena--3d.scena--pronta .scena__statica {
+  display: none;
+}
+
+.scena__stato {
+  position: absolute;
+  inset: auto var(--space-4) var(--space-4) var(--space-4);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--colore-primario);
+  color: var(--colore-testo-inverso);
+  border-radius: var(--raggio);
+  font-size: var(--testo-sm);
+}
+
+.comandi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: space-between;
+  margin-top: var(--space-4);
+}
+
+.comandi__gruppo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.comando {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: var(--space-2) var(--space-3);
+  background-color: transparent;
+  border: 1px solid rgb(255 255 255 / 32%);
+  border-radius: var(--raggio);
+  color: var(--colore-testo-inverso);
+  font-size: var(--testo-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transizione), border-color var(--transizione);
+}
+
+.comando:hover {
+  background-color: rgb(255 255 255 / 10%);
+  border-color: var(--colore-testo-inverso);
+}
+
+.comando[aria-pressed='true'] {
+  background-color: var(--colore-superficie);
+  border-color: var(--colore-superficie);
+  color: var(--colore-primario);
+}
+
+.comando--testo {
+  min-width: 0;
+}
+
+.comandi__zoom {
+  min-width: 4rem;
+  color: var(--colore-testo-inverso-tenue);
+  font-size: var(--testo-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.pannello__piede {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  align-items: baseline;
+  margin: var(--space-4) 0 0;
+  color: var(--colore-testo-inverso-tenue);
+  font-size: var(--testo-sm);
+}
+
+.pannello__dati {
+  font-variant-numeric: tabular-nums;
+}
+
+.pannello__scarica {
+  margin-left: auto;
+  color: var(--colore-testo-inverso);
+  font-weight: 600;
+}
+
+.pannello__istruzioni,
+.pannello__noscript {
+  margin: var(--space-2) 0 0;
+  color: var(--colore-testo-inverso-tenue);
+  font-size: var(--testo-xs);
+}
+
+@media (min-width: 64em) {
+  .visualizzatore {
+    grid-template-columns: 17rem minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .visualizzatore__voci {
+    flex-direction: column;
+  }
+
+  .visualizzatore__etichetta {
+    width: 100%;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   12. Movimento ridotto
    ------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html {

@@ -10,6 +10,20 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
   collection con 6 progetti, form contatti con funzione Netlify e 14 test verdi, SEO e
   netlify.toml. Build e `astro check` puliti, check-pages 15/15. Restano le verifiche
   finali (fase 9) e la documentazione (README, RESULTS).
+- 2026-09-07 14:55 — **Rifacimento del hero e nuovo visualizzatore di disegni**, su
+  richiesta del proprietario. La home apre con un video a schermo intero, titolo in
+  carattere display e due chiamate all'azione; le pagine progetto mostrano tavole 2D
+  ingrandibili e modelli 3D in STL che si ruotano col mouse, col dito o inclinando il
+  telefono. Il vincolo «zero JavaScript tranne il form» è caduto per volontà del
+  proprietario: adesso ci sono tre isole dichiarate, 14,6 kB in tutto, verificate da
+  `npm run check:js`. Nessun'altra parte del sito è stata toccata. Tutte le verifiche
+  rieseguite: Lighthouse 100/100/100/100 su home e su una pagina progetto col
+  visualizzatore.
+- 2026-09-07 15:05 — Allineata la documentazione ai numeri nuovi: `GUIDA.md` (e la
+  sua versione stampabile) diceva ancora «80 kB a pagina» e «2,4 kB di JavaScript su
+  una pagina sola». Ora dice 104 kB in home, una ventina sulle altre, 14,6 kB di
+  JavaScript in tre isole. Rimossa anche `public/img/hero-officina.svg`, rimasta
+  senza riferimenti dopo il nuovo hero.
 - 2026-08-30 19:20 — Primo deploy reale su Netlify: la home rispondeva con un ciclo
   di reindirizzamenti. Causa: la regola `from = "/*/"` con `force = true` in
   `netlify.toml`, in cui lo splat può corrispondere alla stringa vuota e quindi la
@@ -245,6 +259,67 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
     di anteprima. Alternativa scartata: costruire con `site` puntato a localhost solo per
     la verifica, che avrebbe misurato un artefatto diverso da quello pubblicato.
 
+18. **Il vincolo «zero JavaScript» è stato sostituito, non aggirato.** Un video che
+    parte e si ferma da sé e un visualizzatore 3D non si fanno senza JavaScript: la
+    richiesta del proprietario prevale sul vincolo iniziale. Per non perdere la
+    proprietà che rendeva quel vincolo utile, la regola è stata riscritta in una forma
+    verificabile — *nessuno script fuori dalle isole dichiarate, e ogni isola solo sulle
+    pagine che la usano* — ed è controllata da `scripts/check-js.mjs`, che fallisce se
+    entra un file JavaScript estraneo, se una pagina carica un'isola che non le compete
+    o se compare uno script scritto dentro l'HTML. Risultato: tre isole, 14,6 kB in
+    tutto. Alternativa scartata: lasciare il check come grep manuale, che con tre isole
+    non distingue più fra ciò che è previsto e ciò che è entrato per sbaglio.
+
+19. **Il video del hero è generato, non filmato.** Non ho riprese dello stabilimento e
+    non potevo scaricarne: `scripts/genera-video-hero.mjs` calcola 200 fotogrammi di un
+    wireframe di flangia che ruota in proiezione ortografica su una griglia da tavolo da
+    disegno, e li codifica in H.264. 398 kB per 8 secondi, ciclo senza stacco. `ffmpeg`
+    non è dipendenza del progetto: lo script si esegue una tantum e i file si committano.
+    Alternativa scartata: un filmato di stock, che avrebbe richiesto una licenza e non
+    sarebbe stato coerente con la palette.
+
+20. **Solo MP4, niente WebM.** L'H.264 di questo filmato pesa 398 kB contro gli 800 kB
+    del VP9 a qualità confrontabile — su contenuto vettoriale piatto x264 è più
+    efficiente — ed è supportato da ogni browser in uso. Un secondo formato avrebbe
+    aggiunto peso al repository senza servire a nessuno.
+
+21. **Fermo immagine in WebP con `srcset`, JPEG come ricaduta.** È l'elemento più grande
+    della pagina e quindi quello che fissa il Largest Contentful Paint. La prima misura
+    con il solo JPEG da 74 kB dava Performance 99; passando a WebP (7,6 kB a 900 px) la
+    home è tornata a 100. Il video ha perso l'attributo `poster`, che avrebbe scaricato
+    una seconda copia dell'immagine in formato diverso.
+
+22. **Terzo carattere, solo per il titolo del hero.** Il vincolo iniziale era due
+    caratteri al massimo; «font fighi» richiesti dal proprietario prevalgono. Archivo
+    700 (14,5 kB, sottoinsieme latino) è usato **solo** dal titolo del hero, tutto in
+    maiuscolo: fuori da lì il sito resta su Inter e Source Serif 4.
+
+23. **Il formato dei modelli 3D è STL.** È quello che esportano tutti i CAD, quindi il
+    proprietario può caricare i modelli veri senza conversioni. Il visualizzatore legge
+    sia il binario sia l'ASCII e ricalcola sempre le normali, perché quelle scritte nei
+    file sono spesso a zero. Alternativa scartata: un formato mio a vertici e spigoli,
+    più comodo da disegnare ma impossibile da esportare da un CAD.
+
+24. **Resa 3D con l'algoritmo del pittore, senza WebGL né librerie.** Le facce e gli
+    spigoli finiscono in **una sola lista ordinata per profondità**: tenendoli separati
+    — prima le facce, poi le linee — gli spigoli del lato nascosto si vedevano
+    attraverso il pieno. Ogni triangolo viene anche contornato del proprio colore, per
+    chiudere le righe di antialiasing che a occhio sembravano una rigatura sulla
+    superficie. Agli spigoli vivi si aggiungono a runtime le **sagome** (dove una faccia
+    in vista incontra una faccia girata via): senza di esse il filo di ferro di un
+    cilindro sembra spezzato. Misurato: 60 fotogrammi al secondo su un modello da 2 304
+    triangoli. Alternativa scartata: WebGL, che avrebbe dato prestazioni superiori ma
+    richiesto shader e una ricaduta per i browser senza contesto 3D.
+
+25. **L'altezza dell'intestazione la misura l'isola, non il CSS.** Il hero occupa
+    `100svh` meno l'intestazione, ma quell'altezza in CSS non è conoscibile: dipende da
+    quante righe occupa il menu, e fra 360 e 768 px cambia in modo non monotono (161,
+    119, 141, 89 px). L'isola la misura e la scrive nella variabile CSS; scrivere sulla
+    CSSOM non è interessato dalla CSP, che riguarda i fogli e gli attributi `style` nel
+    markup. La ricaduta senza JavaScript è volutamente generosa, così se sbaglia il hero
+    resta più corto e le due chiamate all'azione restano visibili. Verificato a 360, 480,
+    640, 768 e 1280 px.
+
 ---
 
 ## Versioni installate
@@ -265,6 +340,12 @@ immagini social e arriva già come dipendenza di Astro.
 | Dipendenza di sviluppo | Versione | Perché |
 |---|---|---|
 | playwright | 1.62.1 | Solo per il check 14 (overflow e screenshot a 360/768/1280 px). Non finisce in `dist/`. |
+
+Caratteri: Inter 400/600, Source Serif 4 600 e **Archivo 700** (solo il titolo del
+hero), sottoinsieme latino, licenza SIL Open Font License 1.1.
+
+`ffmpeg` serve solo a `npm run video` e non è dipendenza del progetto: il video è
+committato già codificato.
 
 Strumenti di verifica eseguiti con `npx`, non installati nel progetto:
 lighthouse 13.4.1, html-validate, linkinator.
