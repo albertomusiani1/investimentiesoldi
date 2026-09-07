@@ -32,12 +32,16 @@
   --accent:#4F46E5;
   --accent-ink:#FFFFFF;
   --accent-soft:#EEEDFD;
-  --up:#0F8A54;
-  --down:#D33A3A;
-  --warn:#B26B00;
+  --up:#0B7A49;
+  --down:#C62E2E;
+  --warn:#A05F00;
   --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
   --s7:#4a3aa7; --s8:#e34948;
   --grid:#ECECF2;
+  /* nomi usati dai grafici. Rimandano ai token sopra, quindi seguono il tema
+     da soli: al cambio di tema è --s1 che cambia, non questi. */
+  --series-1:var(--s1); --series-2:var(--ink-3);
+  --surface-1:var(--card); --border-strong:var(--line-2);
   --sh:0 1px 2px rgba(20,20,40,.05);
   --sh-2:0 4px 16px rgba(20,20,40,.07);
   --r:16px; --r-s:11px;
@@ -46,27 +50,27 @@
 @media (prefers-color-scheme: dark){
   :root:where(:not([data-theme="light"])){
     color-scheme: dark;
-    --bg:#0F0F14; --card:#17171F; --card-2:#1F1F29;
-    --line:#282833; --line-2:#3B3B4A;
-    --ink:#F5F5F7; --ink-2:#B9B9C6; --ink-3:#8B8BA0;
-    --accent:#A5A0FF; --accent-ink:#15151C; --accent-soft:#232135;
-    --up:#3DD08A; --down:#FF6B6B; --warn:#F0B429;
+    --bg:#0F0F14; --card:#17171F; --card-2:#20202B;
+    --line:#30303E; --line-2:#4B4B5E;
+    --ink:#F7F7FA; --ink-2:#C8C8D6; --ink-3:#9EA0B5;
+    --accent:#B0ABFF; --accent-ink:#15151C; --accent-soft:#252338;
+    --up:#4ADE94; --down:#FF8080; --warn:#F5BE3F;
     --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
     --s7:#9085e9; --s8:#e66767;
-    --grid:#242430;
+    --grid:#2A2A38;
     --sh:0 1px 2px rgba(0,0,0,.4); --sh-2:0 4px 18px rgba(0,0,0,.35);
   }
 }
 :root[data-theme="dark"]{
   color-scheme: dark;
-  --bg:#0F0F14; --card:#17171F; --card-2:#1F1F29;
-  --line:#282833; --line-2:#3B3B4A;
-  --ink:#F5F5F7; --ink-2:#B9B9C6; --ink-3:#8B8BA0;
-  --accent:#A5A0FF; --accent-ink:#15151C; --accent-soft:#232135;
-  --up:#3DD08A; --down:#FF6B6B; --warn:#F0B429;
+  --bg:#0F0F14; --card:#17171F; --card-2:#20202B;
+  --line:#30303E; --line-2:#4B4B5E;
+  --ink:#F7F7FA; --ink-2:#C8C8D6; --ink-3:#9EA0B5;
+  --accent:#B0ABFF; --accent-ink:#15151C; --accent-soft:#252338;
+  --up:#4ADE94; --down:#FF8080; --warn:#F5BE3F;
   --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
   --s7:#9085e9; --s8:#e66767;
-  --grid:#242430;
+  --grid:#2A2A38;
   --sh:0 1px 2px rgba(0,0,0,.4); --sh-2:0 4px 18px rgba(0,0,0,.35);
 }
 
@@ -178,19 +182,72 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:10p
   .wrap{padding-top:6px}
 }
 
-/* ================== RIEPILOGO COMPATTO ================== */
-.summary{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.summary .big{font-size:clamp(26px,7vw,32px);font-weight:680;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.05}
-.summary .biglab{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:620}
-.summary .facts{display:flex;gap:16px;flex-wrap:wrap;margin-left:auto}
-.fact{display:flex;flex-direction:column;gap:1px;min-width:0}
-.fact .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:620;white-space:nowrap}
-.fact .v{font-size:15px;font-weight:640;font-variant-numeric:tabular-nums;white-space:nowrap}
-@media(max-width:520px){
-  .summary .facts{width:100%;margin-left:0;justify-content:space-between;gap:10px;
-    border-top:1px solid var(--line);padding-top:9px}
-  .fact .v{font-size:14px}
+/* ================== RIEPILOGO COMPATTO ==================
+   I numeri stanno in una griglia con filetti veri, non affiancati con
+   space-between: al buio il contorno è l'unica cosa che dice dove
+   finisce una cifra e dove comincia la successiva. Ogni cella ha la
+   sua etichetta sopra e il numero non si stringe mai. */
+.summary{display:flex;flex-direction:column;gap:13px}
+.summary .hero{display:flex;flex-direction:column;gap:4px;min-width:0}
+.summary .big{font-size:clamp(29px,7.6vw,35px);font-weight:680;letter-spacing:-.032em;
+  font-variant-numeric:tabular-nums;line-height:1.02}
+.summary .biglab{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);font-weight:660}
+.summary .facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+/* numero dispari di celle: l'ultima prende tutta la riga, così non resta
+   mai un buco grigio in fondo alla griglia */
+.summary .facts>.fact:last-child:nth-child(odd){grid-column:1/-1}
+.fact{display:flex;flex-direction:column;gap:2px;min-width:0;background:var(--card);padding:8px 11px}
+.fact .k{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:660;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fact .v{font-size:15.5px;font-weight:660;font-variant-numeric:tabular-nums;white-space:nowrap;letter-spacing:-.012em}
+@media(min-width:760px){
+  .summary{flex-direction:row;align-items:center;gap:22px}
+  .summary .facts{margin-left:auto;grid-auto-flow:column;grid-template-columns:none}
+  .summary .facts>.fact:last-child:nth-child(odd){grid-column:auto}
+  .fact{padding:7px 14px}
 }
+
+/* la variazione come pastiglia: al buio un colore su fondo scuro si legge
+   molto meglio se ha una campitura sotto, e il segno resta chiaro anche
+   a chi non distingue rosso e verde */
+.delta{display:inline-flex;align-items:center;gap:5px;width:fit-content;flex:none;white-space:nowrap;
+  font-size:13px;font-weight:660;font-variant-numeric:tabular-nums;
+  padding:3px 9px;border-radius:100px;border:1px solid transparent}
+.delta.up{color:var(--up);background:color-mix(in srgb,var(--up) 13%,transparent);
+  border-color:color-mix(in srgb,var(--up) 32%,transparent)}
+.delta.down{color:var(--down);background:color-mix(in srgb,var(--down) 13%,transparent);
+  border-color:color-mix(in srgb,var(--down) 32%,transparent)}
+.delta.flat{color:var(--ink-3);background:var(--card-2);border-color:var(--line)}
+.delta.sm{font-size:11.5px;padding:2px 7px;gap:4px;font-weight:640}
+
+/* il tasto per aggiungere sta in fondo all'elenco, dove arriva il pollice */
+.addrow{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:13px;
+  padding:12px;border-radius:12px;border:1px dashed var(--line-2);background:transparent;
+  color:var(--accent);font-size:13.5px;font-weight:640}
+.addrow:hover{background:var(--accent-soft);border-color:var(--accent);border-style:solid}
+
+/* ==================== OBBLIGAZIONI ====================
+   Un BTP non è quotato da nessuna parte, ma i suoi numeri sono tutti
+   calcolabili: qui vanno in chiaro, quattro celle per titolo. */
+.bond{padding:14px 0}
+.bond+.bond{border-top:1px solid var(--line)}
+.bond .bh{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}
+.bond .bn{font-size:14.5px;font-weight:660;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bond .bh>div{flex:1 1 auto;min-width:0}
+.bond .bsub{font-size:11.5px;color:var(--ink-3);margin-top:3px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.bkv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-top:11px}
+@media(min-width:560px){ .bkv{grid-template-columns:repeat(4,minmax(0,1fr))} }
+.bkv>div{background:var(--card);padding:8px 10px;min-width:0}
+.bkv .k{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:660;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bkv .v{font-size:14.5px;font-weight:660;font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:2px}
+.bkv .v em{font-style:normal;font-size:10.5px;font-weight:560;color:var(--ink-3);
+  display:block;margin-top:1px;white-space:normal;line-height:1.3}
+.bbar{height:6px;border-radius:100px;background:var(--card-2);margin-top:12px;overflow:hidden}
+.bbar i{display:block;height:100%;border-radius:100px;background:var(--accent)}
+.bfoot{display:flex;justify-content:space-between;gap:12px;font-size:10.5px;color:var(--ink-3);margin-top:5px}
 
 /* =================== BARRA ALLOCAZIONE =================== */
 .allocbar{display:flex;height:10px;border-radius:100px;overflow:hidden;gap:2px;background:var(--card-2)}
@@ -227,8 +284,14 @@ tfoot td{font-weight:640;border-top:1px solid var(--line-2);border-bottom:0;padd
 .row .main{min-width:0}
 .row .t{font-weight:600;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .row .s{font-size:11.5px;color:var(--ink-3);display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:2px}
-.row .amt{font-variant-numeric:tabular-nums;font-weight:640;font-size:14.5px;text-align:right;white-space:nowrap}
-.row .amt small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:500}
+.row .amt{font-variant-numeric:tabular-nums;font-weight:640;font-size:14.5px;text-align:right;white-space:nowrap;
+  display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.row .amt small{display:block;font-size:11.5px;color:var(--ink-3);font-weight:560;margin-top:1px}
+.row .amt .delta{margin-top:3px;margin-left:auto}
+/* la riga si apre in modifica: il tocco ha un suo riscontro */
+.row.tap{cursor:pointer;border-radius:10px;padding-left:9px;padding-right:9px;margin-left:-9px;margin-right:-9px}
+.row.tap:hover{background:var(--card-2)}
+.row.tap:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .row .acts{display:flex;gap:2px}
 /* contrassegno del colore della categoria sulle righe dei movimenti */
 .row.mk{position:relative;padding-left:13px}
@@ -326,7 +389,12 @@ dialog.modal::backdrop{background:rgba(10,10,16,.5);backdrop-filter:blur(3px)}
 dialog.modal .mhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 16px 0}
 dialog.modal .mhead h3{font-size:16.5px}
 dialog.modal .mbody{padding:14px 16px 0}
-dialog.modal .mfoot{display:flex;gap:8px;justify-content:flex-end;padding:16px;flex-wrap:wrap}
+/* nove campi non stanno in uno schermo da telefono: testa e piede restano
+   fermi, il corpo scorre. display:flex solo su [open], altrimenti il
+   dialog chiuso tornerebbe visibile. */
+dialog.modal[open]{display:flex;flex-direction:column;max-height:92vh}
+dialog.modal .mbody{overflow-y:auto;overscroll-behavior:contain;min-height:0}
+dialog.modal .mfoot{display:flex;gap:8px;justify-content:flex-end;padding:16px;flex-wrap:wrap;flex:none}
 dialog.modal .mfoot button{flex:1;justify-content:center;padding:11px 14px}
 @media(min-width:560px){ dialog.modal .mfoot button{flex:0 0 auto} }
 dialog.modal .x{border:0;background:transparent;font-size:18px;color:var(--ink-3);padding:2px 8px;border-radius:8px}
@@ -455,6 +523,7 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
   <div class="quick">
     <button class="primary" id="qExpense">+ Spesa</button>
     <button class="ghost" id="qWish">+ Futuro</button>
+    <button class="ghost" id="qInv">+ Investimento</button>
   </div>
 </div>
 
@@ -552,55 +621,32 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
     <div class="summary" id="invSummary"></div>
   </section>
 
+  <!-- Il conto degli interessi: cedole già in tasca, rateo che matura ogni
+       giorno, rendimento bloccato a scadenza. Compare solo se ha obbligazioni. -->
+  <section class="card hidden" id="bondCard">
+    <header>
+      <h2>Cedole e interessi</h2>
+      <span class="muted" id="bondNext" style="font-size:11.5px;font-weight:620"></span>
+    </header>
+    <div id="bondTot"></div>
+    <div id="bondRows"></div>
+    <div id="bondMigrate"></div>
+  </section>
+
   <section class="card">
     <header>
       <h2>Posizioni</h2>
-      <button class="ghost" id="btnAddToggle" style="padding:6px 11px;font-size:13px">+ Aggiungi</button>
+      <span class="muted" id="posCount" style="font-size:11.5px;font-weight:620"></span>
     </header>
-
-    <div id="addForm" class="hidden" style="border:1px dashed var(--line-2);border-radius:12px;padding:13px;margin-bottom:12px;background:var(--card-2)">
-      <div class="seg" id="posMode" style="width:100%;margin-bottom:11px">
-        <button type="button" data-m="auto" aria-pressed="true" style="flex:1">Quotato</button>
-        <button type="button" data-m="manual" aria-pressed="false" style="flex:1">A mano</button>
-      </div>
-      <div class="formgrid">
-        <div class="field" style="grid-column:span 2;min-width:180px">
-          <label for="fTicker" id="fTickerLab">Ticker <span class="muted" style="font-weight:400">(Yahoo Finance)</span></label>
-          <input id="fTicker" list="tickerList" placeholder="es. VWCE.DE" autocomplete="off" spellcheck="false">
-          <datalist id="tickerList"></datalist>
-        </div>
-        <div class="field"><label for="fCat">Categoria</label>
-          <select id="fCat">
-            <option value="equity">Azionario</option>
-            <option value="bond">Obbligazionario</option>
-            <option value="gold">Oro / materie prime</option>
-            <option value="crypto">Crypto</option>
-            <option value="cash">Liquidità</option>
-            <option value="other">Altro</option>
-          </select>
-        </div>
-        <div class="field"><label for="fAmount">Investito (€)</label>
-          <input id="fAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="5000"></div>
-        <div class="field"><label for="fDate">Data</label><input id="fDate" type="date"></div>
-        <div class="field" id="fSharesField"><label for="fShares">Quote <span class="muted" style="font-weight:400">(auto)</span></label>
-          <input id="fShares" type="number" inputmode="decimal" step="any" min="0" placeholder="auto"></div>
-        <div class="field hidden" id="fValueField"><label for="fValue">Vale oggi (€)</label>
-          <input id="fValue" type="number" inputmode="decimal" step="0.01" min="0" placeholder="come da estratto conto"></div>
-      </div>
-      <div class="muted" style="font-size:12px;margin-top:9px" id="posHint"></div>
-      <div style="display:flex;gap:8px;margin-top:11px">
-        <button class="primary" id="btnAdd">Aggiungi</button>
-        <button class="ghost" id="btnCancelAdd">Annulla</button>
-      </div>
-    </div>
 
     <div class="rows" id="posRows"></div>
     <div id="posEmpty" class="empty">
       <h3>Nessuna posizione</h3>
-      <p>Aggiungi un investimento: ticker, quanto hai messo e quando.</p>
+      <p>Un ETF o un'azione: basta il ticker. Un BTP: nominale, cedola e scadenza, gli interessi li conto io.</p>
       <button class="primary" id="btnAddFirst" style="margin-top:8px">+ Aggiungi</button>
       <p><small>oppure <a href="#" id="btnDemo">carica un esempio</a></small></p>
     </div>
+    <button class="addrow" id="btnAddToggle">+ Aggiungi una posizione</button>
 
     <div id="allocBox" style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
@@ -666,6 +712,83 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
       <span>Un'entrata<small>stipendio, rimborso, un lavoretto</small></span></button>
     <button type="button" class="sheetbtn" id="pickFut"><span class="ic">🎯</span>
       <span>Qualcosa nel futuro<small>da comprare, da pagare, o che ti piacerebbe</small></span></button>
+    <button type="button" class="sheetbtn" id="pickInv"><span class="ic">📈</span>
+      <span>Un investimento<small>un ETF, un'azione, un BTP</small></span></button>
+  </div>
+</dialog>
+
+<dialog class="modal" id="dlgPos">
+  <div class="mhead"><h3 id="posDlgTitle">Nuova posizione</h3><button type="button" class="x" data-close="dlgPos">✕</button></div>
+  <div class="mbody">
+    <div class="seg" id="posMode" style="width:100%;margin-bottom:13px">
+      <button type="button" data-m="auto" aria-pressed="true" style="flex:1">Quotato</button>
+      <button type="button" data-m="bond" aria-pressed="false" style="flex:1">Obbligazione</button>
+      <button type="button" data-m="manual" aria-pressed="false" style="flex:1">A mano</button>
+    </div>
+
+    <!-- Un'unica griglia: ogni modalità accende i campi che le servono,
+         così l'ordine di lettura resta quello dell'estratto conto. -->
+    <div class="formgrid" id="posGrid">
+      <div class="field" style="grid-column:1/-1">
+        <label for="fTicker" id="fTickerLab">Ticker</label>
+        <input id="fTicker" list="tickerList" placeholder="es. VWCE.DE" autocomplete="off" spellcheck="false">
+        <datalist id="tickerList"></datalist>
+      </div>
+
+      <div class="field hidden" id="wNominal"><label for="bNominal">Nominale (€)</label>
+        <input id="bNominal" type="number" inputmode="decimal" step="1000" min="0" placeholder="10000"></div>
+      <div class="field hidden" id="wBuyPrice"><label for="bBuyPrice">Prezzo di carico</label>
+        <input id="bBuyPrice" type="number" inputmode="decimal" step="0.01" min="0" placeholder="98,50"></div>
+      <div class="field hidden" id="wCoupon"><label for="bCoupon">Cedola annua</label>
+        <input id="bCoupon" type="number" inputmode="decimal" step="0.01" min="0" placeholder="4,40"></div>
+      <div class="field hidden" id="wFreq"><label for="bFreq">Stacco cedole</label>
+        <select id="bFreq">
+          <option value="2">Ogni 6 mesi</option>
+          <option value="1">Una volta l'anno</option>
+          <option value="4">Ogni 3 mesi</option>
+          <option value="0">Nessuna cedola (BOT, CTZ)</option>
+        </select></div>
+      <div class="field hidden" id="wMaturity"><label for="bMaturity">Scadenza</label>
+        <input id="bMaturity" type="date"></div>
+
+      <div class="field" id="wCat"><label for="fCat">Categoria</label>
+        <select id="fCat">
+          <option value="equity">Azionario</option>
+          <option value="bond">Obbligazionario</option>
+          <option value="gold">Oro / materie prime</option>
+          <option value="crypto">Crypto</option>
+          <option value="cash">Liquidità</option>
+          <option value="other">Altro</option>
+        </select></div>
+      <div class="field" id="wAmount"><label for="fAmount">Investito (€)</label>
+        <input id="fAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="5000"></div>
+      <div class="field" id="wDate"><label for="fDate" id="fDateLab">Data</label>
+        <input id="fDate" type="date"></div>
+      <div class="field" id="wShares"><label for="fShares">Quote <span class="muted" style="font-weight:400">(auto)</span></label>
+        <input id="fShares" type="number" inputmode="decimal" step="any" min="0" placeholder="auto"></div>
+      <div class="field hidden" id="wValue"><label for="fValue">Vale oggi (€)</label>
+        <input id="fValue" type="number" inputmode="decimal" step="0.01" min="0" placeholder="come da estratto conto"></div>
+
+      <div class="field" id="wManPrice"><label for="fManPrice">Prezzo attuale <span class="muted" style="font-weight:400">(solo se Yahoo sbaglia)</span></label>
+        <input id="fManPrice" type="number" inputmode="decimal" step="any" min="0" placeholder="lo scarico io"></div>
+
+      <div class="field hidden" id="wPrice"><label for="bPrice">Prezzo oggi <span class="muted" style="font-weight:400">(se lo sai)</span></label>
+        <input id="bPrice" type="number" inputmode="decimal" step="0.01" min="0" placeholder="come il carico"></div>
+      <div class="field hidden" id="wTax"><label for="bTax">Tassazione</label>
+        <select id="bTax">
+          <option value="12.5">12,5% · titoli di stato</option>
+          <option value="26">26% · altre obbligazioni</option>
+          <option value="0">0% · non contarla</option>
+        </select></div>
+    </div>
+
+    <div id="posPreview"></div>
+    <div class="muted" style="font-size:12px;margin-top:10px" id="posHint"></div>
+  </div>
+  <div class="mfoot">
+    <button type="button" class="danger hidden" id="btnPosDel">Elimina</button>
+    <button type="button" class="ghost" data-close="dlgPos">Annulla</button>
+    <button type="button" class="primary" id="btnAdd">Aggiungi</button>
   </div>
 </dialog>
 
@@ -932,6 +1055,17 @@ const CACHE = store.get(K.CACHE, {});
 const SERIES = {};              // sym -> {dates, close, meta, stale}
 const FAILED = new Set();
 
+/* All'apertura riverso lo storico già salvato dentro SERIES: la pagina mostra
+   numeri veri appena si apre, invece di trattini finché Yahoo non risponde
+   (sul telefono, con la rete lenta, erano dieci secondi di niente).
+   Sono marcate fromCache, così loadSeries le riscarica comunque. */
+for (const k in CACHE) {
+  const c = CACHE[k];
+  if (c && c.dates && c.dates.length) {
+    SERIES[k] = { dates: c.dates, close: c.close, meta: c.meta, stale: c.t, fromCache: true };
+  }
+}
+
 function parseChart(j, sym) {
   const r = j && j.chart && j.chart.result && j.chart.result[0];
   if (!r || !r.timestamp) throw new Error('dati assenti per ' + sym);
@@ -979,7 +1113,7 @@ function mergeSeries(oldS, newS) {
 }
 
 async function loadSeries(sym) {
-  if (SERIES[sym]) return SERIES[sym];
+  if (SERIES[sym] && !SERIES[sym].fromCache) return SERIES[sym];
   const c = CACHE[sym];
   // se ho già lo storico salvato, scarico solo l'ultimo trimestre e lo salda sopra:
   // molto più veloce e molto meno esposto ai limiti di frequenza del canale
@@ -1049,20 +1183,212 @@ function fxAt(cur, d) {
 }
 function fxLast(cur) { if (cur === 'EUR') return 1; const s = FX[cur]; return s ? (lastPrice(s) || 1) : 1; }
 
-/** posizione senza quotazione: BTP, conto deposito, polizza — qualunque cosa
-    che Yahoo non conosce. Il valore di oggi lo scrive lui a mano. */
-const isManual = p => !!p.manual;
+/** Tre specie di posizione, e cambia solo da dove arriva il valore di oggi.
+    quotato — Yahoo manda il prezzo
+    bond    — nessuno la quota, ma non serve: i flussi sono scritti nel
+              contratto, il valore lo calcolo io giorno per giorno
+    a mano  — conto deposito, polizza: il controvalore lo scrive lui */
+const isBond = p => p.kind === 'bond' && !!p.bond;
+const isManual = p => !!p.manual && !isBond(p);
+const isQuoted = p => !isBond(p) && !p.manual;
+
+/* =====================================================================
+   3-bis. OBBLIGAZIONI
+   Un singolo BTP non è quotato da nessuna parte, e finché lo si trattava
+   come una posizione «a mano» il guadagno era solo la differenza fra due
+   numeri scritti a mano: cioè zero informazione. Ma un'obbligazione è un
+   contratto con flussi noti in anticipo — da nominale, cedola, stacco e
+   scadenza si ricava tutto, senza rete e senza aggiornare niente:
+   le cedole già incassate, il rateo che matura ogni giorno che passa,
+   e il rendimento a scadenza, che è il numero vero: quello che ha
+   bloccato il giorno dell'acquisto e che non cambia più.
+   ===================================================================== */
+
+/** stesso giorno del mese, n mesi dopo; se il mese è più corto va a fine mese
+    (un titolo che scade il 31 agosto stacca il 28 o 29 febbraio) */
+function addMonthsIso(str, n) {
+  const [y, m, d] = str.split('-').map(Number);
+  const t = new Date(Date.UTC(y, m - 1 + n, 1));
+  const last = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth() + 1, 0)).getUTCDate();
+  return `${t.getUTCFullYear()}-${String(t.getUTCMonth() + 1).padStart(2, '0')}-${String(Math.min(d, last)).padStart(2, '0')}`;
+}
+
+/** tasso che azzera il valore attuale dei flussi, per bisezione.
+    Il valore attuale scende al salire del tasso: basta stringere l'intervallo. */
+function irr(flows) {
+  const f = y => flows.reduce((a, c) => a + c.v / Math.pow(1 + y, c.t), 0);
+  let lo = -0.95, hi = 5;
+  if (!(f(lo) > 0) || !(f(hi) < 0)) return null;
+  for (let i = 0; i < 200; i++) { const m = (lo + hi) / 2; if (f(m) > 0) lo = m; else hi = m; }
+  return (lo + hi) / 2;
+}
+
+const FREQ_LAB = { 4: 'trimestrale', 2: 'semestrale', 1: 'annuale', 0: 'senza cedola' };
+
+/** Tutti i conti di un titolo, a una data. Ritorna null se i dati non bastano. */
+function bondCalc(p, today) {
+  const b = p.bond || {};
+  today = today || iso(Date.now());
+  const nominal = +b.nominal, freq = +b.freq || 0;
+  const rate = (+b.coupon || 0) / 100;
+  const mat = b.maturity, buy = p.date;
+  const buyPx = +b.buyPrice;
+  if (!(nominal > 0) || !(buyPx > 0) || !mat || !buy || mat <= buy) return null;
+
+  const cpn = freq ? nominal * rate / freq : 0;
+  const curPx = (b.price != null && b.price !== '' && +b.price > 0) ? +b.price : buyPx;
+  const tax = (b.tax != null ? +b.tax : 12.5) / 100;
+
+  // il calendario si ricava dalla scadenza a ritroso: è la scadenza che
+  // fissa i giorni di stacco. Tengo anche la cedola precedente all'acquisto,
+  // serve per il rateo che ha pagato al venditore.
+  const sched = [];
+  if (freq) {
+    const step = 12 / freq;
+    for (let k = 0; k < 600; k++) {
+      const d = addMonthsIso(mat, -k * step);
+      sched.unshift(d);
+      if (d <= buy) break;
+    }
+  } else sched.push(mat);
+
+  const prevOf = day => { let pv = null; for (const d of sched) if (d <= day) pv = d; return pv; };
+  const nextOf = day => { for (const d of sched) if (d > day) return d; return null; };
+  /** rateo: quota della cedola in corso già maturata, giorni effettivi */
+  const accrOn = day => {
+    if (!freq || day >= mat) return 0;
+    const pv = prevOf(day), nx = nextOf(day);
+    if (!pv || !nx) return 0;
+    const span = daysBetween(pv, nx);
+    return span > 0 ? cpn * clamp(daysBetween(pv, day) / span, 0, 1) : 0;
+  };
+
+  const accrBuy = accrOn(buy);
+  const spesa = nominal * buyPx / 100 + accrBuy;
+  const matured = today >= mat;
+  const upto = matured ? mat : today;
+
+  const got = sched.filter(d => d > buy && d <= upto);
+  const cashIn = got.length * cpn;                       // cedole già in tasca
+  const accrued = matured ? 0 : accrOn(today);           // quella in maturazione
+
+  // rendimento a scadenza sul prezzo pagato da lui: non va aggiornato mai
+  const future = sched.filter(d => d > buy);
+  const flowsFrom = (d0, net) => {
+    const f = [];
+    for (const d of future) if (d > d0) f.push({ t: daysBetween(d0, d) / 365, v: net ? cpn * (1 - tax) : cpn });
+    const redeem = net ? nominal - Math.max(nominal - nominal * buyPx / 100, 0) * tax : nominal;
+    f.push({ t: Math.max(daysBetween(d0, mat) / 365, 1 / 365), v: redeem });
+    return f;
+  };
+  const ytm = irr([{ t: 0, v: -spesa }, ...flowsFrom(buy, false)]);
+  const ytmNet = irr([{ t: 0, v: -spesa }, ...flowsFrom(buy, true)]);
+
+  /* Valore di oggi senza un prezzo di mercato.
+     Tenere il prezzo fermo a quello di carico va bene per un BTP, dove il
+     rateo cresce ogni giorno e si vede — ma un BOT comprato a 97,80 non ha
+     cedole: sarebbe fermo a zero per un anno e poi salterebbe di colpo.
+     Allora il valore lo faccio crescere al rendimento che ha bloccato lui,
+     scontando le cedole già riscosse: è il costo ammortizzato, cioè
+     l'interesse effettivo maturato a oggi. Per costruzione arriva
+     esattamente al nominale il giorno della scadenza. */
+  const carryAt = day => {
+    if (day >= mat) return nominal;
+    if (ytm == null) return nominal * buyPx / 100 + accrOn(day);
+    const T = daysBetween(buy, day) / 365;
+    let v = spesa * Math.pow(1 + ytm, T);
+    for (const d of sched) {
+      if (d > buy && d <= day) v -= cpn * Math.pow(1 + ytm, T - daysBetween(buy, d) / 365);
+    }
+    return v;
+  };
+
+  // se il prezzo di oggi lo sa lui, vince il suo: quello è il mercato vero
+  const quoted = b.price != null && b.price !== '' && +b.price > 0;
+  const value = matured ? nominal : (quoted ? nominal * curPx / 100 + accrued : carryAt(today));
+  const market = value - accrued;
+  const cleanPx = nominal ? market / nominal * 100 : buyPx;
+
+  const capGain = market - nominal * buyPx / 100;
+  const gain = value + cashIn - spesa;
+  const netGain = (cashIn + accrued - accrBuy) * (1 - tax) + capGain * (1 - tax);
+
+  const left = sched.filter(d => d > upto);
+  const life = daysBetween(buy, mat);
+  return {
+    nominal, cpn, freq, rate, spesa, accrBuy, buyPx, curPx, cleanPx, quoted, tax, matured, sched,
+    got: got.length, cashIn, accrued, market, value, capGain, gain, netGain, carryAt,
+    plp: spesa ? gain / spesa : null, ytm, ytmNet,
+    next: freq ? (left[0] || null) : null,
+    next12: left.filter(d => daysBetween(today, d) <= 366).length * cpn,
+    leftCoupons: freq ? left.length : 0,
+    leftCash: left.length * cpn + (nominal - market),
+    yrsLeft: Math.max(daysBetween(today, mat) / 365.25, 0),
+    prog: life > 0 ? clamp(daysBetween(buy, today) / life, 0, 1) : 1
+  };
+}
+
+/** Valore di un titolo giorno per giorno, per il grafico. Il calendario e il
+    rendimento si calcolano una volta sola e poi si riusano: bondCalc completo
+    su duecento date rifarebbe duecento volte anche la bisezione.
+    Alle cedole già riscosse sommo il valore maturato, così la curva sale
+    ogni giorno di quello che il titolo rende davvero. */
+function bondValuer(p) {
+  const c = bondCalc(p);
+  if (!c) return null;
+  const { nominal, cpn, sched, carryAt } = c;
+  const mat = p.bond.maturity, buy = p.date;
+  const allCoupons = sched.filter(d => d > buy && d <= mat).length * cpn;
+  return day => {
+    if (day < buy) return null;
+    if (day >= mat) return nominal + allCoupons;
+    let got = 0;
+    for (const d of sched) { if (d > day) break; if (d > buy) got += cpn; }
+    return carryAt(day) + got;
+  };
+}
+
+/** griglia di date regolare, per quando non c'è nessuna serie di borsa da cui
+    prendere i giorni di apertura (portafoglio di soli BTP) */
+function dateGrid(start, end, maxPts = 220) {
+  const a = +new Date(start + 'T00:00:00');
+  const days = Math.max(Math.round((+new Date(end + 'T00:00:00') - a) / 864e5), 1);
+  const step = Math.max(Math.ceil(days / maxPts), 1);
+  const out = [];
+  for (let i = 0; i <= days; i += step) out.push(iso(a + i * 864e5));
+  if (out[out.length - 1] !== end) out.push(end);
+  return out;
+}
 
 function computePositions() {
   const rows = [];
   for (const p of POS) {
+    if (isBond(p)) {
+      const bc = bondCalc(p);
+      if (!bc) {   // dati incompleti: la tengo visibile ma senza numeri inventati
+        rows.push({ ...p, series: null, currency: 'EUR', name: p.ticker, bc: null,
+          buyPrice: null, shares: null, price: null, value: null, cashIn: 0,
+          pl: null, plp: null, ann: null, yrs: 0, missing: true });
+        continue;
+      }
+      rows.push({
+        ...p, series: null, currency: 'EUR', name: p.ticker, bc,
+        amount: bc.spesa,            // la spesa vera: prezzo di carico + rateo pagato
+        buyPrice: bc.buyPx, shares: null, price: bc.curPx,
+        value: bc.value, cashIn: bc.cashIn,
+        pl: bc.gain, plp: bc.plp,
+        ann: bc.ytm, yrs: Math.max(daysBetween(p.date, iso(Date.now())) / 365.25, 1 / 365.25),
+        missing: false
+      });
+      continue;
+    }
     if (isManual(p)) {
       const value = (p.manualValue != null && p.manualValue !== '') ? +p.manualValue : null;
       const pl = value != null ? value - p.amount : null;
       const plp = (pl != null && p.amount) ? pl / p.amount : null;
       const yr = Math.max(daysBetween(p.date, iso(Date.now())) / 365.25, 1 / 365.25);
       rows.push({
-        ...p, series: null, currency: 'EUR', name: p.ticker,
+        ...p, series: null, currency: 'EUR', name: p.ticker, bc: null, cashIn: 0,
         buyPrice: null, shares: null, price: null, value, pl, plp,
         ann: plp != null ? Math.pow(1 + plp, 1 / yr) - 1 : null, yrs: yr,
         missing: value == null
@@ -1083,7 +1409,7 @@ function computePositions() {
     const yrs = Math.max(daysBetween(p.date, iso(Date.now())) / 365.25, 1 / 365.25);
     const ann = plp != null ? Math.pow(1 + plp, 1 / yrs) - 1 : null;
     rows.push({
-      ...p, series: s, currency: cur, name: (s && s.meta.name) || p.ticker,
+      ...p, series: s, currency: cur, name: (s && s.meta.name) || p.ticker, bc: null, cashIn: 0,
       buyPrice: pAtBuy, shares, price: px, value, pl, plp, ann, yrs,
       missing: !s || px == null
     });
@@ -1091,28 +1417,48 @@ function computePositions() {
   return rows;
 }
 
+/* val  = quanto valgono i titoli che ha in mano adesso (rateo compreso)
+   cash = cedole già staccate e incassate: sono soldi suoi, ma non stanno
+          più nel titolo. Vanno nel guadagno, non nel valore, altrimenti
+          la ripartizione conterebbe due volte gli stessi euro. */
 function totals(rows) {
-  let inv = 0, val = 0;
+  let inv = 0, val = 0, cash = 0, invKnown = 0, dark = 0, darkN = 0;
   const byCat = {};
   for (const k in CATS) byCat[k] = { inv: 0, val: 0 };
   for (const r of rows) {
     inv += r.amount;
-    if (r.value != null) { val += r.value; byCat[r.cat].val += r.value; }
+    cash += r.cashIn || 0;
+    if (r.value != null) { val += r.value; invKnown += r.amount; byCat[r.cat].val += r.value; }
+    else { dark += r.amount; darkN++; }
     byCat[r.cat].inv += r.amount;
   }
-  const pl = val - inv;
-  return { inv, val, pl, plp: inv ? pl / inv : 0, byCat };
+  /* Il guadagno si misura solo su quello di cui conosco il valore. Sommare
+     nell'investito anche un titolo di cui manca il prezzo faceva comparire
+     una perdita che non esiste: appena il canale dati non risponde, i 15.000
+     di un ETF senza quotazione diventavano 15.000 di rosso. */
+  const pl = val + cash - invKnown;
+  return { inv, invKnown, dark, darkN, val, cash, pl, plp: invKnown ? pl / invKnown : 0, byCat };
 }
 
 /** valore del portafoglio giorno per giorno + capitale investito cumulato */
 function portfolioHistory(rows) {
   const live = rows.filter(r => r.series && r.shares != null);
-  if (!live.length) return null;
-  const set = new Set();
-  const start = live.reduce((m, r) => r.date < m ? r.date : m, live[0].date);
-  for (const r of live) for (const d of r.series.dates) if (d >= start) set.add(d);
-  const dates = [...set].sort();
+  const bonds = rows.filter(r => r.bc).map(r => ({ r, at: bondValuer(r) })).filter(x => x.at);
+  const parts = [...live, ...bonds.map(x => x.r)];
+  if (!parts.length) return null;
+
+  const start = parts.reduce((m, r) => r.date < m ? r.date : m, parts[0].date);
+  const today = iso(Date.now());
+  let dates;
+  if (live.length) {
+    const set = new Set();
+    for (const r of live) for (const d of r.series.dates) if (d >= start) set.add(d);
+    dates = [...set].sort();
+  } else {
+    dates = dateGrid(start, today);   // solo obbligazioni: i giorni li faccio io
+  }
   if (dates.length < 2) return null;
+
   const value = [], invested = [];
   for (const d of dates) {
     let v = 0, i = 0;
@@ -1122,9 +1468,15 @@ function portfolioHistory(rows) {
       const p = priceAt(r.series, d);
       if (p != null) v += r.shares * p * fxAt(r.currency, d);
     }
+    for (const x of bonds) {
+      if (x.r.date > d) continue;
+      i += x.r.amount;
+      const bv = x.at(d);
+      if (bv != null) v += bv;
+    }
     value.push(v); invested.push(i);
   }
-  return { dates, value, invested };
+  return { dates, value, invested, hasBonds: bonds.length > 0 };
 }
 
 /* =====================================================================
@@ -1232,7 +1584,8 @@ function drawPortfolio(hist) {
   $('#pfLegend').innerHTML =
     `<span><i class="swatch" style="background:${cssv('--series-1')}"></i>Valore attuale</span>` +
     `<span><i class="swatch" style="background:${cssv('--series-2')}"></i>Capitale investito</span>` +
-    (POS.some(isManual) ? '<span class="muted">le posizioni a mano non hanno storico, qui non compaiono</span>' : '');
+    (POS.some(isManual) ? '<span class="muted">le posizioni a mano non hanno storico, qui non compaiono</span>' : '') +
+    ((hist && hist.hasBonds) ? '<span class="muted">le obbligazioni salgono per interessi maturati</span>' : '');
 }
 
 /* ------------------------------------------- allocazione a barre */
@@ -1263,6 +1616,15 @@ function drawAllocation(tot) {
    ===================================================================== */
 let STATE = {};
 
+/** pastiglia della variazione: segno, euro, percentuale */
+function deltaPill(v, p, sm) {
+  if (v == null) return '';
+  const k = cls(v) || 'flat';
+  const arr = k === 'up' ? '▲' : k === 'down' ? '▼' : '·';
+  return `<span class="delta ${k}${sm ? ' sm' : ''}">${arr} ${eur(Math.abs(v))}` +
+    (p != null ? ` · ${dec(Math.abs(p) * 100, 1)}%` : '') + `</span>`;
+}
+
 function renderInvSummary(tot, rows) {
   const twr = (() => {
     let num = 0, den = 0;
@@ -1273,70 +1635,147 @@ function renderInvSummary(tot, rows) {
     const total = num / den;
     return wYrs > 0.08 ? Math.pow(1 + total, 1 / wYrs) - 1 : null;
   })();
-  $('#invSummary').innerHTML = `
-    <div>
-      <div class="biglab">Valore</div>
-      <div class="big">${eur(tot.val)}</div>
-      <div class="${cls(tot.pl)}" style="font-size:13.5px;font-weight:640;margin-top:2px">
-        ${(tot.pl >= 0 ? '+' : '−') + eur(Math.abs(tot.pl))} · ${pct(tot.plp, 1)}
-      </div>
-    </div>
-    <div class="facts">
-      <div class="fact"><span class="k">Investito</span><span class="v">${eur(tot.inv)}</span></div>
-      <div class="fact"><span class="k">All'anno</span><span class="v ${twr != null ? cls(twr) : ''}">${twr != null ? pct(twr, 1) : '—'}</span></div>
-      <div class="fact"><span class="k">Posizioni</span><span class="v">${rows.length}</span></div>
-    </div>`;
-}
+  const facts = [
+    `<div class="fact"><span class="k">Investito</span><span class="v">${eur(tot.inv)}</span></div>`,
+    `<div class="fact"><span class="k">All'anno</span><span class="v ${twr != null ? cls(twr) : ''}">${twr != null ? pct(twr, 1) : '—'}</span></div>`
+  ];
+  if (tot.cash > 0) facts.push(`<div class="fact"><span class="k">Cedole</span><span class="v up">${eur(tot.cash)}</span></div>`);
+  facts.push(`<div class="fact"><span class="k">Posizioni</span><span class="v">${rows.length}</span></div>`);
 
+  const note = tot.dark > 0
+    ? `${tot.darkN === 1 ? 'Un titolo' : tot.darkN + ' titoli'} senza prezzo (${eur(tot.dark)}): ${tot.darkN === 1 ? 'non è' : 'non sono'} nel conto`
+    : `guadagno da quando hai comprato${tot.cash > 0 ? ', cedole comprese' : ''}`;
+  $('#invSummary').innerHTML = `
+    <div class="hero">
+      <div class="biglab">Valore dei titoli</div>
+      <div class="big">${eur(tot.val)}</div>
+      ${deltaPill(tot.pl, tot.plp)}
+      <div class="muted" style="font-size:11px">${note}</div>
+    </div>
+    <div class="facts">${facts.join('')}</div>`;
+}
 
 
 function renderTable(rows, tot) {
   $('#posEmpty').classList.toggle('hidden', rows.length > 0);
   $('#allocBox').classList.toggle('hidden', rows.length === 0);
+  $('#posCount').textContent = rows.length ? `${rows.length} ${rows.length === 1 ? 'titolo' : 'titoli'}` : '';
   if (!rows.length) { $('#posRows').innerHTML = ''; return; }
 
+  /* Le righe portano solo numeri da leggere: quello che si modifica si apre
+     nel foglio, invece dei campetti da 3px infilati nel sottotitolo. */
   $('#posRows').innerHTML = rows.map(r => {
-    const man = isManual(r);
-    const manca = !man && (r.shares == null || r.price == null);
-    return `<div class="row">
+    const sub = [`<span class="pill">${CATS[r.cat].label}</span>`];
+    if (r.bc) {
+      // il dettaglio sta nella card delle cedole: qui basta cedola e scadenza
+      sub.push(`<span>${r.bc.freq ? dec(r.bond.coupon, 2) + '%' : 'no cedola'} · ${r.bc.matured ? 'rimborsato' : 'scade'} ${dispDate(r.bond.maturity)}</span>`);
+    } else {
+      if (isManual(r)) sub.push('<span class="pill">a mano</span>');
+      sub.push(`<span>${eur(r.amount)} dal ${dispDate(r.date)}</span>`);
+    }
+    if (r.missing) sub.push('<span class="down">dati da completare</span>');
+
+    return `<div class="row tap" role="button" tabindex="0" data-edit="${r.id}"
+        aria-label="Modifica ${esc(r.ticker)}">
       <div class="main">
         <div class="t">${esc(r.ticker)}</div>
-        <div class="s">
-          <span class="pill">${CATS[r.cat].label}</span>
-          ${man ? '<span class="pill">a mano</span>' : ''}
-          <span>${eur(r.amount)} dal ${dispDate(r.date)}</span>
-          ${man ? `<span>vale oggi <input data-mv="${r.id}" type="number" step="any" placeholder="0,00" value="${r.manualValue != null ? esc(r.manualValue) : ''}" style="width:92px;padding:3px 6px;font-size:11.5px"> €</span>` : ''}
-          ${manca ? `<span>${r.shares == null ? `<input data-ms="${r.id}" type="number" step="any" placeholder="quote" style="width:72px;padding:3px 6px;font-size:11.5px">` : ''}
-            ${r.price == null ? `<input data-mp="${r.id}" type="number" step="any" placeholder="prezzo" style="width:74px;padding:3px 6px;font-size:11.5px">` : ''}</span>` : ''}
-        </div>
+        <div class="s">${sub.join('')}</div>
       </div>
       <div class="amt">${r.value != null ? eur(r.value) : '—'}
-        ${r.pl != null ? `<small class="${cls(r.pl)}">${(r.pl >= 0 ? '+' : '−') + eur(Math.abs(r.pl))} · ${pct(r.plp, 1)}</small>` : ''}</div>
-      <div class="acts"><button class="iconbtn danger" data-del="${r.id}" title="Elimina">✕</button></div>
+        ${deltaPill(r.pl, r.plp, true)}</div>
+      <div class="acts"><span class="muted" style="font-size:15px;padding:0 2px">›</span></div>
     </div>`;
   }).join('');
 
-  $$('#posRows [data-del]').forEach(b => b.onclick = () => {
-    const r = POS.find(p => p.id === b.dataset.del);
-    if (confirm(`Eliminare ${r.ticker} (${eur(r.amount)})?`)) {
-      const id = b.dataset.del;
-      POS = POS.filter(p => p.id !== id); savePos(); tomb('pos', id); boot(false);
-    }
+  $$('#posRows [data-edit]').forEach(el => {
+    const go = () => openPos(el.dataset.edit);
+    el.onclick = go;
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
   });
-  $$('#posRows [data-mp]').forEach(inp => inp.onchange = () => {
-    const p = POS.find(x => x.id === inp.dataset.mp);
-    p.manualPrice = parseFloat(String(inp.value).replace(',', '.')) || null; savePos(); stamp('pos', p.id); refresh();
-  });
-  $$('#posRows [data-mv]').forEach(inp => inp.onchange = () => {
-    const p = POS.find(x => x.id === inp.dataset.mv);
-    p.manualValue = parseFloat(String(inp.value).replace(',', '.'));
-    if (!(p.manualValue >= 0)) p.manualValue = null;
-    savePos(); stamp('pos', p.id); refresh();
-  });
-  $$('#posRows [data-ms]').forEach(inp => inp.onchange = () => {
-    const p = POS.find(x => x.id === inp.dataset.ms);
-    p.shares = parseFloat(String(inp.value).replace(',', '.')) || null; savePos(); stamp('pos', p.id); refresh();
-  });
+}
+
+
+/* =====================================================================
+   CEDOLE E INTERESSI — la risposta a «quanto sto guadagnando»
+   ===================================================================== */
+function renderBonds(rows) {
+  const bs = rows.filter(r => r.bc);
+  const legacy = POS.filter(p => isManual(p) && p.cat === 'bond');
+  const card = $('#bondCard');
+  card.classList.toggle('hidden', !bs.length && !legacy.length);
+  if (card.classList.contains('hidden')) return;
+
+  /* totali: il rendimento medio è pesato sulla spesa, non una media
+     aritmetica — 50.000 € al 3% non contano come 1.000 € al 6% */
+  const inc = bs.reduce((a, r) => a + r.bc.cashIn, 0);
+  const accr = bs.reduce((a, r) => a + r.bc.accrued, 0);
+  const n12 = bs.reduce((a, r) => a + r.bc.next12, 0);
+  const wSum = bs.reduce((a, r) => a + (r.bc.ytmNet != null ? r.bc.spesa : 0), 0);
+  const wY = wSum ? bs.reduce((a, r) => a + (r.bc.ytmNet != null ? r.bc.ytmNet * r.bc.spesa : 0), 0) / wSum : null;
+  const nextD = bs.map(r => r.bc.next).filter(Boolean).sort()[0] || null;
+
+  $('#bondNext').textContent = nextD ? `prossima cedola il ${dispDate(nextD)}` : '';
+  $('#bondTot').innerHTML = !bs.length ? '' : `<div class="bkv">
+      <div><div class="k">Cedole incassate</div><div class="v ${inc > 0 ? 'up' : ''}">${eur(inc)}</div></div>
+      <div><div class="k">Rateo in corso</div><div class="v">${eur(accr)}<em>maturato, non ancora staccato</em></div></div>
+      <div><div class="k">Prossimi 12 mesi</div><div class="v">${eur(n12)}</div></div>
+      <div><div class="k">Rendimento netto</div><div class="v ${wY != null ? cls(wY) : ''}">${wY != null ? pctPlain(wY, 2) : '—'}<em>all'anno, fino a scadenza</em></div></div>
+    </div>`;
+
+  $('#bondRows').innerHTML = bs.map(r => {
+    const c = r.bc;
+    const meta = [
+      `nominale ${eur(c.nominal)}`,
+      `carico ${dec(c.buyPx, 2)}`,
+      c.freq ? `${dec(r.bond.coupon, 2)}% ${FREQ_LAB[c.freq]}` : 'senza cedola'
+    ].join(' · ');
+    return `<div class="bond">
+      <div class="bh">
+        <div style="min-width:0">
+          <div class="bn">${esc(r.ticker)}</div>
+          <div class="bsub">${meta}</div>
+        </div>
+        ${deltaPill(c.gain, c.plp, true)}
+      </div>
+      <div class="bkv">
+        ${c.freq
+          ? `<div><div class="k">Cedole incassate</div>
+              <div class="v ${c.cashIn > 0 ? 'up' : ''}">${eur(c.cashIn)}<em>${c.got} ${c.got === 1 ? 'stacco' : 'stacchi'}</em></div></div>`
+          : `<div><div class="k">Sconto totale</div>
+              <div class="v">${eur(c.nominal - c.nominal * c.buyPx / 100)}<em>è tutto il guadagno del titolo</em></div></div>`}
+        <div><div class="k">${c.freq ? 'Rateo in corso' : 'Maturato'}</div>
+          <div class="v">${eur(c.freq ? c.accrued : Math.max(c.gain, 0))}<em>${c.freq
+            ? (c.next ? 'stacca il ' + dispDate(c.next) : 'niente più cedole')
+            : 'sconto maturato a oggi'}</em></div></div>
+        <div><div class="k">Rendimento</div>
+          <div class="v ${c.ytmNet != null ? cls(c.ytmNet) : ''}">${c.ytmNet != null ? pctPlain(c.ytmNet, 2) : '—'}<em>netto${c.ytm != null ? ' · ' + pctPlain(c.ytm, 2) + ' lordo' : ''}</em></div></div>
+        <div><div class="k">${c.matured ? 'Incassato' : 'Da incassare'}</div>
+          <div class="v">${eur(c.matured ? c.nominal + c.cashIn : c.leftCash)}<em>${c.matured
+            ? 'titolo rimborsato'
+            : c.leftCoupons === 0 ? 'rimborso a scadenza'
+            : c.leftCoupons === 1 ? 'ultima cedola + capitale'
+            : `${c.leftCoupons} cedole + capitale`}</em></div></div>
+      </div>
+      <div class="bbar"><i style="width:${dec(c.prog * 100, 1)}%"></i></div>
+      <div class="bfoot">
+        <span>${dispDate(r.date)}</span>
+        <span>${c.matured ? 'arrivato a scadenza' : `ancora ${dec(c.yrsLeft, 1)} anni`}</span>
+        <span>${dispDate(r.bond.maturity)}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  /* Le vecchie obbligazioni inserite a mano: non posso indovinare cedola e
+     scadenza, ma posso dirgli che basta un tocco per farle contare. */
+  $('#bondMigrate').innerHTML = !legacy.length ? '' : `
+    <div class="notice warn" style="margin-top:14px;flex-direction:column;gap:9px">
+      <div><b>${legacy.length} ${legacy.length === 1 ? 'posizione obbligazionaria' : 'posizioni obbligazionarie'}</b>
+      ${legacy.length === 1 ? 'è inserita' : 'sono inserite'} a mano, quindi qui non ${legacy.length === 1 ? 'compare' : 'compaiono'}:
+      di ${legacy.length === 1 ? 'quella' : 'quelle'} non conosco cedola e scadenza.
+      ${legacy.length === 1 ? 'Completala' : 'Completale'} e calcolo tutto io.</div>
+      <div class="chips">${legacy.map(p => `<button class="chip" data-conv="${p.id}" style="cursor:pointer">${esc(p.ticker)} →</button>`).join('')}</div>
+    </div>`;
+  $$('#bondMigrate [data-conv]').forEach(b => b.onclick = () => openPos(b.dataset.conv, 'bond'));
 }
 
 
@@ -1374,15 +1813,16 @@ function refresh() {
 
   renderInvSummary(tot, rows);
   renderTable(rows, tot);
+  renderBonds(rows);
   drawPortfolio(hist);
   drawAllocation(tot);
 }
 
 async function loadAll(showSpinner = true) {
-  const need = new Set(POS.filter(p => !isManual(p)).map(p => p.ticker));
+  const need = new Set(POS.filter(isQuoted).map(p => p.ticker));
   if (!need.size) {
     setStatus(POS.length
-      ? '<span class="muted">Solo posizioni a mano: niente da scaricare.</span>'
+      ? '<span class="muted">Nessun titolo quotato: qui non c\'è niente da scaricare, i conti li faccio in locale.</span>'
       : '<span class="muted">Nessuna posizione. Aggiungine una per iniziare.</span>');
     refresh(); return;
   }
@@ -1402,7 +1842,7 @@ async function loadAll(showSpinner = true) {
 
   // valute estere, anch'esse in sequenza
   const curs = new Set();
-  for (const p of POS) { if (isManual(p)) continue; const s = SERIES[p.ticker]; if (s && s.meta.currency !== 'EUR') curs.add(s.meta.currency); }
+  for (const p of POS) { if (!isQuoted(p)) continue; const s = SERIES[p.ticker]; if (s && s.meta.currency !== 'EUR') curs.add(s.meta.currency); }
   for (const c of curs) {
     if (showSpinner) setStatus(`<span class="spinner"></span><span>Cambio ${esc(c)}/EUR…</span>`);
     FX[c] = await loadFx(c);
@@ -1440,7 +1880,7 @@ const BOND_BENCH = [
 
 async function priceSelfTest() {
   const box = $('#priceTest'), btn = $('#btnPriceTest');
-  const mine = [...new Set(POS.filter(p => !isManual(p)).map(p => p.ticker))];
+  const mine = [...new Set(POS.filter(isQuoted).map(p => p.ticker))];
   const list = mine.map(t => [t, 'tuo']).concat(BOND_BENCH.filter(([t]) => !mine.includes(t)));
   const res = [];
   const show = (running) => {
@@ -1498,75 +1938,208 @@ function fillSelects() {
   $('#tickerList').innerHTML = SUGGEST.map(([t, n]) => `<option value="${esc(t)}">${esc(n)}</option>`).join('');
 }
 
-function toggleAdd(show) {
-  const f = $('#addForm');
-  f.classList.toggle('hidden', show === false ? true : show === true ? false : !f.classList.contains('hidden'));
-  if (!f.classList.contains('hidden')) {
-    if (!$('#fDate').value) $('#fDate').value = iso(Date.now());
-    setPosMode(POSMODE); $('#fTicker').focus();
-  }
-}
+/* =====================================================================
+   IL FOGLIO DELLA POSIZIONE — aggiunge e modifica, tre modalità
+   Ogni modalità accende i suoi campi nella stessa griglia, così la
+   sequenza di lettura resta quella dell'estratto conto della banca.
+   ===================================================================== */
+let POSMODE = 'auto', posEditId = null;
 
-let POSMODE = 'auto';
+const POS_FIELDS = {
+  auto:   ['wCat', 'wAmount', 'wDate', 'wShares', 'wManPrice'],
+  bond:   ['wNominal', 'wBuyPrice', 'wCoupon', 'wFreq', 'wMaturity', 'wDate', 'wPrice', 'wTax'],
+  manual: ['wCat', 'wAmount', 'wDate', 'wValue']
+};
+const POS_ALLW = [...new Set([].concat(...Object.values(POS_FIELDS)))];
+
+const numOf = sel => { const v = parseFloat(String($(sel).value || '').replace(',', '.')); return isFinite(v) ? v : NaN; };
+
 function setPosMode(m) {
-  POSMODE = m === 'manual' ? 'manual' : 'auto';
-  const man = POSMODE === 'manual';
+  POSMODE = POS_FIELDS[m] ? m : 'auto';
+  const on = new Set(POS_FIELDS[POSMODE]);
   $$('#posMode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === POSMODE));
-  $('#fTickerLab').innerHTML = man
-    ? 'Nome <span class="muted" style="font-weight:400">(come vuoi chiamarlo)</span>'
-    : 'Ticker <span class="muted" style="font-weight:400">(Yahoo Finance)</span>';
-  $('#fTicker').placeholder = man ? 'es. BTP 1/8/2033 4,40%' : 'es. VWCE.DE';
-  $('#fTicker').setAttribute('list', man ? '' : 'tickerList');
-  $('#fSharesField').classList.toggle('hidden', man);
-  $('#fValueField').classList.toggle('hidden', !man);
-  $('#posHint').textContent = man
-    ? 'Per i singoli BTP, i conti deposito e le polizze: Yahoo non li quota. Scrivi quanto valgono oggi (il controvalore che vedi in banca) e aggiornalo quando ti va.'
-    : 'ETF, azioni, indici e crypto: scarico io il prezzo. Il suffisso è la borsa — .MI Milano, .DE Xetra, .AS Amsterdam, .L Londra.';
+  POS_ALLW.forEach(w => $('#' + w).classList.toggle('hidden', !on.has(w)));
+
+  const lab = $('#fTickerLab'), inp = $('#fTicker');
+  if (POSMODE === 'bond') {
+    lab.innerHTML = 'Titolo <span class="muted" style="font-weight:400">(come lo chiami tu)</span>';
+    inp.placeholder = 'es. BTP 1/8/2033 4,40%';
+  } else if (POSMODE === 'manual') {
+    lab.innerHTML = 'Nome <span class="muted" style="font-weight:400">(come lo chiami tu)</span>';
+    inp.placeholder = 'es. conto deposito Illimity';
+  } else {
+    lab.innerHTML = 'Ticker <span class="muted" style="font-weight:400">(Yahoo Finance)</span>';
+    inp.placeholder = 'es. VWCE.DE';
+  }
+  inp.setAttribute('list', POSMODE === 'auto' ? 'tickerList' : '');
+  $('#fDateLab').textContent = POSMODE === 'bond' ? 'Comprato il' : 'Data';
+
+  $('#posHint').textContent =
+    POSMODE === 'bond'
+      ? 'BTP, BOT, CCT, obbligazioni societarie. Le date di stacco le ricavo dalla scadenza, il resto lo conto io: cedole incassate, rateo e rendimento a scadenza. Non devi aggiornare niente.'
+      : POSMODE === 'manual'
+        ? 'Conti deposito, polizze, tutto quello che non ha né un prezzo di borsa né una cedola. Il controvalore lo scrivi tu e lo aggiorni quando ti va.'
+        : 'ETF, azioni, indici e crypto: il prezzo lo scarico io. Il suffisso è la borsa — .MI Milano, .DE Xetra, .AS Amsterdam, .L Londra.';
+  drawPosPreview();
 }
 
-async function addPosition() {
-  const manual = POSMODE === 'manual';
-  const raw = $('#fTicker').value.trim();
-  const ticker = manual ? raw : raw.toUpperCase();
-  const amount = parseFloat(($('#fAmount').value || '').replace(',', '.'));
+/** legge i campi del foglio e prova a costruire l'obbligazione */
+function readBondForm() {
   const date = $('#fDate').value;
-  const shares = parseFloat(($('#fShares').value || '').replace(',', '.'));
-  const mval = parseFloat(($('#fValue').value || '').replace(',', '.'));
-  if (!ticker) return alert(manual ? 'Dai un nome alla posizione (es. BTP 2033).' : 'Inserisci il ticker (es. VWCE.DE).');
-  if (!(amount > 0)) return alert('Inserisci l\'importo investito in euro.');
+  const b = {
+    nominal: numOf('#bNominal'), buyPrice: numOf('#bBuyPrice'),
+    coupon: isNaN(numOf('#bCoupon')) ? 0 : numOf('#bCoupon'),
+    freq: +$('#bFreq').value, maturity: $('#bMaturity').value,
+    price: $('#bPrice').value === '' ? null : numOf('#bPrice'),
+    tax: +$('#bTax').value
+  };
+  if (!(b.nominal > 0) || !(b.buyPrice > 0) || !b.maturity || !date) return null;
+  return { probe: { id: 'x', ticker: 'x', cat: 'bond', date, kind: 'bond', bond: b, amount: 0 }, bond: b };
+}
+
+/** I conti in diretta mentre scrive: è qui che si capisce cosa sta comprando. */
+function drawPosPreview() {
+  const box = $('#posPreview');
+  if (POSMODE !== 'bond') { box.innerHTML = ''; return; }
+  const f = readBondForm();
+  const c = f && bondCalc(f.probe);
+  if (!c) {
+    box.innerHTML = `<div class="notice" style="margin:12px 0 0;border-color:var(--line);background:var(--card-2);color:var(--ink-3)">
+      <span>ⓘ</span><div>Metti nominale, prezzo di carico, scadenza e data di acquisto: da lì ricavo tutto il resto.</div></div>`;
+    return;
+  }
+  const tot = c.nominal + c.leftCoupons * c.cpn + c.cashIn;
+  box.innerHTML = `<div class="bkv" style="margin-top:13px">
+      <div><div class="k">Spesa</div><div class="v">${eur(c.spesa)}<em>${eur(c.nominal * c.buyPx / 100)}${c.accrBuy > 0.005 ? ' + ' + eur(c.accrBuy) + ' di rateo' : ''}</em></div></div>
+      <div><div class="k">Cedola</div><div class="v">${c.freq ? eur(c.cpn) : '—'}<em>${c.freq ? FREQ_LAB[c.freq] : 'nessuna cedola'}</em></div></div>
+      <div><div class="k">Rendimento netto</div><div class="v ${c.ytmNet != null ? cls(c.ytmNet) : ''}">${c.ytmNet != null ? pctPlain(c.ytmNet, 2) : '—'}<em>${c.ytm != null ? pctPlain(c.ytm, 2) + ' lordo' : ''} · all'anno</em></div></div>
+      <div><div class="k">A scadenza</div><div class="v">${eur(tot)}<em>${dispDate(c.sched[c.sched.length - 1])}</em></div></div>
+    </div>`;
+}
+
+function openPos(id, forceMode) {
+  fillSelects();
+  posEditId = id || null;
+  const p = id ? POS.find(x => x.id === id) : null;
+  const mode = forceMode || (p ? (isBond(p) ? 'bond' : isManual(p) ? 'manual' : 'auto') : 'auto');
+
+  $('#posDlgTitle').textContent = p ? 'Modifica posizione' : 'Nuova posizione';
+  $('#btnAdd').textContent = p ? 'Salva' : 'Aggiungi';
+  $('#btnPosDel').classList.toggle('hidden', !p);
+
+  $('#fTicker').value = p ? p.ticker : '';
+  $('#fCat').value = p ? p.cat : 'equity';
+  $('#fAmount').value = p && !isBond(p) ? p.amount : '';
+  $('#fDate').value = (p && p.date) || iso(Date.now());
+  $('#fShares').value = p && p.shares != null ? p.shares : '';
+  $('#fManPrice').value = p && p.manualPrice != null ? p.manualPrice : '';
+  $('#fValue').value = p && p.manualValue != null ? p.manualValue : '';
+
+  const b = (p && p.bond) || {};
+  $('#bNominal').value = b.nominal != null ? b.nominal : '';
+  $('#bBuyPrice').value = b.buyPrice != null ? b.buyPrice : '';
+  $('#bCoupon').value = b.coupon != null ? b.coupon : '';
+  $('#bFreq').value = b.freq != null ? String(b.freq) : '2';
+  $('#bMaturity').value = b.maturity || '';
+  $('#bPrice').value = b.price != null ? b.price : '';
+  $('#bTax').value = b.tax != null ? String(b.tax) : '12.5';
+
+  setPosMode(mode);
+  openD('dlgPos');
+  setTimeout(() => $('#fTicker').focus(), 60);
+}
+
+async function savePosition() {
+  const raw = $('#fTicker').value.trim();
+  const date = $('#fDate').value;
+  const editing = posEditId ? POS.find(x => x.id === posEditId) : null;
+
+  if (!raw) return alert(POSMODE === 'auto' ? 'Inserisci il ticker (es. VWCE.DE).' : 'Dai un nome a questa posizione.');
   if (!date) return alert('Inserisci la data di acquisto.');
   if (date > iso(Date.now())) return alert('La data di acquisto è nel futuro.');
 
-  if (manual) {
+  /* ------------------------------------------------ obbligazione */
+  if (POSMODE === 'bond') {
+    const f = readBondForm();
+    if (!f) return alert('Servono nominale, prezzo di carico e scadenza.');
+    if (f.bond.maturity <= date) return alert('La scadenza deve venire dopo la data di acquisto.');
+    const c = bondCalc(f.probe);
+    if (!c) return alert('Con questi numeri non riesco a fare i conti: ricontrolla nominale, prezzo e scadenza.');
     const np = {
-      id: uid(), ticker, cat: $('#fCat').value, amount, date,
-      shares: null, manualPrice: null, manual: true,
-      manualValue: mval > 0 ? mval : amount
+      id: editing ? editing.id : uid(), ticker: raw, cat: 'bond', date,
+      kind: 'bond', bond: f.bond, amount: c.spesa,
+      shares: null, manualPrice: null
     };
-    POS.push(np); savePos(); stamp('pos', np.id);
-    $('#fTicker').value = ''; $('#fAmount').value = ''; $('#fValue').value = '';
-    toggleAdd(false); fillSelects(); refresh();
+    if (editing) { delete editing.manual; delete editing.manualValue; Object.assign(editing, np); }
+    else POS.push(np);
+    savePos(); stamp('pos', np.id);
+    closeD('dlgPos'); posEditId = null;
+    toast(`${raw} · ${eur(c.spesa)}${c.ytmNet != null ? ' · ' + pctPlain(c.ytmNet, 2) + ' netto' : ''}`);
+    fillSelects(); refresh();
     return;
   }
 
-  const btn = $('#btnAdd'); btn.disabled = true; btn.textContent = 'Verifico…';
-  try { await loadSeries(ticker); }
-  catch (e) {
-    const why = String(e.message).includes('sconosciuto')
-      ? `Yahoo Finance non conosce il simbolo "${ticker}".\n\nSe è un ETF, quasi sempre è il suffisso di borsa: .MI per Milano, .DE per Xetra, .AS per Amsterdam, .L per Londra (l'iShares Core S&P 500 a Milano è CSSPX.MI, non CSPX.MI).\n\nSe invece è un singolo BTP o un'obbligazione, Yahoo non li quota proprio: chiudi qui e usa il tasto "A mano".`
-      : `Non riesco a raggiungere il canale dati per "${ticker}" in questo momento.`;
-    if (!confirm(why + `\n\nLo aggiungo lo stesso? Potrai inserire quote e prezzo a mano nella tabella.`)) {
-      btn.disabled = false; btn.textContent = 'Aggiungi'; return;
-    }
+  const amount = numOf('#fAmount');
+  if (!(amount > 0)) return alert("Inserisci l'importo investito in euro.");
+
+  /* ------------------------------------------------------ a mano */
+  if (POSMODE === 'manual') {
+    const mval = numOf('#fValue');
+    const np = {
+      id: editing ? editing.id : uid(), ticker: raw, cat: $('#fCat').value, amount, date,
+      shares: null, manualPrice: null, manual: true,
+      manualValue: mval > 0 ? mval : amount
+    };
+    if (editing) { delete editing.kind; delete editing.bond; Object.assign(editing, np); }
+    else POS.push(np);
+    savePos(); stamp('pos', np.id);
+    closeD('dlgPos'); posEditId = null;
+    toast(`${raw} · ${eur(amount)}`);
+    fillSelects(); refresh();
+    return;
   }
-  const newPos = { id: uid(), ticker, cat: $('#fCat').value, amount, date, shares: shares > 0 ? shares : null, manualPrice: null };
-  POS.push(newPos);
-  savePos(); stamp('pos', newPos.id);
-  $('#fTicker').value = ''; $('#fAmount').value = ''; $('#fShares').value = '';
-  btn.disabled = false; btn.textContent = 'Aggiungi';
-  toggleAdd(false);
+
+  /* ----------------------------------------------------- quotato */
+  const ticker = raw.toUpperCase();
+  const shares = numOf('#fShares');
+  const btn = $('#btnAdd'), lab = btn.textContent;
+  if (!editing || editing.ticker !== ticker) {
+    btn.disabled = true; btn.textContent = 'Verifico…';
+    try { await loadSeries(ticker); }
+    catch (e) {
+      const why = String(e.message).includes('sconosciuto')
+        ? `Yahoo Finance non conosce il simbolo "${ticker}".\n\nSe è un ETF, quasi sempre è il suffisso di borsa: .MI per Milano, .DE per Xetra, .AS per Amsterdam, .L per Londra (l'iShares Core S&P 500 a Milano è CSSPX.MI, non CSPX.MI).\n\nSe invece è un BTP o un'obbligazione, Yahoo non li quota: torna indietro e usa "Obbligazione", così calcolo cedole e rendimento.`
+        : `Non riesco a raggiungere il canale dati per "${ticker}" in questo momento.`;
+      if (!confirm(why + `\n\nLo aggiungo lo stesso? Potrai inserire quote e prezzo a mano.`)) {
+        btn.disabled = false; btn.textContent = lab; return;
+      }
+    }
+    btn.disabled = false; btn.textContent = lab;
+  }
+  const mp = numOf('#fManPrice');
+  const np = {
+    id: editing ? editing.id : uid(), ticker, cat: $('#fCat').value, amount, date,
+    shares: shares > 0 ? shares : null, manualPrice: mp > 0 ? mp : null
+  };
+  if (editing) { delete editing.kind; delete editing.bond; delete editing.manual; delete editing.manualValue; Object.assign(editing, np); }
+  else POS.push(np);
+  savePos(); stamp('pos', np.id);
+  closeD('dlgPos'); posEditId = null;
+  toast(`${ticker} · ${eur(amount)}`);
   fillSelects();
+  refresh();                       // la riga compare subito, il prezzo arriva dopo
   await loadAll(true);
+}
+
+function deletePosition() {
+  const p = posEditId ? POS.find(x => x.id === posEditId) : null;
+  if (!p) return;
+  if (!confirm(`Eliminare ${p.ticker} (${eur(p.amount)})?`)) return;
+  const id = p.id;
+  POS = POS.filter(x => x.id !== id); savePos(); tomb('pos', id);
+  closeD('dlgPos'); posEditId = null;
+  toast('Eliminata');
+  refresh();
 }
 
 function applyPayload(j) {
@@ -1621,9 +2194,12 @@ function loadDemo() {
     { id: uid(), ticker: 'CSSPX.MI', cat: 'equity', amount: 8000, date: d1, shares: null, manualPrice: null },
     { id: uid(), ticker: 'AGGH.MI', cat: 'bond', amount: 9000, date: d2, shares: null, manualPrice: null },
     { id: uid(), ticker: 'XEON.DE', cat: 'cash', amount: 4000, date: d1, shares: null, manualPrice: null },
-    { id: uid(), ticker: 'SGLD.MI', cat: 'gold', amount: 3000, date: d1, shares: null, manualPrice: null }
+    { id: uid(), ticker: 'SGLD.MI', cat: 'gold', amount: 3000, date: d1, shares: null, manualPrice: null },
+    { id: uid(), ticker: 'BTP 1/8/2033 4,40%', cat: 'bond', date: d1, kind: 'bond',
+      shares: null, manualPrice: null, amount: 9925,
+      bond: { nominal: 10000, buyPrice: 98.5, coupon: 4.4, freq: 2, maturity: '2033-08-01', price: null, tax: 12.5 } }
   ];
-  savePos(); fillSelects(); loadAll(true);
+  savePos(); fillSelects(); refresh(); loadAll(true);
 }
 
 /* -------------------------------------------------------------- theme */
@@ -1637,7 +2213,8 @@ function applyTheme(t) {
 async function boot(fetchData = true) {
   fillSelects();
   renderTargets();
-  if (fetchData) await loadAll(true); else refresh();
+  refresh();                       // cedole, rateo e rendimenti non hanno bisogno di rete
+  if (fetchData) await loadAll(true);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1649,20 +2226,24 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(cur === 'auto' ? 'light' : cur === 'light' ? 'dark' : 'auto');
   };
   $('#btnData').onclick = () => { const d = $('#dataPanel'); d.classList.toggle('hidden'); if (!d.classList.contains('hidden')) renderSyncPanel(); };
-  $('#btnCancelAdd').onclick = () => toggleAdd(false);
   $('#btnCloseData').onclick = () => $('#dataPanel').classList.add('hidden');
   $('#btnExport').onclick = exportBackup;
   $('#btnImport').onclick = importBackup;
   $('#btnReset').onclick = resetAll;
   $('#btnDiag2').onclick = showDiag;
   $('#btnPriceTest').onclick = priceSelfTest;
-  $('#btnAddToggle').onclick = () => toggleAdd();
-  $('#btnAddFirst').onclick = () => toggleAdd(true);
-  $('#btnAdd').onclick = addPosition;
+  $('#btnAddToggle').onclick = () => openPos(null);
+  $('#btnAddFirst').onclick = () => openPos(null);
+  $('#btnAdd').onclick = savePosition;
+  $('#btnPosDel').onclick = deletePosition;
   $$('#posMode button').forEach(b => b.onclick = () => setPosMode(b.dataset.m));
+  // i conti dell'obbligazione si aggiornano mentre scrive
+  ['#bNominal', '#bBuyPrice', '#bCoupon', '#bMaturity', '#bPrice', '#fDate']
+    .forEach(sel => $(sel).addEventListener('input', drawPosPreview));
+  ['#bFreq', '#bTax'].forEach(sel => $(sel).addEventListener('change', drawPosPreview));
   $('#btnDemo').onclick = e => { e.preventDefault(); loadDemo(); };
   $('#btnTargets').onclick = () => { renderTargets(); $('#targetEditor').classList.toggle('hidden'); };
-  $('#fTicker').addEventListener('keydown', e => { if (e.key === 'Enter') addPosition(); });
+  $('#fTicker').addEventListener('keydown', e => { if (e.key === 'Enter') savePosition(); });
 
   let rt;
   addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => {
@@ -2992,6 +3573,8 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#pickExp').onclick = () => { closeD('dlgPick'); setTimeout(() => openExpDlg('out'), 120); };
   $('#pickInc').onclick = () => { closeD('dlgPick'); setTimeout(() => openExpDlg('in'), 120); };
   $('#pickFut').onclick = () => { closeD('dlgPick'); setTimeout(() => openFut(null), 120); };
+  $('#pickInv').onclick = () => { closeD('dlgPick'); setTimeout(() => { showTab('inv'); openPos(null); }, 120); };
+  $('#qInv').onclick = () => { showTab('inv'); openPos(null); };
   $$('#expKind button').forEach(b => b.onclick = () => setExpKind(b.dataset.k));
   $('#btnAddFut').onclick = () => openFut(null);
   $('#btnAddFut2').onclick = () => openFut(null);
@@ -3008,7 +3591,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const t = e.target.tagName;
     if (t === 'INPUT' || t === 'SELECT' || t === 'TEXTAREA') return;
-    if ($('#dlgExp').open || $('#dlgFut').open || $('#dlgPick').open) return;
+    if ($('#dlgExp').open || $('#dlgFut').open || $('#dlgPick').open || $('#dlgPos').open) return;
     if (e.key === 's' || e.key === 'S') { e.preventDefault(); openExpDlg('out'); }
     if (e.key === 'e' || e.key === 'E') { e.preventDefault(); openExpDlg('in'); }
     if (e.key === 'f' || e.key === 'F') { e.preventDefault(); openFut(null); }

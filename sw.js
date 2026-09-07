@@ -3,7 +3,7 @@
    2) tiene una copia della pagina, così l'app si apre anche senza rete
    Strategia: prima la rete, la copia salvata solo se la rete non risponde,
    così un aggiornamento della dashboard si vede subito. */
-const CACHE = 'conti-v6';
+const CACHE = 'conti-v7';
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(
