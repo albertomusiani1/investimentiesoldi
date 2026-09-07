@@ -36,6 +36,7 @@
   --down:#D33A3A;
   --warn:#B26B00;
   --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --s7:#4a3aa7; --s8:#e34948;
   --grid:#ECECF2;
   --sh:0 1px 2px rgba(20,20,40,.05);
   --sh-2:0 4px 16px rgba(20,20,40,.07);
@@ -51,6 +52,7 @@
     --accent:#A5A0FF; --accent-ink:#15151C; --accent-soft:#232135;
     --up:#3DD08A; --down:#FF6B6B; --warn:#F0B429;
     --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+    --s7:#9085e9; --s8:#e66767;
     --grid:#242430;
     --sh:0 1px 2px rgba(0,0,0,.4); --sh-2:0 4px 18px rgba(0,0,0,.35);
   }
@@ -63,6 +65,7 @@
   --accent:#A5A0FF; --accent-ink:#15151C; --accent-soft:#232135;
   --up:#3DD08A; --down:#FF6B6B; --warn:#F0B429;
   --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --s7:#9085e9; --s8:#e66767;
   --grid:#242430;
   --sh:0 1px 2px rgba(0,0,0,.4); --sh-2:0 4px 18px rgba(0,0,0,.35);
 }
@@ -227,6 +230,45 @@ tfoot td{font-weight:640;border-top:1px solid var(--line-2);border-bottom:0;padd
 .row .amt{font-variant-numeric:tabular-nums;font-weight:640;font-size:14.5px;text-align:right;white-space:nowrap}
 .row .amt small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:500}
 .row .acts{display:flex;gap:2px}
+/* contrassegno del colore della categoria sulle righe dei movimenti */
+.row.mk{position:relative;padding-left:13px}
+.row.mk::before{content:"";position:absolute;left:0;top:11px;bottom:11px;width:3px;
+  border-radius:2px;background:var(--cc,var(--line-2))}
+.cpill{display:inline-flex;align-items:center;gap:5px}
+.cpill i{width:8px;height:8px;border-radius:2px;background-color:var(--cc,var(--line-2));flex:none}
+
+/* ===================== DOVE VANNO I SOLDI ===================== */
+/* la striscia dà la forma del mese in un colpo d'occhio; l'elenco sotto
+   porta nome, euro e percentuale su ogni riga, così il colore non è mai
+   l'unica cosa che distingue una categoria */
+.catstrip{display:flex;gap:2px;height:14px;border-radius:7px;overflow:hidden;
+  background:var(--card-2);margin:2px 0 4px}
+.catstrip i{display:block;min-width:3px;cursor:pointer;background-color:var(--cc)}
+/* secondo canale, oltre l'ottava categoria: la trama, tono su tono */
+[data-grp="1"]{background-image:repeating-linear-gradient(45deg,
+  transparent 0 4px, color-mix(in srgb, var(--card) 34%, transparent) 4px 8px)}
+[data-grp="2"]{background-image:repeating-linear-gradient(135deg,
+  transparent 0 4px, color-mix(in srgb, var(--card) 34%, transparent) 4px 8px)}
+.sw[data-grp="1"],.cpill i[data-grp="1"]{background-image:repeating-linear-gradient(45deg,
+  transparent 0 2px, color-mix(in srgb, var(--card) 46%, transparent) 2px 4px)}
+.sw[data-grp="2"],.cpill i[data-grp="2"]{background-image:repeating-linear-gradient(135deg,
+  transparent 0 2px, color-mix(in srgb, var(--card) 46%, transparent) 2px 4px)}
+.catstrip i:first-child{border-radius:7px 0 0 7px}
+.catstrip i:last-child{border-radius:0 7px 7px 0}
+.catrow{padding:9px 0}
+.catrow+.catrow{border-top:1px solid var(--line)}
+.catrow .l1{display:flex;align-items:center;gap:8px;min-width:0}
+.catrow .sw{width:10px;height:10px;border-radius:3px;flex:none;background-color:var(--cc)}
+.catrow .nm{font-size:13.5px;font-weight:620;color:var(--ink);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.catrow .vv{margin-left:auto;font-size:12.5px;color:var(--ink-3);
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+.catrow .vv b{color:var(--ink);font-weight:640;font-size:13px}
+.catrow .track{height:8px;border-radius:4px;background:var(--card-2);margin-top:6px}
+.catrow .fill{height:100%;border-radius:0 4px 4px 0;min-width:3px;background-color:var(--cc)}
+button.linky{background:transparent;border:0;color:var(--accent);font-size:12.5px;
+  font-weight:620;padding:10px 0 1px;width:100%;text-align:center}
+button.linky:hover{background:transparent;text-decoration:underline}
 .tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:680;padding:2px 7px;border-radius:100px;
   border:1px solid var(--line-2);background:var(--card-2);letter-spacing:.02em}
 .tag[data-k="need"]{color:var(--down);border-color:color-mix(in srgb,var(--down) 40%,var(--line))}
@@ -249,7 +291,8 @@ svg.chart text{font-family:inherit;font-variant-numeric:tabular-nums}
 .swatch.sq{height:10px;width:10px;border-radius:3px}
 .tip{position:absolute;pointer-events:none;z-index:5;opacity:0;transition:opacity .08s;
   background:var(--card);border:1px solid var(--line-2);border-radius:10px;box-shadow:var(--sh-2);
-  padding:8px 11px;font-size:12px;min-width:120px;font-variant-numeric:tabular-nums}
+  padding:8px 11px;font-size:12px;min-width:120px;max-width:100%;box-sizing:border-box;
+  font-variant-numeric:tabular-nums}
 .tip .th{font-weight:640;margin-bottom:4px;font-size:11.5px;color:var(--ink-2)}
 .tip .tr{display:flex;justify-content:space-between;gap:14px}
 
@@ -432,15 +475,25 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
     <div class="summary" id="expSummary"></div>
   </section>
 
+  <!-- ============ dove vanno i soldi: quanto e che percentuale ============ -->
   <section class="card">
     <header>
-      <h2>Movimenti</h2>
-      <span class="muted" style="font-size:11.5px" id="monthSummary"></span>
+      <h2>Dove vanno i soldi</h2>
+      <select id="ecPeriod" style="width:auto;padding:5px 9px;font-size:12.5px;font-weight:600">
+        <option value="month">Questo mese</option>
+        <option value="y12" selected>Ultimi 12 mesi</option>
+        <option value="year">Anno corrente</option>
+      </select>
     </header>
-    <div class="rows" id="movRows"></div>
-    <div id="movEmpty" class="empty">
-      <h3>Nessun movimento</h3>
-      <p>Tocca <b>+</b> per registrare una spesa o un'entrata: bastano descrizione, importo e data.</p>
+    <div class="chart-wrap">
+      <div class="catstrip" id="catStrip" role="img" aria-label="Peso di ogni categoria sul totale"></div>
+      <div class="tip" id="csTip"></div>
+    </div>
+    <div class="muted" style="font-size:11.5px;margin:5px 0 2px" id="catTotal"></div>
+    <div id="catRows"></div>
+    <button class="linky hidden" id="btnCatMore"></button>
+    <div id="catEmpty" class="empty">
+      <p>Quando registri qualche spesa, qui vedi quanto va in ogni categoria e che fetta è del totale.</p>
     </div>
   </section>
 
@@ -455,24 +508,6 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
     </div>
     <div class="legend" id="emLegend"></div>
 
-    <details class="fold" id="foldCat">
-      <summary>Dove vanno i soldi</summary>
-      <div class="body">
-        <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
-          <select id="ecPeriod" style="width:auto;padding:5px 9px;font-size:12.5px">
-            <option value="month">Mese selezionato</option>
-            <option value="y12" selected>Ultimi 12 mesi</option>
-            <option value="year">Anno corrente</option>
-          </select>
-        </div>
-        <div class="chart-wrap" id="ecWrap">
-          <svg class="chart" id="ecChart" role="img" aria-label="Spese per categoria"></svg>
-          <div class="tip" id="ecTip"></div>
-        </div>
-        <div class="legend" id="ecLegend"></div>
-      </div>
-    </details>
-
     <details class="fold" id="foldFix">
       <summary>Voci fisse <span class="muted" id="fixSummary" style="font-weight:500"></span></summary>
       <div class="body">
@@ -482,7 +517,7 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
     </details>
 
     <details class="fold" id="foldCats">
-      <summary>Categorie</summary>
+      <summary>Gestisci le categorie</summary>
       <div class="body">
         <div class="chips" id="catChips"></div>
         <div style="display:flex;gap:8px;margin-top:11px">
@@ -491,6 +526,20 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
         </div>
       </div>
     </details>
+  </section>
+
+  <!-- ============ le singole voci, per ultime e richiudibili ============ -->
+  <section class="card">
+    <header>
+      <h2>Movimenti</h2>
+      <span class="muted" style="font-size:11.5px" id="monthSummary"></span>
+    </header>
+    <div class="rows" id="movRows"></div>
+    <button class="linky hidden" id="btnMovMore"></button>
+    <div id="movEmpty" class="empty">
+      <h3>Nessun movimento</h3>
+      <p>Tocca <b>+</b> per registrare una spesa o un'entrata: bastano descrizione, importo e data.</p>
+    </div>
   </section>
 </div>
 
@@ -1824,22 +1873,41 @@ function renderExpSummary() {
     </div>`;
 }
 
+let MOVOPEN = false;            // elenco completo o solo gli ultimi
+const MOV_PREVIEW = 5;
+
+/** una riga di movimento, con la striscetta del colore della categoria */
+function movRow(m) {
+  const inn = isIn(m);
+  const s = inn ? null : catStyle(m.cat);
+  const cc = inn ? 'var(--line-2)' : cssv('--s' + s.slot);
+  return `<div class="row mk" style="--cc:${cc}">
+      <div class="main">
+        <div class="t">${esc(m.desc)}</div>
+        <div class="s"><span>${dayShort(m.when)}</span>
+          <span class="pill cpill">${inn ? '' : `<i data-grp="${s.grp}"></i>`}${esc(m.cat)}</span>${m.type === 'fissa' ? `<span class="pill">${inn ? 'ricorrente' : 'fissa'}</span>` : ''}</div>
+      </div>
+      <div class="amt ${inn ? 'up' : ''}">${inn ? '+' : ''}${eur(m.amount)}</div>
+      <div class="acts">${m.type === 'variabile'
+      ? `<button class="iconbtn danger" data-delexp="${m.id}" title="Elimina">✕</button>`
+      : `<button class="iconbtn" data-jumpfix="1" title="Si gestisce fra le voci fisse">↗</button>`}</div>
+    </div>`;
+}
+
 function renderMovements() {
   const t = monthTotals(SELMONTH);
   const all = t.mv.concat(t.inRows)
     .sort((x, y) => y.when.localeCompare(x.when) || String(x.desc).localeCompare(String(y.desc)));
   $('#movEmpty').classList.toggle('hidden', all.length > 0);
-  $('#movRows').innerHTML = all.map(m => `
-    <div class="row">
-      <div class="main">
-        <div class="t">${esc(m.desc)}</div>
-        <div class="s"><span>${dayShort(m.when)}</span><span class="pill">${esc(m.cat)}</span>${m.type === 'fissa' ? `<span class="pill">${isIn(m) ? 'ricorrente' : 'fissa'}</span>` : ''}</div>
-      </div>
-      <div class="amt ${isIn(m) ? 'up' : ''}">${isIn(m) ? '+' : ''}${eur(m.amount)}</div>
-      <div class="acts">${m.type === 'variabile'
-        ? `<button class="iconbtn danger" data-delexp="${m.id}" title="Elimina">✕</button>`
-        : `<button class="iconbtn" data-jumpfix="1" title="Si gestisce fra le voci fisse">↗</button>`}</div>
-    </div>`).join('');
+  const shown = MOVOPEN ? all : all.slice(0, MOV_PREVIEW);
+  $('#movRows').innerHTML = shown.map(movRow).join('');
+
+  const more = $('#btnMovMore');
+  more.classList.toggle('hidden', all.length <= MOV_PREVIEW);
+  more.textContent = MOVOPEN
+    ? 'Richiudi'
+    : `Vedi tutti i ${all.length} movimenti`;
+
   const bits = [];
   if (t.mv.length) bits.push(`${eur(t.total)} usciti`);
   if (t.inRows.length) bits.push(`${eur(sum(t.inRows))} entrati`);
@@ -1856,10 +1924,11 @@ function renderFixed() {
     const f = FREQ[e.freq] || FREQ.mensile;
     const over = e.end && e.end < today;
     const inn = isIn(e);
-    return `<div class="row ${over ? 'done' : ''}">
+    const s = inn ? null : catStyle(e.cat);
+    return `<div class="row mk ${over ? 'done' : ''}" style="--cc:${inn ? 'var(--line-2)' : cssv('--s' + s.slot)}">
       <div class="main">
         <div class="t">${esc(e.desc)}</div>
-        <div class="s"><span class="pill">${esc(e.cat)}</span><span>ogni ${f.short}</span>${over ? '<span>terminata</span>' : ''}</div>
+        <div class="s"><span class="pill cpill">${inn ? '' : `<i data-grp="${s.grp}"></i>`}${esc(e.cat)}</span><span>ogni ${f.short}</span>${over ? '<span>terminata</span>' : ''}</div>
       </div>
       <div class="amt ${inn ? 'up' : ''}">${inn ? '+' : ''}${eur(e.amount)}<small>${inn ? '+' : ''}${eur(e.amount * f.perMonth)}/mese</small></div>
       <div class="acts"><button class="iconbtn danger" data-delexp="${e.id}" title="Elimina">✕</button></div>
@@ -1944,7 +2013,7 @@ function drawMonths() {
       tip.style.top = '2px';
     });
     hit.addEventListener('mouseleave', () => { tip.style.opacity = 0; });
-    hit.addEventListener('click', () => { SELMONTH = d.ym; $('#monthSel').value = d.ym; renderMonthView(); drawMonths(); });
+    hit.addEventListener('click', () => { SELMONTH = d.ym; MOVOPEN = false; $('#monthSel').value = d.ym; renderMonthView(); drawMonths(); });
     g.appendChild(hit);
   });
 
@@ -1960,57 +2029,140 @@ function drawMonths() {
     `<span class="muted">tocca un mese</span>`;
 }
 
-/* ---------------------------------------------- grafico: per categoria */
-function drawCategories() {
-  const svg = $('#ecChart'), wrap = $('#ecWrap'), tip = $('#ecTip');
-  svg.textContent = ''; $('#ecLegend').textContent = '';
-  const mode = $('#ecPeriod').value;
-  const months = mode === 'month' ? [SELMONTH]
+/* =====================================================================
+   DOVE VANNO I SOLDI
+   Una striscia che dà la forma del periodo in un colpo d'occhio, e sotto
+   l'elenco ordinato dal più caro al meno caro: ogni riga porta il nome,
+   gli euro e la percentuale. Il colore della categoria è un aiuto in più,
+   mai l'unica cosa che la distingue — così resta leggibile anche a chi
+   non distingue bene i colori.
+   ===================================================================== */
+
+/* Il colore segue la categoria, non la sua posizione in classifica: così una
+   categoria ha sempre la stessa tinta, in ogni schermata e su ogni dispositivo.
+   Le tinte sono otto, verificate per contrasto e daltonismo; siccome le
+   categorie possono essere più di otto, dalla nona in poi la tinta si ripete
+   ma cambia la trama (righe a 45° e a 135°), che è il secondo canale: due
+   categorie non sono mai distinte dal solo colore. */
+const CAT_SLOTS = 8;
+function hash32(s) {
+  let h = 2166136261;
+  s = String(s == null ? '' : s);
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+let _catMap = null, _catMapKey = null;
+function catMap() {
+  const key = ECATS.join('|');
+  if (_catMap && _catMapKey === key) return _catMap;
+  _catMap = {}; _catMapKey = key;
+  ECATS.forEach((c, i) => { _catMap[c] = { slot: (i % CAT_SLOTS) + 1, grp: Math.floor(i / CAT_SLOTS) % 3 }; });
+  return _catMap;
+}
+/** tinta + trama di una categoria; le categorie non più in elenco (spese
+    vecchie) ricadono su una posizione derivata dal nome */
+function catStyle(name) {
+  const m = catMap()[name];
+  if (m) return m;
+  const h = hash32(name);
+  return { slot: (h % CAT_SLOTS) + 1, grp: (h >>> 5) % 3 };
+}
+const catSlot = name => catStyle(name).slot;
+const catColor = name => cssv('--s' + catSlot(name));
+
+/** mesi coperti dal periodo scelto nel menù */
+function catMonths() {
+  const mode = $('#ecPeriod') ? $('#ecPeriod').value : 'y12';
+  return mode === 'month' ? [SELMONTH]
     : mode === 'year' ? lastMonths(12).filter(m => m.startsWith(ymNow().slice(0, 4)))
     : lastMonths(12);
-  const rows = byCategory(months);
+}
+const catPeriodLabel = () => {
+  const mode = $('#ecPeriod') ? $('#ecPeriod').value : 'y12';
+  return mode === 'month' ? monthLabelLong(SELMONTH) : mode === 'year' ? 'anno ' + ymNow().slice(0, 4) : 'ultimi 12 mesi';
+};
+
+let CATOPEN = false;          // elenco completo o solo le prime
+const CAT_PREVIEW = 6;
+
+/** un tooltip lasciato aperto, se poi la finestra cambia larghezza, resterebbe
+    piazzato dove non c'è più spazio: alla prima occasione lo si ripiega */
+function hideTips() {
+  $$('.tip').forEach(t => { t.style.opacity = 0; t.style.left = '0px'; });
+}
+
+function renderCategories() {
+  hideTips();
+  const rows = byCategory(catMonths());
+  const tot = rows.reduce((a, r) => a + r[1], 0);
+  $('#catEmpty').classList.toggle('hidden', rows.length > 0);
+  $('#catStrip').classList.toggle('hidden', rows.length === 0);
+
   if (!rows.length) {
-    svg.setAttribute('viewBox', '0 0 10 10'); svg.setAttribute('height', 0);
-    $('#ecLegend').innerHTML = '<span class="muted">Nessuna spesa nel periodo scelto.</span>';
+    $('#catStrip').innerHTML = ''; $('#catRows').innerHTML = '';
+    $('#catTotal').textContent = ''; $('#btnCatMore').classList.add('hidden');
     return;
   }
-  svg.removeAttribute('height');
-  const W = Math.max(280, wrap.clientWidth || 480);
-  const narrow = W < 440;
-  const rowH = narrow ? 40 : 30;
-  const H = rows.length * rowH + 6;
-  const M = { t: 4, r: narrow ? 6 : 108, l: narrow ? 2 : 118 };
-  const iw = W - M.l - M.r;
-  const tot = rows.reduce((a, r) => a + r[1], 0), max = rows[0][1] * 1.02;
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H);
-  const g = el('g'); svg.appendChild(g);
-  const C = cssv('--s1');
 
-  rows.forEach(([cat, v], i) => {
-    const yTop = M.t + i * rowH, bh = 12;
-    const by = yTop + (narrow ? 16 : (rowH - bh) / 2);
-    const lbl = el('text', narrow
-      ? { x: M.l, y: yTop + 11, 'font-size': 12.5, 'font-weight': 600, fill: cssv('--ink') }
-      : { x: M.l - 9, y: by + bh - 2, 'text-anchor': 'end', 'font-size': 12.5, 'font-weight': 600, fill: cssv('--ink') });
-    lbl.textContent = cat; g.appendChild(lbl);
-    const w = Math.max(2, v / max * iw);
-    g.appendChild(el('rect', { x: M.l, y: by, width: w, height: bh, fill: C, rx: 4 }));
-    const t = el('text', narrow
-      ? { x: W - 4, y: yTop + 11, 'text-anchor': 'end', 'font-size': 11.5, 'font-weight': 600, fill: cssv('--ink-2') }
-      : { x: M.l + w + 8, y: by + bh - 1.5, 'font-size': 11.5, 'font-weight': 600, fill: cssv('--ink-2') });
-    t.textContent = eur(v) + '  ·  ' + dec(v / tot * 100, 0) + '%';
-    g.appendChild(t);
+  // striscia: ogni fetta è larga quanto la sua quota, staccata da 2px di sfondo
+  $('#catStrip').innerHTML = rows.map(([cat, v]) => {
+    const s = catStyle(cat);
+    return `<i style="flex:${(v / tot).toFixed(6)} 0 auto;--cc:${cssv('--s' + s.slot)}"
+        data-grp="${s.grp}" data-cs="${esc(cat)}" data-v="${v}"></i>`;
+  }).join('');
+
+  const max = rows[0][1];
+  const shown = CATOPEN ? rows : rows.slice(0, CAT_PREVIEW);
+  $('#catRows').innerHTML = shown.map(([cat, v]) => {
+    const s = catStyle(cat), cc = cssv('--s' + s.slot);
+    return `
+    <div class="catrow" style="--cc:${cc}">
+      <div class="l1">
+        <i class="sw" data-grp="${s.grp}"></i>
+        <span class="nm">${esc(cat)}</span>
+        <span class="vv"><b>${eur(v)}</b> · ${dec(v / tot * 100, v / tot < 0.095 ? 1 : 0)}%</span>
+      </div>
+      <div class="track"><div class="fill" data-grp="${s.grp}" style="width:${Math.max(1.2, v / max * 100).toFixed(2)}%"></div></div>
+    </div>`;
+  }).join('');
+
+  $('#catTotal').textContent =
+    `${rows.length} categorie · ${catPeriodLabel()} · totale ${eur(tot)}`;
+
+  const more = $('#btnCatMore');
+  more.classList.toggle('hidden', rows.length <= CAT_PREVIEW);
+  more.textContent = CATOPEN
+    ? 'Mostra solo le principali'
+    : `Mostra tutte le ${rows.length} categorie`;
+
+  // la striscia non ha etichette dentro: gliele dà il tocco
+  const tip = $('#csTip');
+  const hide = () => { tip.style.opacity = 0; };
+  $$('#catStrip i').forEach(seg => {
+    const show = () => {
+      const cat = seg.dataset.cs, v = +seg.dataset.v;
+      tip.innerHTML = `<div class="th">${esc(cat)}</div>
+        <div class="tr"><span>Speso</span><b>${eur(v)}</b></div>
+        <div class="tr"><span>Sul totale</span><b>${dec(v / tot * 100, 1)}%</b></div>`;
+      tip.style.opacity = 1;
+      const box = $('#catStrip').getBoundingClientRect();
+      const r = seg.getBoundingClientRect();
+      const tw = tip.offsetWidth || 150;
+      tip.style.left = clamp(r.left - box.left + r.width / 2 - tw / 2, 0, Math.max(0, box.width - tw)) + 'px';
+      tip.style.top = '20px';
+    };
+    seg.addEventListener('mouseenter', show);
+    seg.addEventListener('mouseleave', hide);
+    seg.addEventListener('click', show);
   });
-  const per = mode === 'month' ? monthLabelLong(SELMONTH) : mode === 'year' ? ymNow().slice(0, 4) : 'ultimi 12 mesi';
-  $('#ecLegend').innerHTML = `<span class="muted">${per} · totale ${eur(tot)}</span>`;
 }
 
 /* --------------------------------------------------------- categorie */
 function renderCats() {
   const used = {};
   for (const e of EXP) used[e.cat] = (used[e.cat] || 0) + 1;
-  $('#catChips').innerHTML = ECATS.map(c =>
-    `<span class="chip">${esc(c)}${used[c] ? `<span class="muted" style="font-weight:400">${used[c]}</span>` : ''}
+  $('#catChips').innerHTML = ECATS.map((c, i) =>
+    `<span class="chip cpill" style="--cc:${cssv('--s' + catStyle(c).slot)}"><i data-grp="${catStyle(c).grp}"></i>${esc(c)}${used[c] ? `<span class="muted" style="font-weight:400">${used[c]}</span>` : ''}
       <button class="x" data-delcat="${esc(c)}" title="${used[c] ? 'In uso' : 'Elimina'}">✕</button></span>`).join('');
   $$('#catChips [data-delcat]').forEach(b => b.onclick = () => {
     const c = b.dataset.delcat;
@@ -2135,7 +2287,7 @@ function fillMonthSel() {
 }
 function renderMonthView() {
   $('#incomeInput').value = INCOME[SELMONTH] != null ? INCOME[SELMONTH] : '';
-  renderExpSummary(); renderMovements(); drawCategories();
+  renderExpSummary(); renderMovements(); renderCategories();
 }
 function renderExpenses() {
   refreshAllCombos(); renderCats(); fillMonthSel();
@@ -2287,9 +2439,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   $('#btnAddCat').onclick = addCategory;
   $('#newCat').addEventListener('keydown', e => { if (e.key === 'Enter') addCategory(); });
-  $('#monthSel').onchange = e => { SELMONTH = e.target.value; renderMonthView(); drawMonths(); };
-  $('#ecPeriod').onchange = drawCategories;
-  $('#foldCat').addEventListener('toggle', () => { if ($('#foldCat').open) drawCategories(); });
+  $('#monthSel').onchange = e => { SELMONTH = e.target.value; MOVOPEN = false; renderMonthView(); drawMonths(); };
+  $('#ecPeriod').onchange = () => { CATOPEN = false; renderCategories(); };
+  $('#btnCatMore').onclick = () => { CATOPEN = !CATOPEN; renderCategories(); };
+  $('#btnMovMore').onclick = () => { MOVOPEN = !MOVOPEN; renderMovements(); };
   $('#incomeInput').onchange = e => {
     const v = parseFloat(String(e.target.value).replace(',', '.'));
     if (v > 0) { INCOME[SELMONTH] = v; stamp('inc', SELMONTH); } else { delete INCOME[SELMONTH]; tomb('inc', SELMONTH); }
@@ -2305,9 +2458,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let rt;
   addEventListener('resize', () => {
+    hideTips();
     clearTimeout(rt);
     rt = setTimeout(() => {
-      if (!$('#pageExp').classList.contains('hidden')) { drawMonths(); if ($('#foldCat').open) drawCategories(); }
+      if (!$('#pageExp').classList.contains('hidden')) { drawMonths(); renderCategories(); }
       if (!$('#pageInv').classList.contains('hidden') && STATE && STATE.tot) { drawPortfolio(STATE.hist); drawAllocation(STATE.tot); }
     }, 170);
   });
