@@ -595,7 +595,23 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
     `animation-fill-mode: none` e due fotogrammi identici fra loro. Fuori
     dall'intervallo l'animazione non si applica affatto, dentro sì: è un
     interruttore, non una dissolvenza. La barra di avanzamento è la stessa idea
-    applicata alla colonna intera. Ricaduta dove le linee del tempo non ci sono:
+    applicata alla colonna intera.
+
+    **L'intervallo è la parte che ha richiesto due tentativi.** Il primo usava
+    `contain`, cioè «la tappa si vede tutta intera»: sembrava giusto e non lo
+    era. Con tappe di altezze diverse, due corte vicine risultano attive
+    insieme, e una più alta della finestra non lo è mai — misurando la pagina
+    a sette altezze di scorrimento, dalla metà in giù non si accendeva più
+    niente. Il secondo tentativo definisce una **riga di lettura** a 35 %
+    dall'alto della finestra: una tappa è attiva finché quella riga le cade
+    dentro. Si scrive `animation-range: cover 65vh calc(100% - 35vh + 5rem)` —
+    il bordo alto che tocca la riga, il bordo basso che la tocca, più lo spazio
+    fra una tappa e l'altra perché il menu non resti spento nel mezzo. Così gli
+    intervalli si susseguono senza sovrapporsi e senza buchi, qualunque sia
+    l'altezza delle tappe. Verificato di nuovo alle stesse sette altezze: una
+    voce accesa per volta, sempre quella giusta.
+
+    Ricaduta dove le linee del tempo non ci sono:
     `:has()` guarda quale tappa è il bersaglio dell'ancora e accende la voce
     nella stessa posizione — il menu torna a essere un indice, che è il minimo
     che deve fare. Alternativa scartata: un IntersectionObserver, cioè una quarta

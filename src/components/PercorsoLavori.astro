@@ -362,12 +362,27 @@ const numero = (i: number) => String(i + 1).padStart(2, '0');
         view-timeline-name: --colonna;
       }
 
+      /* Tutti gli intervalli sono espressi rispetto alla stessa «riga di
+         lettura», a 35% dall'alto della finestra: una tappa è quella attiva
+         finché la riga di lettura le cade dentro.
+
+         Perché non `contain`, che sarebbe più corto da scrivere: `contain`
+         vuol dire «la tappa si vede tutta intera», e con tappe di altezze
+         diverse due corte vicine risultano attive insieme mentre una più alta
+         della finestra non lo è mai. Misurato: alla metà della pagina non si
+         accendeva più niente. Con la riga di lettura gli intervalli si
+         susseguono senza sovrapporsi e senza buchi.
+
+         `cover 65vh` è il momento in cui il bordo alto della tappa tocca la
+         riga; `calc(100% - 35vh + 5rem)` quello in cui la tocca il bordo
+         basso, più lo spazio fra una tappa e l'altra, così l'ultima riga di
+         una tappa e la prima della successiva non lasciano il menu spento. */
       .percorso__avanzamento {
         animation-name: avanza;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: --colonna;
-        animation-range: contain 0% contain 100%;
+        animation-range: cover 65vh calc(100% - 35vh);
       }
 
       .percorso__tappa:nth-child(1) { view-timeline-name: --tappa-1; }
@@ -386,11 +401,11 @@ const numero = (i: number) => String(i + 1).padStart(2, '0');
         animation-name: voce-accesa;
       }
 
-      .percorso__voce:nth-child(1) { animation-timeline: --tappa-1; animation-range: contain 0% contain 100%; }
-      .percorso__voce:nth-child(2) { animation-timeline: --tappa-2; animation-range: contain 0% contain 100%; }
-      .percorso__voce:nth-child(3) { animation-timeline: --tappa-3; animation-range: contain 0% contain 100%; }
-      .percorso__voce:nth-child(4) { animation-timeline: --tappa-4; animation-range: contain 0% contain 100%; }
-      .percorso__voce:nth-child(5) { animation-timeline: --tappa-5; animation-range: contain 0% contain 100%; }
+      .percorso__voce:nth-child(1) { animation-timeline: --tappa-1; animation-range: cover 65vh calc(100% - 35vh + 5rem); }
+      .percorso__voce:nth-child(2) { animation-timeline: --tappa-2; animation-range: cover 65vh calc(100% - 35vh + 5rem); }
+      .percorso__voce:nth-child(3) { animation-timeline: --tappa-3; animation-range: cover 65vh calc(100% - 35vh + 5rem); }
+      .percorso__voce:nth-child(4) { animation-timeline: --tappa-4; animation-range: cover 65vh calc(100% - 35vh + 5rem); }
+      .percorso__voce:nth-child(5) { animation-timeline: --tappa-5; animation-range: cover 65vh calc(100% - 35vh + 5rem); }
 
       /* La voce dei disegni resta blu anche da accesa: è la sola voce che
          non è una tappa del racconto ma una cosa con cui si gioca. */
