@@ -41,10 +41,14 @@ const ISOLE = [
     pagine: /^\/contatti$/,
   },
   {
-    nome: 'VisualizzatoreDisegni',
+    // Il nome è quello del file che porta il <script>: il corpo del
+    // visualizzatore, che sta in un componente a parte perché serve sia
+    // nella sua sezione sia dentro il percorso della pagina Lavori.
+    nome: 'VisualizzatoreCorpo',
     perche: 'rende interattive le tavole 2D e i modelli 3D',
-    // In home c'è il modello in vetrina, sulle schede lavoro le loro tavole.
-    pagine: /^\/$|^\/progetti\/[^/]+$/,
+    // In home c'è il modello in vetrina, nell'elenco dei lavori la raccolta
+    // di tutte le tavole in fondo al percorso, sulle schede le proprie.
+    pagine: /^\/$|^\/progetti$|^\/progetti\/[^/]+$/,
   },
 ];
 

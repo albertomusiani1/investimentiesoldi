@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import IntestazioneSezione from '../components/IntestazioneSezione.astro';
 import SchedaProgetto from '../components/SchedaProgetto.astro';
+import PercorsoLavori from '../components/PercorsoLavori.astro';
 import { getCollection } from 'astro:content';
 import { CATEGORIE_PROGETTO } from '../content.config';
 import { t } from '../i18n';
@@ -17,6 +18,14 @@ const progetti = (await getCollection('progetti')).sort((a, b) => {
 const categorieUsate = CATEGORIE_PROGETTO.filter((categoria) =>
   progetti.some((progetto) => progetto.data.categoria === categoria)
 );
+
+/**
+ * I disegni di tutti i lavori pubblicati, riuniti nell'ultima tappa del
+ * percorso. Il limite di otto non è arbitrario: tante sono le regole CSS
+ * che pilotano i pannelli del visualizzatore senza JavaScript.
+ */
+const MASSIMO_DISEGNI = 8;
+const disegni = progetti.flatMap((progetto) => progetto.data.disegni ?? []).slice(0, MASSIMO_DISEGNI);
 
 /** Identificatore CSS/HTML sicuro per una categoria. */
 const idCategoria = (categoria: string) =>
@@ -75,6 +84,11 @@ const idCategoria = (categoria: string) =>
               </div>
             </fieldset>
 
+            {/* Titolo di livello 2 fra l'h1 della pagina e gli h3 delle
+                schede: senza, la gerarchia salta un gradino e chi naviga per
+                intestazioni non trova l'elenco. Non serve vederlo. */}
+            <h2 class="solo-screen-reader">{t('progetti.elencoTitolo')}</h2>
+
             <ul class="griglia griglia--2 griglia--3 elenco-progetti">
               {progetti.map((progetto, indice) => (
                 <li class="rivela" data-categoria={progetto.data.categoria}>
@@ -87,6 +101,8 @@ const idCategoria = (categoria: string) =>
       }
     </div>
   </section>
+
+  <PercorsoLavori disegni={disegni} indice="02" />
 </BaseLayout>
 
 <style>
@@ -139,10 +155,9 @@ const idCategoria = (categoria: string) =>
   }
 
   .filtro__radio:checked + .filtro__etichetta {
-    background-color: var(--colore-primario);
-    border-color: var(--colore-primario);
-    color: var(--colore-testo-inverso);
-    box-shadow: inset 0 -2px 0 0 var(--marchio-blu);
+    background-color: var(--marchio-blu);
+    border-color: var(--marchio-blu);
+    color: var(--colore-su-accento);
   }
 
   .filtro__radio:focus-visible + .filtro__etichetta {

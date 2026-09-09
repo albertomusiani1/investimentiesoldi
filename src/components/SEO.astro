@@ -4,6 +4,7 @@
  * Open Graph, Twitter Card e JSON-LD. Usato da ogni pagina del sito.
  */
 import { t, defaultLocale } from '../i18n';
+import { tema } from '../lib/tema';
 import { azienda } from '../lib/azienda';
 
 export interface Props {
@@ -34,6 +35,13 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const immagineAssoluta = new URL(immagine, Astro.site).href;
 const locale = defaultLocale;
+
+/**
+ * Il colore con cui il browser tinge la barra intorno alla pagina: quello
+ * del fondo del tema, altrimenti su telefono si vede una striscia di un
+ * colore che nel sito non c'è.
+ */
+const coloreTema = tema === '2' ? '#edf0f2' : '#0e1518';
 ---
 
 <meta charset="utf-8" />
@@ -43,7 +51,7 @@ const locale = defaultLocale;
 <link rel="canonical" href={canonical} />
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-<meta name="theme-color" content="#303435" />
+<meta name="theme-color" content={coloreTema} />
 <meta name="author" content={azienda.nomeLegale} />
 <meta name="generator" content={Astro.generator} />
 
@@ -57,9 +65,13 @@ const locale = defaultLocale;
   type="font/woff2"
   crossorigin
 />
+<!-- Space Grotesk compone i titoli, e il titolo è la prima cosa che si
+     legge. Sono preallineati solo i due caratteri che servono al primo
+     disegno della pagina: Inter 600, JetBrains Mono e i pesi intermedi
+     arrivano subito dopo, senza rubare banda al testo grande. -->
 <link
   rel="preload"
-  href="/fonts/inter-latin-600.woff2"
+  href="/fonts/space-grotesk-latin-var.woff2"
   as="font"
   type="font/woff2"
   crossorigin

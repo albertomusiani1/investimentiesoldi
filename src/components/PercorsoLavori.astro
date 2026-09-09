@@ -1,0 +1,427 @@
+---
+/**
+ * Il percorso di un lavoro: menu fisso a sinistra, colonna che scorre a
+ * destra.
+ *
+ * Come funziona, e perché così:
+ *
+ *  · Il menu è `position: sticky`. Non serve JavaScript per tenerlo fermo:
+ *    resta agganciato finché il blocco che lo contiene è sotto gli occhi, e
+ *    se ne va da solo quando il blocco finisce.
+ *
+ *  · La voce accesa e la barra di avanzamento sono **animazioni legate allo
+ *    scorrimento**. Ogni tappa dichiara una linea del tempo con
+ *    `view-timeline-name`, `timeline-scope` la rende visibile al menu, che è
+ *    in un altro ramo del documento, e la voce corrispondente si accende per
+ *    la durata in cui la sua tappa è sotto gli occhi. Zero JavaScript, zero
+ *    IntersectionObserver, zero ascoltatori di scorrimento.
+ *
+ *  · Dove le linee del tempo non ci sono (o dove il sistema chiede meno
+ *    animazioni) resta la voce cliccata a essere accesa, tramite `:target`:
+ *    il menu funziona come un indice normale.
+ *
+ * Il numero di tappe è limitato a quattro più i disegni: le regole CSS che
+ * assegnano una linea del tempo a ogni tappa sono scritte a mano, una per
+ * indice, perché una CSP senza 'unsafe-inline' vieta gli attributi `style`.
+ */
+import IntestazioneSezione from './IntestazioneSezione.astro';
+import VisualizzatoreCorpo from './VisualizzatoreCorpo.astro';
+import { t } from '../i18n';
+import { tappe } from '../lib/percorso';
+import type { Disegno } from '../content.config';
+
+export interface Props {
+  /** I disegni dell'ultima tappa. Se non ce ne sono, la tappa sparisce. */
+  disegni: Disegno[];
+  /** Indice della sezione nella pagina, es. "02". */
+  indice?: string;
+}
+
+const { disegni, indice = '02' } = Astro.props;
+
+/** Quante regole per indice sono scritte in CSS: quattro tappe più i disegni. */
+const MASSIMO = 4;
+const mostrate = tappe.slice(0, MASSIMO);
+
+const conDisegni = disegni.length > 0;
+const numero = (i: number) => String(i + 1).padStart(2, '0');
+---
+
+<section class="sezione" aria-labelledby="titolo-percorso">
+  <div class="contenitore">
+    <IntestazioneSezione
+      indice={indice}
+      etichetta={t('progetti.percorsoEtichetta')}
+      titolo={t('progetti.percorsoTitolo')}
+      testo={t('progetti.percorsoSottotitolo')}
+      id="titolo-percorso"
+    />
+
+    <div class="percorso">
+      <nav class="percorso__indice" aria-label={t('progetti.percorsoNav')}>
+        <ol class="percorso__voci">
+          {
+            mostrate.map((tappa, i) => (
+              <li class="percorso__voce">
+                <a href={`#tappa-${tappa.id}`}>
+                  <span class="percorso__numero">{numero(i)}</span>
+                  <span class="percorso__nome">{tappa.voce}</span>
+                </a>
+              </li>
+            ))
+          }
+          {
+            conDisegni && (
+              <li class="percorso__voce percorso__voce--forte">
+                <a href="#tappa-disegni">
+                  <span class="percorso__numero">{numero(mostrate.length)}</span>
+                  <span class="percorso__nome">{t('progetti.percorsoDisegniVoce')}</span>
+                </a>
+              </li>
+            )
+          }
+        </ol>
+        <span class="percorso__binario" aria-hidden="true">
+          <span class="percorso__avanzamento"></span>
+        </span>
+      </nav>
+
+      <div class="percorso__colonna">
+        {
+          mostrate.map((tappa) => (
+            <article class="percorso__tappa" id={`tappa-${tappa.id}`}>
+              <h3 class="percorso__titolo">{tappa.titolo}</h3>
+              <p class="percorso__testo">{tappa.testo}</p>
+              <ul class="percorso__punti">
+                {tappa.punti.map((punto) => (
+                  <li>{punto}</li>
+                ))}
+              </ul>
+
+              {tappa.video && (
+                <figure class="segnaposto-video">
+                  <div class="segnaposto-video__riquadro">
+                    <span class="segnaposto-video__esagono" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="22" height="22" focusable="false">
+                        <path d="M9 6.5v11l9-5.5z" fill="currentColor" />
+                      </svg>
+                    </span>
+                    <p class="segnaposto-video__titolo">{t('progetti.videoTitolo')}</p>
+                    <p class="segnaposto-video__stato">{t('progetti.videoDurata')}</p>
+                  </div>
+                  <figcaption>{t('progetti.videoAttesa')}</figcaption>
+                </figure>
+              )}
+            </article>
+          ))
+        }
+
+        {
+          conDisegni && (
+            <article class="percorso__tappa percorso__tappa--disegni" id="tappa-disegni">
+              <h3 class="percorso__titolo">{t('progetti.percorsoDisegniTitolo')}</h3>
+              <p class="percorso__testo">{t('progetti.percorsoDisegniTesto')}</p>
+              <VisualizzatoreCorpo disegni={disegni} />
+            </article>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* `timeline-scope` è la parte importante: rende le linee del tempo
+     dichiarate dalle tappe visibili anche al menu, che sta in un altro ramo
+     del documento. Senza, ogni animazione vedrebbe solo i propri antenati. */
+  .percorso {
+    display: grid;
+    gap: var(--space-6);
+    timeline-scope: --tappa-1, --tappa-2, --tappa-3, --tappa-4, --tappa-5, --colonna;
+  }
+
+  .percorso__indice {
+    position: relative;
+    padding-left: var(--space-5);
+  }
+
+  .percorso__voci {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: none;
+  }
+
+  .percorso__voce {
+    color: var(--colore-testo-tenue);
+    transition: color var(--transizione), transform var(--transizione);
+  }
+
+  .percorso__voce a {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .percorso__numero {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: var(--testo-xs);
+    letter-spacing: 0.08em;
+    opacity: 0.75;
+  }
+
+  .percorso__nome {
+    font-family: var(--font-display);
+    font-size: var(--testo-md);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .percorso__voce:hover {
+    color: var(--colore-titolo);
+  }
+
+  /* L'ultima voce è il visualizzatore: è la cosa che questa pagina ha di
+     diverso da tutte le altre, e nel menu si deve vedere. */
+  .percorso__voce--forte {
+    margin-top: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--colore-bordo);
+    color: var(--colore-accento);
+  }
+
+  .percorso__voce--forte .percorso__nome {
+    font-size: var(--testo-lg);
+  }
+
+  .percorso__voce--forte a::after {
+    content: '';
+    width: 0.5rem;
+    height: calc(0.5rem / var(--esagono-proporzione));
+    background-color: currentcolor;
+    clip-path: var(--esagono);
+  }
+
+  /* Il binario e la sua parte piena: la riga verticale che segna a che
+     punto del percorso si è arrivati. */
+  .percorso__binario {
+    position: absolute;
+    top: 0.35rem;
+    bottom: 0.35rem;
+    left: 0;
+    width: 2px;
+    background-color: rgb(255 255 255 / 10%);
+    overflow: hidden;
+  }
+
+  .percorso__avanzamento {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, var(--marchio-blu), var(--colore-accento));
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  .percorso__colonna {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .percorso__tappa {
+    scroll-margin-top: calc(var(--altezza-intestazione) + var(--space-6));
+  }
+
+  .percorso__titolo {
+    font-size: var(--testo-xl);
+    letter-spacing: -0.02em;
+  }
+
+  .percorso__testo {
+    max-width: var(--misura);
+    margin-top: var(--space-4);
+    color: var(--colore-testo-tenue);
+  }
+
+  .percorso__punti {
+    display: grid;
+    gap: var(--space-3);
+    max-width: var(--misura);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .percorso__punti li {
+    display: grid;
+    grid-template-columns: 0.5rem minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: baseline;
+    font-size: var(--testo-sm);
+  }
+
+  .percorso__punti li::before {
+    content: '';
+    width: 0.5rem;
+    height: calc(0.5rem / var(--esagono-proporzione));
+    background-color: var(--marchio-blu);
+    clip-path: var(--esagono);
+    transform: translateY(0.15em);
+  }
+
+  /* Segnaposto del video: un riquadro nelle proporzioni giuste, così quando
+     arriverà la ripresa vera niente si sposterà. */
+  .segnaposto-video {
+    margin: var(--space-6) 0 0;
+  }
+
+  .segnaposto-video__riquadro {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-3);
+    aspect-ratio: 16 / 9;
+    border: 1px dashed var(--colore-bordo-forte);
+    border-radius: var(--raggio-grande);
+    background-color: var(--colore-superficie);
+    background-image: var(--trama-esagoni-fitta), var(--lucido);
+    background-blend-mode: soft-light, normal;
+  }
+
+  .segnaposto-video__esagono {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    aspect-ratio: var(--esagono-proporzione);
+    clip-path: var(--esagono);
+    background-color: rgb(48 147 201 / 22%);
+    color: var(--colore-accento);
+  }
+
+  .segnaposto-video__titolo {
+    margin: 0;
+    color: var(--colore-titolo);
+    font-family: var(--font-display);
+    font-size: var(--testo-md);
+  }
+
+  .segnaposto-video__stato {
+    margin: 0;
+    color: var(--colore-accento);
+    font-family: var(--font-mono);
+    font-size: var(--testo-xs);
+    letter-spacing: var(--tracciatura-etichetta);
+    text-transform: uppercase;
+  }
+
+  .segnaposto-video figcaption {
+    margin-top: var(--space-3);
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-xs);
+  }
+
+  @media (min-width: 64em) {
+    .percorso {
+      grid-template-columns: 16rem minmax(0, 1fr);
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    /* Il menu resta agganciato: nessun JavaScript, solo `sticky`. */
+    .percorso__indice {
+      position: sticky;
+      top: calc(var(--altezza-intestazione) + var(--space-6));
+    }
+  }
+
+  /* Ricaduta senza linee del tempo: si accende la voce che è stata
+     cliccata. Il menu funziona come un indice, che è il minimo che deve
+     fare. `:has()` guarda quale tappa è il bersaglio dell'ancora e accende
+     la voce che sta nella stessa posizione. */
+  .percorso:has(.percorso__colonna > :nth-child(1):target) .percorso__voci > :nth-child(1),
+  .percorso:has(.percorso__colonna > :nth-child(2):target) .percorso__voci > :nth-child(2),
+  .percorso:has(.percorso__colonna > :nth-child(3):target) .percorso__voci > :nth-child(3),
+  .percorso:has(.percorso__colonna > :nth-child(4):target) .percorso__voci > :nth-child(4),
+  .percorso:has(.percorso__colonna > :nth-child(5):target) .percorso__voci > :nth-child(5) {
+    color: var(--colore-titolo);
+  }
+
+  /* Voce accesa e barra di avanzamento, legate allo scorrimento.
+     Attenzione: `animation-timeline` non va mai accanto alla scorciatoia
+     `animation` — il minificatore le fonde in una regola che nessun browser
+     accetta, e l'animazione sparisce in silenzio. Qui sono tutte longhand. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) and (timeline-scope: --x) {
+      .percorso__colonna {
+        view-timeline-name: --colonna;
+      }
+
+      .percorso__avanzamento {
+        animation-name: avanza;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --colonna;
+        animation-range: contain 0% contain 100%;
+      }
+
+      .percorso__tappa:nth-child(1) { view-timeline-name: --tappa-1; }
+      .percorso__tappa:nth-child(2) { view-timeline-name: --tappa-2; }
+      .percorso__tappa:nth-child(3) { view-timeline-name: --tappa-3; }
+      .percorso__tappa:nth-child(4) { view-timeline-name: --tappa-4; }
+      .percorso__tappa:nth-child(5) { view-timeline-name: --tappa-5; }
+
+      /* `animation-fill-mode: none` è la chiave: fuori dall'intervallo
+         l'animazione non si applica affatto, quindi la voce torna spenta da
+         sola. Dentro, i fotogrammi sono identici fra loro: è un interruttore,
+         non una transizione. */
+      .percorso__voce {
+        animation-timing-function: linear;
+        animation-fill-mode: none;
+        animation-name: voce-accesa;
+      }
+
+      .percorso__voce:nth-child(1) { animation-timeline: --tappa-1; animation-range: contain 0% contain 100%; }
+      .percorso__voce:nth-child(2) { animation-timeline: --tappa-2; animation-range: contain 0% contain 100%; }
+      .percorso__voce:nth-child(3) { animation-timeline: --tappa-3; animation-range: contain 0% contain 100%; }
+      .percorso__voce:nth-child(4) { animation-timeline: --tappa-4; animation-range: contain 0% contain 100%; }
+      .percorso__voce:nth-child(5) { animation-timeline: --tappa-5; animation-range: contain 0% contain 100%; }
+
+      /* La voce dei disegni resta blu anche da accesa: è la sola voce che
+         non è una tappa del racconto ma una cosa con cui si gioca. */
+      .percorso__voce--forte {
+        animation-name: voce-accesa-forte;
+      }
+    }
+  }
+
+  @keyframes avanza {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes voce-accesa {
+    from,
+    to {
+      color: var(--colore-titolo);
+      transform: translateX(0.375rem);
+    }
+  }
+
+  @keyframes voce-accesa-forte {
+    from,
+    to {
+      color: var(--colore-accento-scuro);
+      transform: translateX(0.375rem);
+    }
+  }
+</style>

@@ -9,8 +9,10 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "dev:tema2": "PUBLIC_TEMA=2 astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "build:tema2": "PUBLIC_TEMA=2 astro build",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",

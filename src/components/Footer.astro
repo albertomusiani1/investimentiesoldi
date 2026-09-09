@@ -69,8 +69,10 @@ const legali = [
 
 <style>
   .pie {
+    /* Nessuna fascia più chiara in fondo: il fondo del piede è quello della
+       pagina, e a segnare lo stacco basta un filetto di luce. */
     padding-block: var(--space-7);
-    background-color: var(--colore-primario-scuro);
+    border-top: 1px solid rgb(255 255 255 / 7%);
     color: var(--colore-testo-inverso-tenue);
     font-size: var(--testo-sm);
   }

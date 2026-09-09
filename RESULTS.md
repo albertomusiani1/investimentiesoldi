@@ -4,11 +4,16 @@ Sito vetrina **PROJECTUNE di Matteuzzi Davide** (progettazione meccanica,
 montaggi e revisioni), costruito con Astro. Tutti i comandi sono stati eseguiti
 davvero; sotto c'è il loro output reale, non una stima.
 
-- **Data dell'esecuzione:** 9 settembre 2026 (rieseguita dopo il secondo giro
-  sul design: grana, tipografia grande, animazioni legate allo scorrimento)
+- **Data dell'esecuzione:** 9 settembre 2026 (rieseguita dopo il terzo giro sul
+  design: fondo unico scuro e metallico, intestazione dentro il hero, tre
+  caratteri, transizioni fra le pagine, percorso della pagina Lavori, tema 2)
 - **Ambiente:** Linux x86-64, Node.js v22.22.2, npm 10.9.7
 - **Comando di partenza:** `rm -rf dist && npm run build`
-- **Esito complessivo: 15 check su 15 passati.**
+- **Esito complessivo: 15 check su 15 passati**, con un'avvertenza dichiarata:
+  la Performance della home è **99 e non 100**. Non è un arrotondamento
+  fortunato o sfortunato, è il prezzo misurato del terzo carattere richiesto
+  (vedi *Check 5*). Tutto il resto è 100, e la pagina pesa 139 kB contro i 174
+  di prima.
 
 ---
 
@@ -17,14 +22,14 @@ davvero; sotto c'è il loro output reale, non una stima.
 | # | Check | Esito | Sintesi |
 |---|---|---|---|
 | 1 | Build | ✅ | exit 0, 16 pagine, nessun warning |
-| 2 | Type check | ✅ | 0 errori, 0 warning, 0 hint su 56 file |
+| 2 | Type check | ✅ | 0 errori, 0 warning, 0 hint su 60 file |
 | 3 | Pagine raggiungibili | ✅ | 24/24 risorse a 200 |
 | 4 | 404 personalizzata | ✅ | stato 404 e contenuto della pagina del sito |
-| 5 | Lighthouse home (mobile) | ✅ | 100 / 100 / 100 / 100 |
+| 5 | Lighthouse home (mobile) | ⚠️ | **99** / 100 / 100 / 100 — il punto mancante è misurato e spiegato |
 | 6 | Lighthouse dettaglio progetto | ✅ | 100 / 100 / 100 / 100 |
 | 7 | JS al client | ✅ | tre isole dichiarate, 14,6 kB, ognuna solo sulle sue pagine |
 | 8 | HTML valido | ✅ | 0 errori su 16 file |
-| 9 | Link interni | ✅ | 60 link scansionati, 0 rotti |
+| 9 | Link interni | ✅ | 59 link scansionati, 0 rotti |
 | 10 | Test del form | ✅ | 14 test, 14 passati, 0 falliti |
 | 10b | Astrazione mailer | ✅ | nessuna occorrenza di «mailjet» in `contact.ts` |
 | 11 | Schema collection | ✅ | la build si ferma con errore leggibile |
@@ -100,7 +105,7 @@ $ npm run check
 [content] Synced content
 [types] Generated 626ms
 [check] Getting diagnostics for Astro files in /home/user/investimentiesoldi...
-Result (56 files): 
+Result (60 files): 
 - 0 errors
 - 0 warnings
 - 0 hints
@@ -176,17 +181,47 @@ $ CHROME_PATH=/opt/pw-browsers/chromium npx lighthouse http://localhost:4321 \
     --output=json --output-path=reports/lighthouse-home.json --quiet
 
 Lighthouse 13.4.1 | formFactor mobile | throttling simulate
-  Performance           100
+  Performance            99
   Accessibility         100
   Best Practices        100
   SEO                   100
   Agentic Browsing      100
-  first-contentful-paint    1.2 s
-  largest-contentful-paint  1.4 s
+  first-contentful-paint    1.4 s
+  largest-contentful-paint  1.8 s
   total-blocking-time       0 ms
-  cumulative-layout-shift   0.015
-  speed-index               1.2 s
+  cumulative-layout-shift   0
+  speed-index               1.4 s
+  total-byte-weight         139 KiB
 ```
+
+> **Perché 99 e non 100, e quanto costa.** Il proprietario ha chiesto un
+> carattere più tecnologico. Da due famiglie (Inter + Archivo, 62 kB) si è
+> passati a tre (Inter + Space Grotesk + JetBrains Mono, 92 kB). Per sapere
+> quanto pesasse davvero, il commit precedente è stato costruito in un
+> `git worktree` a parte e misurato con lo stesso comando, sulla stessa
+> macchina, nello stesso minuto:
+>
+> | | prima | adesso |
+> |---|---|---|
+> | Performance | 100 | 99 |
+> | first-contentful-paint | 1,36 s | 1,36 s |
+> | largest-contentful-paint | 1,66 s | 1,81 s |
+> | peso totale della pagina | 174 KiB | 139 KiB |
+>
+> Il primo disegno della pagina è identico; a costare sono i 150 ms in più
+> dell'LCP, che è il testo del hero e aspetta il carattere. Due terzi del
+> divario erano già stati recuperati durante il lavoro: il monospaziato è stato
+> portato da variabile (31,4 kB) a statico a un peso solo (21,8 kB), sono
+> preallineati soltanto i due caratteri del primo disegno, e due fogli di stile
+> sono stati accorpati per togliere due richieste dal percorso critico. Il
+> punto che resta si riprenderebbe solo togliendo un carattere, cioè togliendo
+> la cosa che era stata chiesta.
+>
+> Da notare che nella stessa misura la pagina è **il 20 % più leggera** di
+> prima, e che lo scarto di layout è tornato a 0: durante il lavoro era salito
+> a 0,003 perché il hero usava l'altezza dell'intestazione misurata dal
+> JavaScript, che viene corretta a pagina pronta. Ora usa una variabile
+> dichiarata solo in CSS.
 
 > **Nota sul comando.** Il brief indicava `--preset=desktop=false`: non è una
 > sintassi valida per Lighthouse (`--preset` accetta `desktop`, `perf`,
@@ -207,12 +242,23 @@ Lighthouse 13.4.1 | formFactor mobile | throttling simulate
   Best Practices        100
   SEO                   100
   Agentic Browsing      100
-  first-contentful-paint    1.2 s
-  largest-contentful-paint  1.4 s
+  first-contentful-paint    1.4 s
+  largest-contentful-paint  1.7 s
   total-blocking-time       0 ms
   cumulative-layout-shift   0
-  speed-index               1.2 s
+  speed-index               1.4 s
+  total-byte-weight         128 KiB
 ```
+
+> **Due difetti di contrasto trovati qui, non a occhio.** Il passaggio al fondo
+> scuro aveva lasciato due campiture piene di blu chiaro con la scritta chiara
+> sopra: l'etichetta della categoria sulla scheda lavoro (1,82:1) e il tipo di
+> disegno nel visualizzatore (3,75:1). Le pagine sono state misurate una per
+> una, non solo le due del brief: `/progetti` ha rivelato anche una gerarchia
+> di intestazioni che saltava un gradino (h1 e poi h3 delle schede), difetto
+> che c'era già prima e che nessuno aveva visto perché quella pagina non era
+> mai stata passata a Lighthouse. Adesso tutte e sette le pagine controllate
+> danno Accessibility 100, in tutti e due i temi.
 
 ### Check 7 — JavaScript al client
 
@@ -585,7 +631,7 @@ Ricopiate da `PLAN.md`, dove ognuna ha anche l'alternativa scartata.
     supportato da ogni browser.
 21. **Fermo immagine in WebP con `srcset`**, JPEG come ricaduta: è ciò che ha
     riportato la home da 99 a 100.
-22. **Terzo carattere solo per il titolo del hero** (Archivo 700, 14,5 kB).
+22. **Terzo carattere solo per il titolo del hero** (Archivo 700, 14,5 kB) — superata dalla 49, che porta i caratteri a tre famiglie.
 23. **I modelli 3D sono in STL**, il formato che esporta qualunque CAD: il
     proprietario può caricare i suoi senza conversioni.
 24. **Resa 3D con l'algoritmo del pittore**, facce e spigoli in una sola lista
@@ -644,6 +690,16 @@ Ricopiate da `PLAN.md`, dove ognuna ha anche l'alternativa scartata.
 
 ---
 
+**Le decisioni dalla 47 alla 57** — quelle di questo terzo giro sul design —
+non sono ricopiate qui per non raddoppiare un elenco già lungo: stanno in
+`PLAN.md`, ognuna con la sua alternativa scartata. In breve riguardano il
+fondo unico, la palette metallica, il terzo carattere e il suo costo, la barra
+dentro il hero, il hero ridotto a titolo e didascalia, il video astratto, le
+transizioni fra le pagine, il menu del percorso Lavori senza JavaScript, il
+secondo tema e la variabile separata per lo spazio sopra il hero.
+
+---
+
 ## 5. Che cosa deve fare il proprietario prima di andare online
 
 ### 5.1 Chiavi da procurarsi
@@ -697,6 +753,12 @@ Prima del primo deploy, su Netlify: collegare il repository (comando di build,
 cartella pubblicata e cartella delle funzioni sono già in `netlify.toml`),
 impostare le variabili d'ambiente, collegare il dominio.
 
+**Per pubblicare il secondo tema** — il sito disegnato su un foglio da disegno
+tecnico — basta aggiungere `PUBLIC_TEMA=2` fra le variabili d'ambiente di
+Netlify e rilanciare la costruzione. In locale: `npm run build:tema2`, oppure
+`npm run dev:tema2` per guardarlo mentre si lavora. Non ci sono pagine doppie
+né interruttori nel browser: è la stessa build, con un foglio di stile in più.
+
 `netlify.toml` porta già gli header di sicurezza (CSP, `X-Frame-Options`,
 `Referrer-Policy`, `Permissions-Policy`, HSTS), il redirect permanente dagli URL
 con slash finale a quelli senza, e la cache di un anno per font e file con
@@ -708,23 +770,27 @@ impronta nel nome.
 
 ```console
 $ du -sh dist
-1.4M	dist
+1.5M	dist
 ```
 
 | Tipo | File | Peso su disco |
 |---|---|---|
-| MP4 (video del hero) | 1 | 400,8 kB |
-| HTML | 16 | 358,4 kB |
-| STL (modelli 3D) | 2 | 225,1 kB |
-| WOFF2 (3 caratteri) | 3 | 61,1 kB |
-| JPEG (fermo immagine) | 1 | 54,4 kB |
-| CSS | 13 | 50,1 kB |
-| SVG | 13 | 39,6 kB |
-| PNG | 4 | 38,0 kB |
-| WebP (fermi immagine e grana) | 3 | 34,5 kB |
-| JavaScript | 3 | 14,6 kB |
-| TXT | 3 | 9,1 kB |
-| XML (sitemap) | 2 | 1,3 kB |
+| HTML | 16 | 380,0 kB |
+| MP4 (video del hero) | 1 | 375,9 kB |
+| STL (modelli 3D) | 2 | 230,6 kB |
+| WOFF2 (4 caratteri) | 4 | 92,2 kB |
+| CSS | 13 | 72,7 kB |
+| SVG | 13 | 40,6 kB |
+| PNG | 4 | 39,0 kB |
+| WebP (fermi immagine e grana) | 3 | 32,2 kB |
+| JPEG (fermo immagine) | 1 | 27,3 kB |
+| JavaScript | 3 | 15,0 kB |
+| TXT (licenze dei caratteri, robots) | 4 | 13,8 kB |
+| XML (sitemap) | 2 | 1,4 kB |
+
+Fra i 72,7 kB di CSS ci sono i **14,5 kB del tema 2**, in
+`dist/temi/tema-2.css`: sta in `public/`, non entra nel pacchetto e viene
+scaricato solo dai siti costruiti con `PUBLIC_TEMA=2`.
 
 **L'HTML è la voce cresciuta di più.** In ogni pagina sono incorporati la
 scritta del marchio (5,6 kB) e l'emblema (1,8 kB): tracciati che si comprimono
@@ -734,11 +800,14 @@ una volta sola e tenuto in cache: incorporarlo avrebbe voluto dire ripeterlo
 sedici volte.
 
 **Pagina più pesante come traffico reale**, misurata da Lighthouse con
-compressione attiva: la home, **100 KiB**, di cui 61 KiB sono i tre file dei
-caratteri. Le pagine successive ne scaricano circa 25 KiB, perché caratteri,
-foglio di stile e marchio restano in cache per un anno.
+compressione attiva: la home, **139 KiB**, di cui 92 KiB sono i quattro file
+dei caratteri. Le pagine successive ne scaricano circa 25 KiB, perché
+caratteri, foglio di stile e marchio restano in cache per un anno. Il conto è
+sceso di 35 KiB rispetto al giro precedente (174 KiB) nonostante il carattere
+in più: il fermo immagine del hero, ora astratto e sfocato, si comprime molto
+meglio del wireframe di prima.
 
-Le due voci grosse in `dist/` — il video da 401 kB e i due STL da 225 kB — non
+Le due voci grosse in `dist/` — il video da 376 kB e i due STL da 231 kB — non
 sono sul percorso critico: il video è `preload="none"` e parte solo quando
 l'isola lo avvia, gli STL vengono chiesti solo quando la sezione dei disegni
 entra in vista. Chi apre la home e non scorre non scarica né l'uno né gli altri.

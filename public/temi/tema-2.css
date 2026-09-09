@@ -1,0 +1,438 @@
+/* =========================================================================
+   TEMA 2 — «tavola»
+   Il sito disegnato su un foglio da disegno tecnico.
+
+   Stessa struttura, stessi componenti, stessi contenuti del tema di serie:
+   cambia solo il vestito. Tutte le regole stanno dentro `[data-tema='2']`,
+   quindi il file è inerte finché la variabile PUBLIC_TEMA non vale 2.
+
+   L'idea: carta millimetrata, inchiostro nero-blu, e intorno agli elementi
+   le quote di una tavola — linee rosse con le frecce e le misure. Le misure
+   sono finte, e devono restare tali: dichiararle vere significherebbe
+   ricalcolarle a ogni cambio di testo.
+
+   Che cosa si tocca, in ordine: le variabili, il foglio, le quote, e poi i
+   pochi componenti che sul fondo scuro davano per scontato il bianco.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1. Variabili: la stessa scala del tema 1, altri valori
+   ------------------------------------------------------------------------- */
+:root[data-tema='2'] {
+  /* La carta e l'inchiostro. Il rosso è quello delle quote nei CAD. */
+  --carta: #edf0f2;
+  --carta-chiara: #ffffff;
+  --inchiostro: #16232b;
+  --inchiostro-tenue: #4a5a63;
+  --quota: #b5372a;
+  --reticolo: rgb(22 35 43 / 7%);
+  --reticolo-forte: rgb(22 35 43 / 13%);
+
+  --colore-sfondo: var(--carta);
+  --colore-superficie: var(--carta-chiara);
+  --colore-superficie-alt: #e4e9ec;
+  --colore-testo: var(--inchiostro);
+  --colore-testo-tenue: var(--inchiostro-tenue);
+  --colore-titolo: var(--inchiostro);
+  /* Sul foglio non c'è niente di «inverso»: anche il hero è inchiostro
+     su carta. I due nomi restano perché li usano hero, visualizzatore e
+     piede, e cambiarli vorrebbe dire riscrivere il tema 1. */
+  --colore-testo-inverso: var(--inchiostro);
+  --colore-testo-inverso-tenue: var(--inchiostro-tenue);
+
+  --colore-accento: #1b6e9b;
+  --colore-accento-scuro: #12506f;
+  --colore-accento-chiaro: #1b6e9b;
+  /* Testo sopra una campitura di blu marchio (pastiglie esagonali,
+     etichette piene): sul chiaro dev'essere inchiostro, non carta — bianco
+     su quel blu darebbe 3,4:1. I bottoni pieni hanno una regola propria più
+     avanti e non usano questo valore. */
+  --colore-su-accento: #06131a;
+
+  --colore-bordo: rgb(22 35 43 / 22%);
+  --colore-bordo-forte: rgb(22 35 43 / 48%);
+  --colore-errore: #97241c;
+  --colore-successo: #1f5c3d;
+
+  /* Su una tavola non ci sono angoli stondati, riflessi né ombre. */
+  --raggio-sm: 0;
+  --raggio: 0;
+  --raggio-grande: 0;
+  --filo-luce: transparent;
+  --lucido: none;
+  --ombra: none;
+  --ombra-forte: none;
+
+  /* Il carattere delle tavole è monospaziato: qui lo diventano anche i
+     titoli. È il cambio che, da solo, fa più «disegno tecnico» di
+     qualunque decorazione. */
+  --font-display: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  color-scheme: light;
+}
+
+/* -------------------------------------------------------------------------
+   2. Il foglio: carta millimetrata e squadratura
+   ------------------------------------------------------------------------- */
+[data-tema='2'] body {
+  /* Due reticoli sovrapposti, 8 mm e 40 mm, come su un foglio da disegno.
+     `fixed` come nel tema 1: il fondo non cambia mai fra una sezione e
+     l'altra, scorre la pagina e non il foglio. */
+  background-color: var(--carta);
+  background-image:
+    linear-gradient(var(--reticolo-forte) 1px, transparent 1px),
+    linear-gradient(90deg, var(--reticolo-forte) 1px, transparent 1px),
+    linear-gradient(var(--reticolo) 1px, transparent 1px),
+    linear-gradient(90deg, var(--reticolo) 1px, transparent 1px);
+  background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
+  background-attachment: fixed;
+  background-repeat: repeat;
+}
+
+/* La squadratura del foglio: due filetti lungo il bordo della finestra,
+   come la cornice di una tavola. Non intercetta il puntatore. */
+[data-tema='2'] body::before {
+  content: '';
+  position: fixed;
+  inset: 10px;
+  z-index: 80;
+  border: 1px solid rgb(22 35 43 / 45%);
+  outline: 3px solid var(--carta);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgb(22 35 43 / 18%);
+  pointer-events: none;
+}
+
+/* La grana diventa la fibra della carta: moltiplica invece di schiarire. */
+[data-tema='2'] body::after {
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+}
+
+/* -------------------------------------------------------------------------
+   3. Le quote
+   Intorno a ogni sezione, le misure di una tavola: una quota verticale a
+   sinistra e una orizzontale in alto, con le frecce e il numero.
+   Le frecce sono SVG in linea nel CSS — nessun file da caricare — e il
+   numero ha un alone di colore carta che interrompe la linea, come si fa
+   davvero sulle tavole.
+   ------------------------------------------------------------------------- */
+:root[data-tema='2'] {
+  --freccia-su: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='9'%3E%3Cpath d='M3.5 0 7 9H0z' fill='%23b5372a'/%3E%3C/svg%3E");
+  --freccia-giu: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='9'%3E%3Cpath d='M3.5 9 0 0h7z' fill='%23b5372a'/%3E%3C/svg%3E");
+  --freccia-sx: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='7'%3E%3Cpath d='M0 3.5 9 0v7z' fill='%23b5372a'/%3E%3C/svg%3E");
+  --freccia-dx: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='7'%3E%3Cpath d='M9 3.5 0 7V0z' fill='%23b5372a'/%3E%3C/svg%3E");
+}
+
+[data-tema='2'] .sezione > .contenitore {
+  position: relative;
+}
+
+/* Quota verticale, sul filo sinistro della sezione. */
+[data-tema='2'] .sezione > .contenitore::before {
+  content: '1240';
+  position: absolute;
+  top: var(--space-4);
+  bottom: var(--space-4);
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 12px;
+  background-image: var(--freccia-su), var(--freccia-giu),
+    linear-gradient(var(--quota), var(--quota));
+  background-position: center top, center bottom, center;
+  background-size: 7px 9px, 7px 9px, 1px 100%;
+  background-repeat: no-repeat;
+  color: var(--quota);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  writing-mode: vertical-rl;
+  text-shadow: 0 0 4px var(--carta), 0 0 4px var(--carta), 0 0 3px var(--carta);
+  pointer-events: none;
+}
+
+/* Quota orizzontale, sul filo alto. */
+[data-tema='2'] .sezione > .contenitore::after {
+  content: '820';
+  position: absolute;
+  /* Sopra il contenuto, nello spazio della sezione: una quota che passa
+     sopra il titolo sarebbe una quota sbagliata. */
+  top: calc(var(--space-6) * -1);
+  right: var(--space-4);
+  left: var(--space-6);
+  display: grid;
+  place-items: center;
+  height: 12px;
+  background-image: var(--freccia-sx), var(--freccia-dx),
+    linear-gradient(90deg, var(--quota), var(--quota));
+  background-position: left center, right center, center;
+  background-size: 9px 7px, 9px 7px, 100% 1px;
+  background-repeat: no-repeat;
+  color: var(--quota);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 4px var(--carta), 0 0 4px var(--carta), 0 0 3px var(--carta);
+  pointer-events: none;
+}
+
+/* Misure diverse da una sezione all'altra: sono finte, ma tutte uguali si
+   vedrebbe subito. */
+[data-tema='2'] .sezione:nth-of-type(2) > .contenitore::before { content: '960'; }
+[data-tema='2'] .sezione:nth-of-type(2) > .contenitore::after { content: '1140'; }
+[data-tema='2'] .sezione:nth-of-type(3) > .contenitore::before { content: '1480'; }
+[data-tema='2'] .sezione:nth-of-type(3) > .contenitore::after { content: '760'; }
+[data-tema='2'] .sezione:nth-of-type(4) > .contenitore::before { content: '640'; }
+[data-tema='2'] .sezione:nth-of-type(4) > .contenitore::after { content: '1320'; }
+[data-tema='2'] .sezione:nth-of-type(5) > .contenitore::before { content: '1180'; }
+[data-tema='2'] .sezione:nth-of-type(5) > .contenitore::after { content: '890'; }
+
+/* Le sezioni non sono più separate da un filetto di luce ma da una linea
+   tratteggiata, come la piega di un foglio. */
+[data-tema='2'] .sezione + .sezione {
+  border-top: 1px dashed rgb(22 35 43 / 28%);
+}
+
+/* Le squadrature degli angoli, che nel tema 1 compaiono al passaggio del
+   puntatore, qui sono sempre visibili e rosse: sono i riferimenti della
+   tavola, non un effetto. */
+[data-tema='2'] .squadrato::before,
+[data-tema='2'] .squadrato::after {
+  border-color: var(--quota);
+  opacity: 1;
+}
+
+/* -------------------------------------------------------------------------
+   4. I componenti che davano per scontato il fondo scuro
+   ------------------------------------------------------------------------- */
+
+/* Intestazione: carta, con la riga di base di una tavola. */
+[data-tema='2'] .intestazione {
+  background-color: rgb(237 240 242 / 92%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgb(22 35 43 / 45%);
+  color: var(--inchiostro);
+  animation-name: none;
+}
+
+/* Hero: il filmato resta, ma sbiadito come una filigrana sotto il disegno.
+   Il titolo è inchiostro su carta, non bianco su nero. */
+[data-tema='2'] .eroe {
+  background-color: var(--carta);
+  color: var(--inchiostro);
+}
+
+[data-tema='2'] .eroe__poster,
+[data-tema='2'] .eroe__video {
+  opacity: 0.16;
+  filter: blur(16px) grayscale(70%) contrast(120%);
+}
+
+[data-tema='2'] .eroe__video--attivo {
+  opacity: 0.16;
+}
+
+[data-tema='2'] .eroe__favo {
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+
+[data-tema='2'] .eroe__velo {
+  background:
+    linear-gradient(90deg, rgb(237 240 242 / 88%) 0%, rgb(237 240 242 / 40%) 60%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, rgb(237 240 242 / 30%) 60%, var(--carta) 100%);
+}
+
+[data-tema='2'] .eroe__titolo {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+[data-tema='2'] .eroe__titolo::before {
+  background: var(--quota);
+}
+
+[data-tema='2'] .eroe__scorri {
+  background-color: rgb(22 35 43 / 20%);
+}
+
+/* Bottoni: il pieno è inchiostro, non blu — sul bianco il blu del marchio
+   non arriva al contrasto richiesto per il testo. */
+[data-tema='2'] .bottone {
+  border-width: 1px;
+  font-family: var(--font-mono);
+  font-size: var(--testo-xs);
+  letter-spacing: var(--tracciatura-etichetta);
+  text-transform: uppercase;
+}
+
+[data-tema='2'] .bottone--primario {
+  background-color: var(--inchiostro);
+  border-color: var(--inchiostro);
+  color: var(--carta-chiara);
+}
+
+[data-tema='2'] .bottone--primario:hover {
+  background-color: var(--colore-accento-scuro);
+  border-color: var(--colore-accento-scuro);
+  color: var(--carta-chiara);
+}
+
+[data-tema='2'] .bottone--secondario {
+  border-color: var(--inchiostro);
+  color: var(--inchiostro);
+}
+
+[data-tema='2'] .bottone--secondario:hover {
+  background-color: var(--inchiostro);
+  color: var(--carta-chiara);
+}
+
+[data-tema='2'] .bottone--chiaro {
+  background-color: var(--carta-chiara);
+  border-color: var(--inchiostro);
+  color: var(--inchiostro);
+}
+
+/* Schede e pannelli: carta bianca su carta, filetto d'inchiostro. */
+[data-tema='2'] .scheda,
+[data-tema='2'] .scheda-servizio,
+[data-tema='2'] .richiamo__riquadro,
+[data-tema='2'] .segnaposto-video__riquadro {
+  background-color: var(--carta-chiara);
+  background-image: none;
+  border: 1px solid rgb(22 35 43 / 35%);
+}
+
+[data-tema='2'] .scheda:hover,
+[data-tema='2'] .scheda-servizio:hover {
+  border-color: var(--inchiostro);
+  transform: none;
+}
+
+[data-tema='2'] .scheda__media::after {
+  background: none;
+}
+
+[data-tema='2'] .etichetta--chiara {
+  background-color: var(--carta-chiara);
+  border: 1px solid rgb(22 35 43 / 35%);
+  color: var(--inchiostro);
+}
+
+[data-tema='2'] .scheda__bollino {
+  background-color: var(--inchiostro);
+  color: var(--carta-chiara);
+}
+
+/* Le trame a favo, sul chiaro, vanno moltiplicate: schiarirebbero. */
+[data-tema='2'] .trama::before,
+[data-tema='2'] .richiamo__riquadro::before {
+  mix-blend-mode: multiply;
+  opacity: 0.35;
+}
+
+/* Il visualizzatore: sul foglio i comandi sono neri su bianco. */
+[data-tema='2'] .visualizzatore__etichetta,
+[data-tema='2'] .comando {
+  border-color: rgb(22 35 43 / 40%);
+  color: var(--inchiostro);
+}
+
+[data-tema='2'] .visualizzatore__etichetta:hover,
+[data-tema='2'] .comando:hover {
+  background-color: rgb(22 35 43 / 6%);
+  border-color: var(--inchiostro);
+}
+
+[data-tema='2'] .visualizzatore__radio:checked + .visualizzatore__etichetta,
+[data-tema='2'] .comando[aria-pressed='true'] {
+  background-color: var(--inchiostro);
+  border-color: var(--inchiostro);
+  color: var(--carta-chiara);
+}
+
+[data-tema='2'] .visualizzatore__radio:checked + .visualizzatore__etichetta .visualizzatore__tipo {
+  color: rgb(255 255 255 / 72%);
+}
+
+[data-tema='2'] .scena {
+  border-color: rgb(22 35 43 / 40%);
+}
+
+[data-tema='2'] .percorso__binario {
+  background-color: rgb(22 35 43 / 15%);
+}
+
+[data-tema='2'] .percorso__avanzamento {
+  background: var(--quota);
+}
+
+[data-tema='2'] .percorso__punti li::before,
+[data-tema='2'] .eroe__dati li::before {
+  background-color: var(--quota);
+}
+
+[data-tema='2'] .filtro__radio:checked + .filtro__etichetta {
+  background-color: var(--inchiostro);
+  border-color: var(--inchiostro);
+  color: var(--carta-chiara);
+}
+
+/* Il piede diventa il cartiglio: il riquadro in basso a destra di ogni
+   tavola, con dentro chi l'ha fatta, la data e i riferimenti. È già quello
+   che il piede contiene: basta disegnarlo come una tabella. */
+[data-tema='2'] .pie {
+  margin: var(--space-7) var(--space-5) var(--space-6);
+  padding: 0;
+  border: 1px solid var(--inchiostro);
+  background-color: var(--carta-chiara);
+  color: var(--inchiostro);
+}
+
+[data-tema='2'] .pie > .contenitore {
+  padding: 0;
+  max-width: none;
+}
+
+[data-tema='2'] .pie__griglia {
+  gap: 0;
+}
+
+[data-tema='2'] .pie__griglia > * {
+  padding: var(--space-5);
+  border-top: 1px solid rgb(22 35 43 / 30%);
+}
+
+[data-tema='2'] .pie__griglia > :first-child {
+  border-top: 0;
+}
+
+[data-tema='2'] .pie__coda {
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--inchiostro);
+  font-family: var(--font-mono);
+  font-size: var(--testo-xs);
+}
+
+[data-tema='2'] .pie__titolo {
+  font-family: var(--font-mono);
+  color: var(--quota);
+}
+
+[data-tema='2'] .pie a {
+  color: var(--inchiostro);
+}
+
+@media (min-width: 48em) {
+  [data-tema='2'] .pie__griglia > * {
+    border-top: 0;
+    border-left: 1px solid rgb(22 35 43 / 30%);
+  }
+
+  [data-tema='2'] .pie__griglia > :first-child {
+    border-left: 0;
+  }
+}

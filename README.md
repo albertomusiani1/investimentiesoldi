@@ -41,12 +41,14 @@ script non dichiarato.
 6. [Variabili d'ambiente](#variabili-dambiente)
 7. [Il marchio](#il-marchio)
 8. [Il sistema grafico](#il-sistema-grafico)
-9. [I clienti in fondo alla home](#i-clienti-in-fondo-alla-home)
-10. [Come funziona il modulo contatti](#come-funziona-il-modulo-contatti)
-11. [Come cambiare fornitore di posta](#come-cambiare-fornitore-di-posta)
-12. [Come aggiungere l'inglese](#come-aggiungere-linglese)
-13. [Deploy su Netlify](#deploy-su-netlify)
-14. [Verifiche](#verifiche)
+9. [I due temi](#i-due-temi)
+10. [Il percorso nella pagina Lavori](#il-percorso-nella-pagina-lavori)
+11. [I clienti in fondo alla home](#i-clienti-in-fondo-alla-home)
+12. [Come funziona il modulo contatti](#come-funziona-il-modulo-contatti)
+13. [Come cambiare fornitore di posta](#come-cambiare-fornitore-di-posta)
+14. [Come aggiungere l'inglese](#come-aggiungere-linglese)
+15. [Deploy su Netlify](#deploy-su-netlify)
+16. [Verifiche](#verifiche)
 
 ---
 
@@ -71,7 +73,9 @@ l'invio del modulo non funziona.
 | Comando | Che cosa fa |
 |---|---|
 | `npm run dev` | Server di sviluppo con ricarica automatica |
-| `npm run build` | Costruisce il sito in `dist/` |
+| `npm run build` | Costruisce il sito in `dist/` (tema 1) |
+| `npm run build:tema2` | Costruisce il sito con il **tema 2**, il foglio da disegno |
+| `npm run dev:tema2` | Server di sviluppo con il tema 2 |
 | `npm run preview` | Serve `dist/` come lo farebbe il server di produzione |
 | `npm run check` | Controllo TypeScript di pagine, componenti e funzioni |
 | `npm test` | Test del modulo contatti (non serve nessuna chiave) |
@@ -407,6 +411,14 @@ sezione **12**, e si applicano aggiungendo una classe.
 | `.parole-rotanti` | Una parola che cambia da sola dentro un titolo | Richiamo finale della home |
 | `.collegamento-tecnico` | Collegamento a pastiglia, monospaziato | «Guarda i disegni» nelle schede lavoro |
 
+**Il fondo è uno solo.** Le sezioni non si alternano più fra chiaro e scuro: il
+colore della pagina è dichiarato una volta su `body`, con
+`background-attachment: fixed` perché la sfumatura non scorra, e a separare una
+sezione dall'altra ci sono lo spazio e un filetto di luce da un pixel. Se serve
+togliere anche quello, `.sezione--senza-filetto`. Non esistono più
+`.sezione--alt` né `.sezione--scura`: se le si ritrova in una vecchia copia,
+vanno cancellate, non ripristinate.
+
 Sopra tutto c'è la **grana** (`body::after`): un velo di rumore fisso, al 5 %
 di opacità, che rompe le campiture piatte e le sfumature — quelle che sui fondi
 scuri mostrano le bande di colore. È l'unica cosa che sta sopra ogni altro
@@ -446,8 +458,19 @@ salti. Ed è disattivata quando il sistema chiede meno animazioni.
 >    può scorrere abbastanza per arrivarci, e il blocco resta per sempre a metà
 >    animazione.
 
-**Il monospaziato è quello di sistema** (`ui-monospace`, poi Menlo, Consolas…):
-dà il tono da manuale tecnico senza far scaricare un quarto file di caratteri.
+**I caratteri sono tre**, tutti in `public/fonts/` e tutti con la loro licenza
+accanto:
+
+| Famiglia | Peso | Dove | Perché |
+|---|---|---|---|
+| Inter | 400 e 600 | Testo corrente | Si legge bene a qualunque misura |
+| Space Grotesk | variabile 300–700 | Titoli, hero | Grottesca da schermo, geometrica e stretta: è il carattere che dà il tono tecnologico |
+| JetBrains Mono | 500 | Etichette tecniche, numeri, voci di menu | Monospaziato da codice: fa sembrare le etichette quelle di un cartiglio |
+
+Space Grotesk è un file variabile — un solo scaricamento copre tutti i pesi dei
+titoli. JetBrains Mono è statico a un peso solo: i pesi che non si usano non si
+scaricano. In tutto 92 kB, contro i 62 di prima; il conto esatto di che cosa è
+costato sta nella decisione 49 di `PLAN.md`.
 
 **Le due tessere a favo** (`public/img/trama-esagoni*.svg`) sono generate da
 `npm run trame`: sono continue, cioè ripetendole non si vedono giunture, e sono
@@ -464,6 +487,84 @@ scelta nascosta perché il disegno è uno solo.
 Il modello 3D si vede in un **viewport scuro** con il reticolo blu, come in un
 CAD; le tavole 2D restano su carta bianca. Sono due cose diverse e devono
 sembrarlo.
+
+---
+
+## I due temi
+
+Il sito ha due vestiti sullo stesso corpo. Struttura, contenuti, componenti e
+verifiche sono identici: cambia solo il foglio di stile.
+
+| Tema | Come si chiama | Com'è |
+|---|---|---|
+| **1** | officina | Fondo scuro metallico, blu PROJECTUNE, esagoni. È quello di serie. |
+| **2** | tavola | Il sito disegnato su un foglio da disegno tecnico: carta millimetrata, inchiostro, e intorno alle sezioni le quote rosse con le misure. |
+
+Si sceglie con una variabile d'ambiente letta **quando il sito viene
+costruito** — non c'è nessun interruttore nel browser e nessuna pagina doppia:
+
+```bash
+npm run build          # tema 1
+npm run build:tema2    # tema 2
+npm run dev:tema2      # per guardarlo mentre si lavora
+```
+
+Su Netlify si ottiene lo stesso risultato aggiungendo `PUBLIC_TEMA=2` fra le
+variabili d'ambiente del sito.
+
+**Come è fatto, e perché così.** `src/lib/tema.ts` legge la variabile e
+`BaseLayout.astro` mette `data-tema="1"` o `data-tema="2"` sull'elemento
+`<html>`. Con il tema 2 aggiunge anche un collegamento a `/temi/tema-2.css`, che
+sta in `public/` e quindi non entra nel pacchetto: il tema di serie non paga un
+byte per un vestito che non indossa. Tutte le regole del tema 2 cominciano con
+`[data-tema='2']` e sono perciò più specifiche di quelle di base: vincono
+qualunque sia l'ordine con cui i due fogli arrivano al browser.
+
+**Come se ne aggiunge un terzo.** Tre passi, nient'altro:
+
+1. scrivere `public/temi/tema-3.css`, con tutte le regole dentro
+   `[data-tema='3']` (conviene partire da una copia di `tema-2.css`);
+2. aggiungere `'3'` all'elenco `TEMI` in `src/lib/tema.ts`;
+3. copiare la riga `build:tema2` in `package.json` cambiando il numero.
+
+Nessun componente da duplicare, nessun `if` nelle pagine. Un tema che dimentica
+un componente non rompe niente: quel pezzo resta con l'aspetto del tema 1.
+
+**Che cosa cambia il tema 2, in concreto.** Le variabili di colore (carta,
+inchiostro, il rosso delle quote), i raggi degli angoli portati a zero, ombre e
+riflessi spenti, il carattere dei titoli passato al monospaziato, il reticolo
+millimetrato sul fondo, la squadratura lungo il bordo della finestra, le quote
+intorno a ogni sezione e il piè di pagina disegnato come il cartiglio di una
+tavola. **Le misure sono finte** e devono restarlo: farle vere vorrebbe dire
+ricalcolarle a ogni cambio di testo. Si cambiano in fondo al file, nelle regole
+`.sezione:nth-of-type(…)`.
+
+---
+
+## Il percorso nella pagina Lavori
+
+Sotto l'elenco dei lavori c'è un blocco a due colonne: a sinistra un menu che
+resta fermo mentre si scorre, con una barra che si riempie; a destra le tappe,
+una dopo l'altra. L'ultima voce, in evidenza, è il visualizzatore dei disegni,
+con dentro tutte le tavole e tutti i modelli dei lavori pubblicati.
+
+- **I testi delle tappe** stanno in `src/lib/percorso.ts`, con la stessa forma
+  dei quattro passi della home (`src/lib/processo.ts`). Ogni tappa ha una voce
+  di menu, un titolo, un testo e un elenco di dettagli.
+- **Le tappe sono quattro al massimo**, più i disegni. Non è un capriccio: le
+  regole CSS che assegnano una linea del tempo a ogni tappa sono scritte a mano,
+  una per posizione, perché una CSP senza `'unsafe-inline'` vieta gli attributi
+  `style`. Aggiungendo una quinta tappa, quella in più non si accende nel menu —
+  tutto il resto continua a funzionare. Per aggiungerla davvero servono due
+  righe in più in `PercorsoLavori.astro`, nel blocco `@supports`.
+- **Il video è un segnaposto.** Sta nella tappa che ha `video: true` in
+  `percorso.ts`. Quando arriva la ripresa vera, si sostituisce il riquadro con
+  un `<video>` nelle stesse proporzioni (16/9): niente si sposta, perché il
+  riquadro le ha già.
+- **Niente JavaScript.** Il menu è `position: sticky`; la voce accesa e la barra
+  sono animazioni legate allo scorrimento, condivise fra i due rami del
+  documento con `timeline-scope`. Dove il browser non le conosce, si accende la
+  voce cliccata (via `:target`) e il menu funziona come un indice.
 
 ---
 
@@ -734,7 +835,28 @@ questo sito lascia passare tutto e il divieto sta nell'intestazione.
 
 ## Il video del hero
 
-La home apre con un video a schermo intero, il titolo e due chiamate all'azione.
+La home apre con un video astratto a schermo intero, il titolo e la sua
+didascalia. **Nient'altro**: niente occhiello, niente bottoni, niente riga di
+dati. Non è una dimenticanza — le chiamate all'azione stanno nel richiamo in
+fondo alla pagina, dove chi ha letto le trova al momento giusto. L'unico altro
+segno è il filo verticale in basso a destra, che dice che si scorre e non ha
+parole (l'etichetta c'è, ma la sentono solo i lettori di schermo).
+
+**Il video è sfocato e ombreggiato dal CSS**, non dal filmato: `filter:
+blur(14px) saturate(135%) contrast(108%) brightness(62%)` su
+`.eroe__poster, .eroe__video`, più la scala all'8 % che copre i bordi (sfocando,
+un'immagine perde nitidezza anche fuori dai propri margini, e senza la scala
+comparirebbe una cornice sfumata lungo i lati). Sopra ci vanno i veli di
+`.eroe__velo`, che tirano il tutto verso il blu del marchio e chiudono in basso
+sul colore del fondo pagina, così il hero e la prima sezione si toccano senza
+una riga di stacco.
+
+**L'intestazione ci sta dentro.** È fissa e trasparente, e il fondo velato le
+compare sotto appena si comincia a scorrere: è un'animazione legata allo
+scorrimento, non un ascoltatore di eventi. Se si mette mano al hero, va tenuto
+conto che il contenuto è spinto giù di `--spazio-eroe` — una variabile diversa
+da `--altezza-intestazione`, che invece il JavaScript corregge a pagina pronta:
+usare quella sposterebbe il titolo e produrrebbe uno scarto di layout.
 
 **Come si comporta.** Senza JavaScript resta il fermo immagine, che è anche
 l'elemento che decide la velocità percepita della pagina. Con JavaScript il
@@ -752,21 +874,27 @@ Il filmato è muto, senza traccia audio: non c'è niente da silenziare.
    versioni leggere in `public/img/hero-poster-900.webp` e
    `hero-poster-1600.webp`;
 3. aggiorna la descrizione in `src/i18n/it.json`, voce
-   `home.heroVideoDescrizione`.
+   `home.heroVideoDescrizione`, e valuta la sfocatura: su riprese vere
+   dell'officina probabilmente va abbassata (`.eroe__poster, .eroe__video` in
+   `global.css`, sezione 10).
 
 **Il video attuale è generato, non filmato.** `npm run video` lo ricostruisce da
-zero: è un wireframe di flangia che ruota in proiezione ortografica sopra una
-griglia da tavolo da disegno, nei colori del marchio, calcolato in
-`scripts/genera-video-hero.mjs`.
+zero: un favo che respira dentro tre aloni di luce blu che si spostano
+lentamente, calcolato in `scripts/genera-video-hero.mjs`. È astratto di
+proposito: il CSS lo sfoca di 14 px per tenerlo dietro al titolo, e un soggetto
+riconoscibile — la flangia che c'era prima — sfocato diventa una macchia che
+distrae. Le forme sono grandi e i movimenti lenti perché dopo la sfocatura resti
+qualcosa da vedere; ogni movimento è funzione di sin/cos di 2π·t, così il ciclo
+si chiude senza stacco.
 Serve `ffmpeg` installato (`FFMPEG=/percorso/ffmpeg npm run video` se non è nel
 PATH). Non è una dipendenza del progetto: si esegue una volta e i file prodotti
 si committano.
 
-> **Attenzione al contrasto.** Il titolo è testo bianco sopra un filmato. I due
-> veli in `.eroe__velo` (uno orizzontale, uno verticale) esistono per garantire
-> la leggibilità: con riprese più chiare di quelle attuali va rialzata la loro
-> opacità, altrimenti il titolo diventa illeggibile e il punteggio di
-> accessibilità crolla.
+> **Attenzione al contrasto.** Il titolo è testo chiaro sopra un filmato. La
+> sfocatura, la luminosità al 62 % e i veli di `.eroe__velo` esistono per
+> garantire la leggibilità: con riprese più chiare di quelle attuali va abbassata
+> la luminosità o rialzata l'opacità dei veli, altrimenti il titolo diventa
+> illeggibile e il punteggio di accessibilità crolla.
 
 ---
 

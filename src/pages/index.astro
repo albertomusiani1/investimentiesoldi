@@ -43,6 +43,7 @@ const numeri = [
   titolo={t('home.metaTitolo')}
   descrizione={t('home.metaDescrizione')}
   jsonLd={[schemaAttivita(site)]}
+  eroe
 >
   <EroeVideo ancoraSuccessiva="che-cosa-facciamo" />
 
@@ -78,7 +79,7 @@ const numeri = [
     </div>
   </section>
 
-  <section class="sezione sezione--scura trama fascia-numeri" aria-labelledby="titolo-numeri">
+  <section class="sezione trama fascia-numeri" aria-labelledby="titolo-numeri">
     <div class="contenitore">
       <h2 id="titolo-numeri" class="solo-screen-reader">{t('home.numeriTitolo')}</h2>
       <ul class="numeri">
@@ -97,7 +98,7 @@ const numeri = [
     </div>
   </section>
 
-  <section class="sezione sezione--alt" aria-labelledby="titolo-processo">
+  <section class="sezione" aria-labelledby="titolo-processo">
     <div class="contenitore">
       <IntestazioneSezione
         indice="02"
@@ -176,30 +177,3 @@ const numeri = [
   <Clienti indice="05" />
 </BaseLayout>
 
-<style>
-  .elenco-piatto {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .richiamo__testo {
-    margin-top: var(--space-4);
-    margin-inline: auto;
-    max-width: var(--misura);
-    color: var(--colore-testo-tenue);
-    font-size: var(--testo-md);
-  }
-
-  .gruppo-bottoni--centrato {
-    justify-content: center;
-  }
-
-  .griglia > li {
-    display: flex;
-  }
-
-  .griglia > li > :global(*) {
-    width: 100%;
-  }
-</style>

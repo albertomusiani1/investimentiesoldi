@@ -5,6 +5,24 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
 
 ## Stato attuale
 
+- 2026-09-09 20:15 — **Terzo giro sul design, e un secondo tema.** Su indicazioni
+  del proprietario, con quattro immagini di riferimento. Nove richieste, tutte
+  fatte: intestazione unita al hero (fissa e trasparente, il fondo compare
+  scorrendo); hero con dietro un video **astratto** sfocato e ombreggiato nei
+  colori del marchio; carattere dei titoli più tecnologico (Space Grotesk) ed
+  etichette in JetBrains Mono; palette metallica intorno al blu PROJECTUNE; hero
+  ridotto al titolo — non più tutto maiuscolo — e alla didascalia; transizione fra
+  le pagine dichiarata in CSS; **un solo fondo scuro dall'inizio alla fine**, via
+  l'alternanza fra fasce chiare e scure; nella pagina Lavori un menu fisso a
+  sinistra con la barra di avanzamento e la colonna che scorre a destra, un
+  segnaposto per il video e, come ultima voce ben visibile, il visualizzatore dei
+  disegni; **tema 2**, il sito disegnato su un foglio da disegno tecnico con le
+  quote finte intorno alle sezioni, che si carica con `npm run build:tema2`.
+  Nessun JavaScript in più: le isole restano tre, 14,6 kB, e menu, avanzamento e
+  transizioni sono tutti CSS. La pagina è passata da 174 a 136 kB. Verifiche
+  rieseguite: Lighthouse 99/100/100/100 (il punto di Performance è il prezzo del
+  terzo carattere, misurato: LCP da 1,66 a 1,81 s), CLS 0, responsive 48/48,
+  html-validate 0 errori, 60 collegamenti, 14 test verdi.
 - 2026-08-30 09:40 — PLAN.md creato. Nessun codice ancora scritto.
 - 2026-08-30 10:05 — Fasi 1–7 completate: setup, design system, layout, tutte le 10 pagine,
   collection con 6 progetti, form contatti con funzione Netlify e 14 test verdi, SEO e
@@ -504,6 +522,113 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
     `data-taglio-voluto`: il check continua a trovare tutti gli altri casi, e
     l'eccezione è scritta dove la si può vedere.
 
+47. **Un fondo solo, dall'inizio alla fine del sito.** Le fasce non si alternano
+    più fra chiaro e scuro: `.sezione--alt` e `.sezione--scura` sono state tolte
+    dal CSS e dal markup, e con loro una trentina di regole che servivano solo a
+    rimettere a posto i colori del testo dentro le fasce scure. A separare le
+    sezioni restano lo spazio e un filetto di luce da un pixel. Il fondo della
+    pagina è `background-attachment: fixed`, quindi la sfumatura non scorre: da
+    qualunque punto della pagina si guardi, è la stessa lastra. Alternativa
+    scartata: tenere le classi e dare loro lo stesso colore — avrebbe lasciato in
+    piedi il meccanismo dell'alternanza, pronto a tornare al primo che riusa la
+    classe.
+
+48. **La palette è metallica, non semplicemente scura.** Sei grigi freddi tirati
+    verso il blu (`--metallo-0` … `--metallo-5`), un filo di luce sul bordo alto
+    dei pannelli (`--filo-luce`) e una sfumatura di riflesso (`--lucido`). Su
+    fondo scuro l'ombra nera non si vede: quello che stacca una lastra dal fondo
+    è la riga di luce sopra, non l'ombra sotto. Il bottone pieno è blu marchio
+    con la scritta quasi nera — 5,6:1 contro i 3,4:1 che darebbe la scritta
+    bianca — ed è anche più vicino a una targhetta di macchina.
+
+49. **Tre caratteri invece di due, e il conto è stato pagato in chiaro.** Space
+    Grotesk per i titoli e JetBrains Mono per etichette e numeri sono quello che
+    rende «tecnologico» il sito: sono due caratteri da schermo, disegnati per
+    l'interfaccia e per il codice. Costano 44 kB in più di Archivo da solo, e il
+    prezzo si vede: Lighthouse Performance passa da 100 a 99, con l'LCP simulato
+    da 1,66 a 1,81 s. Misurato costruendo il commit precedente in un worktree a
+    parte e mettendo i due risultati uno accanto all'altro. Il punto si
+    riprenderebbe togliendo un carattere, cioè togliendo la cosa che era stata
+    chiesta: la scelta è stata di tenerlo e dichiararlo. Il monospaziato è un
+    file statico a un peso solo (21,8 kB invece dei 31,4 kB della versione
+    variabile): i pesi che non si usano non si scaricano.
+
+50. **L'intestazione sta dentro il hero, e il suo fondo compare scorrendo.**
+    `position: fixed` e sfondo trasparente: il video comincia dal bordo della
+    finestra e la barra ci galleggia sopra. Il fondo velato arriva da
+    un'animazione legata allo scorrimento (`animation-timeline: scroll()`),
+    quindi senza un ascoltatore di eventi e senza JavaScript. Dove le linee del
+    tempo non ci sono, e dove il sistema chiede meno animazioni, la barra è
+    velata sempre: meglio un fondo di troppo che un menu illeggibile sopra una
+    parte chiara del filmato.
+
+51. **Nel hero restano il titolo e la didascalia.** Via l'occhiello, le due
+    chiamate all'azione e la riga di dati. Le chiamate all'azione non sono
+    sparite: stanno nel richiamo in fondo alla home, dove chi ha letto la pagina
+    le trova al momento giusto. È rimasto un solo segno in più, il filo verticale
+    in basso a destra che dice che si scorre: non ha parole, l'etichetta c'è ma
+    la sentono solo i lettori di schermo. Alternativa scartata: toglierlo del
+    tutto — su una schermata alta quanto la finestra, senza nessun indizio,
+    qualcuno non scorre.
+
+52. **Il video del hero è astratto.** Al posto della flangia che ruotava, un favo
+    che respira dentro tre aloni di luce blu che si spostano lentamente. La
+    ragione è pratica prima che estetica: il CSS sfoca il filmato di 14 px per
+    tenerlo dietro al titolo, e un soggetto riconoscibile, sfocato, diventa una
+    macchia che distrae. Le forme sono grandi e lente perché dopo la sfocatura
+    resti qualcosa da vedere. Ogni movimento è funzione di sin/cos di 2π·t: il
+    ciclo si chiude senza stacco.
+
+53. **Il passaggio da una pagina all'altra è dichiarato in CSS.**
+    `@view-transition { navigation: auto }` più due `@keyframes`: la pagina
+    vecchia arretra e sfuma, la nuova sale da sotto dietro un taglio netto, come
+    una tavola che esce dal plotter. L'intestazione porta
+    `view-transition-name: intestazione` e resta ferma mentre tutto il resto si
+    muove. Alternativa scartata: il router di Astro (`<ClientRouter />`), che fa
+    la stessa cosa ma con un'isola di JavaScript su tutte le pagine. Dove il
+    browser non conosce la regola, i collegamenti funzionano come sempre.
+
+54. **Il menu del percorso Lavori si accende senza JavaScript.** Ogni tappa
+    dichiara una linea del tempo con `view-timeline-name`; `timeline-scope`
+    sull'antenato comune la rende visibile al menu, che sta in un altro ramo del
+    documento; la voce corrispondente porta un'animazione con
+    `animation-fill-mode: none` e due fotogrammi identici fra loro. Fuori
+    dall'intervallo l'animazione non si applica affatto, dentro sì: è un
+    interruttore, non una dissolvenza. La barra di avanzamento è la stessa idea
+    applicata alla colonna intera. Ricaduta dove le linee del tempo non ci sono:
+    `:has()` guarda quale tappa è il bersaglio dell'ancora e accende la voce
+    nella stessa posizione — il menu torna a essere un indice, che è il minimo
+    che deve fare. Alternativa scartata: un IntersectionObserver, cioè una quarta
+    isola per un effetto di navigazione.
+
+55. **Il secondo tema è un foglio di stile in `public/`, scelto da una variabile
+    d'ambiente.** `PUBLIC_TEMA=2` mette `data-tema="2"` su `<html>` e aggiunge un
+    `<link>` a `/temi/tema-2.css`; tutte le sue regole sono più specifiche di
+    quelle di base, quindi vincono qualunque sia l'ordine di arrivo dei due
+    fogli. Sta fuori dal pacchetto e non dentro `src/`, così il tema di serie non
+    paga un byte per un vestito che non indossa. Un terzo tema è un file in più e
+    una riga in `src/lib/tema.ts`: nessun componente da duplicare, nessun ramo di
+    codice nelle pagine. Alternative scartate: un interruttore nel browser (uno
+    stato in più da gestire, e due temi caricati sempre), e due cartelle di
+    componenti (la copia si sarebbe scollata dall'originale al primo cambio di
+    contenuto).
+
+56. **Lo spazio sopra il hero è una variabile diversa dall'altezza misurata.**
+    L'isola del hero misura l'intestazione vera e la scrive in
+    `--altezza-intestazione`; se il hero usasse quel valore per il proprio
+    spazio, la correzione a pagina pronta sposterebbe il titolo — uno scarto di
+    layout piccolo ma misurato (CLS 0,003). Il hero usa `--spazio-eroe`,
+    dichiarata solo in CSS: il valore misurato serve ad altro (lo scorrimento
+    alle ancore) e non muove niente.
+
+57. **Il corpo del visualizzatore è un componente a sé.** Serve in due cornici
+    diverse: dentro la sua sezione, con la testata, e dentro il percorso della
+    pagina Lavori, dove il titolo lo mette il percorso. Invece di un parametro
+    che accende e spegne mezzo template, il corpo sta in
+    `VisualizzatoreCorpo.astro` e la sezione lo incorpora. Di conseguenza l'isola
+    dichiarata in `check-js.mjs` ha cambiato nome: il nome è quello del file che
+    porta lo `<script>`, e va tenuto vero.
+
 ---
 
 ## Versioni installate
@@ -525,9 +650,10 @@ immagini social e arriva già come dipendenza di Astro.
 |---|---|---|
 | playwright | 1.62.1 | Solo per il check 14 (overflow e screenshot a 360/768/1280 px). Non finisce in `dist/`. |
 
-Caratteri: Inter 400/600 (testo) e **Archivo 700** (titoli e hero), sottoinsieme latino,
-licenza SIL Open Font License 1.1. Source Serif 4 è stato rimosso con il cambio di
-identità: i file dei caratteri passano da quattro a tre.
+Caratteri: Inter 400/600 (testo), **Space Grotesk 300–700 variabile** (titoli e hero) e
+**JetBrains Mono 500** (etichette tecniche, numeri, menu), sottoinsieme latino, licenza
+SIL Open Font License 1.1. Archivo è stato rimosso con il terzo giro sul design. Quattro
+file, 92 kB in tutto.
 
 `sharp` serve agli script delle immagini e della grana, e arriva già come
 dipendenza di Astro. `ffmpeg` serve solo a `npm run video` e non è dipendenza del progetto: il video è
@@ -536,8 +662,9 @@ committato già codificato.
 Strumenti di verifica eseguiti con `npx`, non installati nel progetto:
 lighthouse 13.4.1, html-validate, linkinator.
 
-Font (copiati come file, non come dipendenze): Inter 400/600 e Archivo 700, sottoinsieme
-latino, licenza SIL Open Font License 1.1.
+Font (copiati come file, non come dipendenze): Inter 400/600, Space Grotesk variabile e
+JetBrains Mono 500, sottoinsieme latino, licenza SIL Open Font License 1.1. Le licenze
+stanno accanto ai file, in `public/fonts/`.
 
 ---
 

@@ -1,6 +1,12 @@
 ---
 /**
- * Hero della home: video a schermo intero, titolo e due chiamate all'azione.
+ * Hero della home: un video astratto a schermo intero, il titolo e una
+ * didascalia. Nient'altro.
+ *
+ * La scelta di togliere occhiello, bottoni e riga di dati è deliberata: su
+ * una schermata di apertura ogni elemento in più toglie forza al titolo. Le
+ * due chiamate all'azione sono rimaste in fondo alla pagina, dove hanno
+ * senso; qui c'è solo quello che il visitatore deve leggere per primo.
  *
  * Come si comporta:
  *  - senza JavaScript resta il fermo immagine (il poster), che è anche
@@ -15,11 +21,11 @@
  * `aria-hidden` e il poster ha `alt` vuoto — chi usa un lettore di schermo
  * sente il titolo, non la descrizione di un'animazione.
  *
- * Sopra il filmato ci sono due strati grafici: la trama a favo del marchio e
- * i due veli che garantiscono il contrasto del testo bianco.
+ * Sfocatura e velo non sono un ripiego: il filmato deve **stare dietro** al
+ * titolo, non contendergli l'attenzione. Sfocato, il movimento si legge
+ * ancora ma nessuna linea entra in concorrenza con il testo.
  */
 import { t } from '../i18n';
-import { azienda } from '../lib/azienda';
 
 export interface Props {
   /** Ancora della prima sezione sotto il hero, per il collegamento "Scorri". */
@@ -27,18 +33,15 @@ export interface Props {
 }
 
 const { ancoraSuccessiva } = Astro.props;
-
-/** La riga di dati sotto il titolo: fatti, non slogan. */
-const dati = [
-  `${azienda.indirizzo.citta} (${azienda.indirizzo.provincia})`,
-  `${t('home.heroDal')} ${azienda.fondazione}`,
-  `${azienda.superficieOfficina} m²`,
-  t('home.heroPreventivo'),
-];
 ---
 
 <section class="eroe" data-eroe>
-  <div class="eroe__sfondo">
+  <!-- `data-taglio-voluto` sta qui e non sulla sezione: il filmato è
+       ingrandito dell'8 % perché la sfocatura non lasci una cornice sfumata
+       lungo i bordi, e quel margine in più va tagliato di proposito. Marcando
+       la sezione intera, il controllo del responsive smetterebbe di guardare
+       anche il titolo e la didascalia, che invece devono starci. -->
+  <div class="eroe__sfondo" aria-hidden="true" data-taglio-voluto>
     <picture class="eroe__poster">
       <source
         type="image/webp"
@@ -66,40 +69,21 @@ const dati = [
     >
       <source src="/video/hero.mp4" type="video/mp4" />
     </video>
-    <div class="eroe__favo" aria-hidden="true"></div>
-    <div class="eroe__velo" aria-hidden="true"></div>
+    <div class="eroe__favo"></div>
+    <div class="eroe__velo"></div>
   </div>
 
   <div class="contenitore eroe__contenuto">
-    <div class="eroe__blocco">
-      <p class="etichetta-tecnica eroe__occhiello">{t('home.heroOcchiello')}</p>
-      <h1 class="eroe__titolo">
-        {t('home.heroTitolo')}
-        <span class="eroe__titolo-accento">{t('home.heroTitoloAccento')}</span>
-      </h1>
-      <p class="eroe__sommario">{t('home.heroTesto')}</p>
-      <div class="eroe__azioni">
-        <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
-        <a class="bottone bottone--chiaro" href="/servizi">{t('azioni.scopriServizi')}</a>
-      </div>
-    </div>
-
-    <ul class="eroe__dati">
-      {dati.map((voce) => <li>{voce}</li>)}
-    </ul>
+    <h1 class="eroe__titolo">
+      {t('home.heroTitolo')}
+      <span class="eroe__titolo-accento">{t('home.heroTitoloAccento')}</span>
+    </h1>
+    <p class="eroe__didascalia">{t('home.heroTesto')}</p>
   </div>
 
   <a class="eroe__scorri" href={`#${ancoraSuccessiva}`}>
-    <span>{t('home.heroScorri')}</span>
-    <svg width="16" height="24" viewBox="0 0 16 24" aria-hidden="true" focusable="false">
-      <path
-        d="M8 2v18M2 14l6 6 6-6"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        stroke-linejoin="round"></path>
-    </svg>
+    <span class="solo-screen-reader">{t('home.heroScorri')}</span>
+    <span class="eroe__scorri-filo" aria-hidden="true"></span>
   </a>
 </section>
 

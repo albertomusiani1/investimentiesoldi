@@ -120,7 +120,7 @@ const altri = (await getCollection('progetti'))
 
   {disegni && disegni.length > 0 && <VisualizzatoreDisegni disegni={disegni} indice="02" />}
 
-  <section class="sezione sezione--alt" aria-labelledby="titolo-altri-progetti">
+  <section class="sezione" aria-labelledby="titolo-altri-progetti">
     <div class="contenitore">
       <IntestazioneSezione
         indice={disegni && disegni.length > 0 ? '03' : '02'}
@@ -191,7 +191,7 @@ const altri = (await getCollection('progetti'))
   .progetto__dati dd {
     margin: var(--space-1) 0 0;
     font-weight: 600;
-    color: var(--colore-primario);
+    color: var(--colore-titolo);
   }
 
   .elenco-altri {

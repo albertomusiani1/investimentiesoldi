@@ -47,11 +47,8 @@
   "home": {
     "metaTitolo": "PROJECTUNE | Progettazione meccanica e montaggi",
     "metaDescrizione": "Officina artigiana a Castel Maggiore: progettazione meccanica di macchine automatiche, montaggi di serie, revisione di pompe idrauliche e per vuoto.",
-    "heroOcchiello": "Officina meccanica artigiana",
     "heroTitolo": "Dal disegno alla",
     "heroTitoloAccento": "macchina che gira",
-    "heroDal": "dal",
-    "heroPreventivo": "Preventivo gratuito",
     "heroTesto": "Progettazione meccanica, montaggi e revisioni per chi costruisce macchine automatiche. Due fratelli, un'officina di cinquecento metri quadri, un modo di lavorare che si vede nei dettagli.",
     "serviziEtichetta": "Servizi",
     "serviziTitolo": "Che cosa facciamo",
@@ -67,10 +64,14 @@
     "disegniSottotitolo": "Sulle schede dei lavori pubblichiamo le tavole e i modelli 3D: si ingrandiscono, si ruotano col mouse o inclinando il telefono. Questo è uno di quelli.",
     "approfondisci": "Servizio completo",
     "ctaTitolo": "Parliamo del vostro",
-    "ctaParole": ["disegno", "montaggio", "collaudo"],
+    "ctaParole": [
+      "disegno",
+      "montaggio",
+      "collaudo"
+    ],
     "ctaTesto": "Un disegno da fare, un gruppo da montare, una pompa che non tiene: chiamateci o scriveteci. Il preventivo è gratuito e la prima risposta arriva presto.",
     "heroScorri": "Scorri",
-    "heroVideoDescrizione": "Animazione del modello a filo di ferro di una flangia che ruota su un fondo a griglia da tavolo da disegno."
+    "heroVideoDescrizione": "Animazione astratta: un reticolo a nido d'ape che si accende a onde dentro tre aloni di luce azzurra in movimento."
   },
   "clienti": {
     "etichetta": "Clienti",
@@ -96,7 +97,18 @@
     "con3d": "Modello 3D",
     "vaiAiDisegni": "Guarda i disegni",
     "conTavole": "Tavole",
-    "altriProgetti": "Altri lavori"
+    "altriProgetti": "Altri lavori",
+    "percorsoEtichetta": "Come lavoriamo",
+    "percorsoTitolo": "Dentro un lavoro, tappa per tappa",
+    "percorsoSottotitolo": "Le stesse quattro fasi su ogni commessa, dalla specifica al collaudo. In fondo, i disegni: quelli veri, da guardare e da girare.",
+    "percorsoNav": "Tappe di un lavoro",
+    "percorsoDisegniVoce": "I disegni",
+    "percorsoDisegniTitolo": "I disegni si guardano, non si immaginano",
+    "percorsoDisegniTesto": "Le tavole e i modelli 3D dei lavori pubblicati, tutti insieme. Si ingrandiscono, si trascinano e si ruotano col mouse, col dito o inclinando il telefono.",
+    "videoTitolo": "Video della sala test",
+    "videoAttesa": "Segnaposto: qui andrà la ripresa della prova di tenuta, appena il cliente la fornisce.",
+    "videoDurata": "In arrivo",
+    "elencoTitolo": "Tutti i lavori pubblicati"
   },
   "chiSiamo": {
     "metaTitolo": "Chi siamo | PROJECTUNE",

@@ -31,10 +31,26 @@
     U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* Space Grotesk è un file variabile: un solo scaricamento copre tutti i
+   pesi dei titoli, dal 300 al 700. */
 @font-face {
-  font-family: 'Archivo';
-  src: url('/fonts/archivo-latin-700.woff2') format('woff2');
-  font-weight: 700;
+  font-family: 'Space Grotesk';
+  src: url('/fonts/space-grotesk-latin-var.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  /* Un peso solo, statico: il file variabile costava dieci chilobyte in più
+     per pesi che nel sito non si usano. Tutte le etichette monospaziate
+     stanno sul 500. */
+  src: url('/fonts/jetbrains-mono-latin-500.woff2') format('woff2');
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
@@ -48,48 +64,76 @@
    per adattare palette, spaziature e tipografia.
    ------------------------------------------------------------------------- */
 :root {
-  /* Palette — i due colori del marchio PROJECTUNE e le varianti che servono
-     per farli funzionare anche come testo.
+  /* Palette — un solo fondo scuro, dal principio alla fine del sito.
+     Le sezioni non si alternano più fra chiaro e scuro: il fondo è uno,
+     continuo, e a separare i blocchi ci pensano lo spazio e i filetti.
 
-     --marchio-antracite e --marchio-blu sono i colori originali del logo,
-     letti dal PDF del cliente: non vanno cambiati. Il blu del marchio su
-     bianco arriva però a 3,42:1, sotto il 4,5:1 richiesto per il testo:
-     per scritte e bottoni si usa --colore-accento (5,6:1), per il testo su
-     fondo antracite --colore-accento-chiaro (5,95:1). Il blu originale
-     resta dov'è nato: grafica, bordi, filetti e titoli grandi. */
+     I due colori del marchio (--marchio-antracite e --marchio-blu) sono
+     quelli letti dal PDF del cliente e non si toccano. Intorno a loro c'è
+     una scala di grigi freddi, tirati verso il blu: è il colore dell'acciaio
+     lavorato, non il grigio neutro di un foglio.
+
+     Il blu del marchio su questo fondo arriva a 5,4:1, quindi si può usare
+     anche per il testo; --colore-accento è la sua versione schiarita
+     (9,4:1), che è quella giusta per i collegamenti. */
   --marchio-antracite: #303435;
   --marchio-blu: #3093c9;
+
+  /* I grigi metallici: dal più profondo (fondo pagina) al più chiaro
+     (pannelli sollevati). La differenza fra uno e l'altro è minima: è così
+     che si legge come metallo e non come una pila di riquadri. */
+  --metallo-0: #0e1518;
+  --metallo-1: #131c20;
+  --metallo-2: #161f23;
+  --metallo-3: #1c262b;
+  --metallo-4: #26333a;
+  --metallo-5: #405057;
 
   --colore-primario: #303435;
   --colore-primario-scuro: #23282a;
   --colore-primario-chiaro: #454c4e;
-  --colore-accento: #1b6e9b;
-  --colore-accento-scuro: #17658f;
+  --colore-accento: #6cc3ee;
+  --colore-accento-scuro: #9bd8f6;
   --colore-accento-vivo: #3093c9;
-  --colore-accento-chiaro: #6fbbe6;
-  --colore-sfondo: #f4f6f6;
-  --colore-superficie: #ffffff;
-  --colore-superficie-alt: #e7ebeb;
-  --colore-testo: #1e2223;
-  --colore-testo-tenue: #4f5658;
-  --colore-testo-inverso: #ffffff;
-  --colore-testo-inverso-tenue: #c3c9ca;
-  --colore-bordo: #d5dbdb;
-  --colore-bordo-forte: #6d7677;
-  --colore-errore: #97241c;
-  --colore-successo: #1f5c3d;
+  --colore-accento-chiaro: #6cc3ee;
+  /* Testo sopra una campitura di blu marchio: quasi nero, 5,6:1. */
+  --colore-su-accento: #08120f;
 
-  /* Tipografia — due famiglie, scala coerente di ragione ≈ 1.2.
-     Inter per il testo, Archivo per i titoli: una grottesca industriale sta
-     al marchio, che è geometrico e tecnico, come non ci stava il serif
-     editoriale di prima. Le etichette maiuscole spaziate riprendono la
-     spaziatura larghissima della scritta del logo. */
+  --colore-sfondo: var(--metallo-0);
+  --colore-superficie: var(--metallo-2);
+  --colore-superficie-alt: var(--metallo-3);
+  --colore-testo: #e6edef;
+  --colore-testo-tenue: #a3b1b6;
+  --colore-titolo: #f2f7f8;
+  /* «Inverso» vuol dire «sopra il fondo scuro»: ora è quasi tutto il sito,
+     e i due valori restano perché li usano hero, visualizzatore e piede. */
+  --colore-testo-inverso: #f2f7f8;
+  --colore-testo-inverso-tenue: #a3b1b6;
+  --colore-bordo: var(--metallo-4);
+  --colore-bordo-forte: var(--metallo-5);
+  --colore-errore: #ff9b91;
+  --colore-successo: #7ddcac;
+
+  /* Il riflesso: la riga di luce sul bordo alto di un pannello. È l'unica
+     cosa che distingue una lastra di metallo da un rettangolo grigio. */
+  --filo-luce: rgb(255 255 255 / 7%);
+  --lucido: linear-gradient(
+    168deg,
+    rgb(255 255 255 / 5.5%) 0%,
+    rgb(255 255 255 / 1.5%) 38%,
+    rgb(0 0 0 / 12%) 100%
+  );
+
+  /* Tipografia — tre famiglie, scala coerente di ragione ≈ 1.2.
+     Inter per il testo lungo, Space Grotesk per i titoli, JetBrains Mono per
+     etichette e numeri. Space Grotesk e JetBrains Mono sono due caratteri da
+     schermo, disegnati per l'interfaccia e per il codice: le loro forme
+     strette e squadrate sono quelle che rendono «tecnologico» il sito, più
+     di qualunque effetto grafico. */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --font-display: 'Archivo', 'Arial Narrow', Helvetica, var(--font-sans);
-  /* Monospaziato di sistema per le etichette tecniche e i numeri: dà il tono
-     da manuale senza far scaricare un quarto file di caratteri. */
-  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
-    'Liberation Mono', 'Courier New', monospace;
+  --font-display: 'Space Grotesk', 'Arial Narrow', Helvetica, var(--font-sans);
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
   /* Spaziatura delle etichette maiuscole, ripresa dal marchio. */
   --tracciatura-etichetta: 0.16em;
 
@@ -136,8 +180,11 @@
   --raggio: 10px;
   --raggio-grande: 20px;
   --grana: url('/img/grana.webp');
-  --ombra: 0 1px 2px rgb(30 34 35 / 7%), 0 2px 8px rgb(30 34 35 / 5%);
-  --ombra-forte: 0 2px 4px rgb(30 34 35 / 9%), 0 8px 20px rgb(30 34 35 / 9%);
+  /* Su un fondo scuro l'ombra nera sparisce: quello che stacca un pannello
+     è il filo di luce sul bordo alto, non l'ombra sotto. Le due ombre
+     restano, molto più profonde, per il distacco alle grandi distanze. */
+  --ombra: 0 1px 0 0 var(--filo-luce) inset, 0 2px 10px rgb(0 0 0 / 34%);
+  --ombra-forte: 0 1px 0 0 var(--filo-luce) inset, 0 12px 34px rgb(0 0 0 / 46%);
 
   /* Altezza dell'intestazione: il hero occupa il resto della finestra.
      Questo è il valore di ricaduta, volutamente generoso (l'altezza vera
@@ -145,14 +192,20 @@
      se sbaglia, sbaglia per difetto sull'altezza del hero, così le due
      chiamate all'azione restano visibili. L'isola del video lo sostituisce
      con la misura esatta. */
-  --altezza-intestazione: 10.5rem;
+  --altezza-intestazione: 8.5rem;
+  /* Lo spazio che il hero lascia sopra il titolo perché non finisca dietro
+     l'intestazione. È una variabile a parte, e non l'altezza misurata qui
+     sopra, apposta: quella la corregge il JavaScript appena la pagina è
+     pronta, e una correzione su un valore che sposta il contenuto del hero
+     sarebbe uno scarto di layout — piccolo, ma misurato. */
+  --spazio-eroe: 9rem;
 
   --larghezza-contenitore: 72rem;
   --larghezza-contenitore-stretto: 46rem;
 
   --transizione: 150ms ease-out;
 
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 /* -------------------------------------------------------------------------
@@ -214,7 +267,17 @@ select {
    ------------------------------------------------------------------------- */
 body {
   min-height: 100vh;
+  /* L'intestazione è fissa: senza il hero sotto, lo spazio va lasciato. */
+  padding-top: var(--altezza-intestazione);
+  /* Un fondo solo per tutto il sito. La sfumatura è `fixed`: resta ferma
+     mentre la pagina scorre, quindi non si vede mai un cambio di colore fra
+     una sezione e l'altra — è la stessa lastra dall'inizio alla fine. */
   background-color: var(--colore-sfondo);
+  background-image:
+    radial-gradient(120% 80% at 78% -10%, rgb(48 147 201 / 13%) 0%, transparent 62%),
+    radial-gradient(90% 70% at 0% 100%, rgb(48 147 201 / 7%) 0%, transparent 58%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--colore-testo);
   font-family: var(--font-sans);
   font-size: var(--testo-base);
@@ -224,6 +287,12 @@ body {
   overflow-wrap: break-word;
 }
 
+/* Nelle pagine che si aprono con il hero l'intestazione ci passa sopra:
+   nessuno spazio da lasciare, il video comincia dal bordo della finestra. */
+body.ha-eroe {
+  padding-top: 0;
+}
+
 h1,
 h2,
 h3,
@@ -231,7 +300,7 @@ h4 {
   font-family: var(--font-display);
   font-weight: 600;
   line-height: var(--interlinea-stretta);
-  color: var(--colore-primario);
+  color: var(--colore-titolo);
   text-wrap: balance;
 }
 
@@ -290,8 +359,8 @@ hr {
 }
 
 ::selection {
-  background-color: var(--colore-primario);
-  color: var(--colore-testo-inverso);
+  background-color: var(--marchio-blu);
+  color: var(--colore-su-accento);
 }
 
 /* -------------------------------------------------------------------------
@@ -314,42 +383,15 @@ hr {
   padding-block: clamp(4rem, 7vw, 8rem);
 }
 
-.sezione--alt {
-  background-color: var(--colore-superficie-alt);
+/* Le fasce non cambiano più colore: il fondo è uno solo, e quello che
+   separa una sezione dall'altra è un filetto sottilissimo, come la riga di
+   un cartiglio. Si spegne con `.sezione--senza-filetto`. */
+.sezione + .sezione {
+  border-top: 1px solid rgb(255 255 255 / 5%);
 }
 
-.sezione--scura {
-  background-color: var(--colore-primario);
-  color: var(--colore-testo-inverso);
-}
-
-.sezione--scura h1,
-.sezione--scura h2,
-.sezione--scura h3 {
-  color: var(--colore-testo-inverso);
-}
-
-.sezione--scura p {
-  color: var(--colore-testo-inverso-tenue);
-}
-
-.sezione--scura a {
-  color: var(--colore-testo-inverso);
-}
-
-/* Il bottone chiaro ha il fondo bianco: su fascia scura la regola qui sopra
-   gli renderebbe bianco anche il testo. */
-.sezione--scura .bottone--chiaro {
-  color: var(--colore-primario);
-}
-
-.sezione--scura .bottone--chiaro:hover {
-  color: var(--colore-primario-scuro);
-}
-
-.sezione--scura :focus-visible,
-.intestazione :focus-visible {
-  outline-color: var(--colore-testo-inverso);
+.sezione--senza-filetto {
+  border-top: 0;
 }
 
 .intestazione-sezione {
@@ -361,10 +403,6 @@ hr {
   margin-top: var(--space-3);
   color: var(--colore-testo-tenue);
   font-size: var(--testo-md);
-}
-
-.sezione--scura .intestazione-sezione p {
-  color: var(--colore-testo-inverso-tenue);
 }
 
 .griglia {
@@ -416,8 +454,9 @@ hr {
    6. Componenti
    ------------------------------------------------------------------------- */
 
-/* Skip link — sta sopra l'intestazione, che è antracite come lui:
-   il bordo bianco è quello che lo stacca dallo sfondo. */
+/* Skip link — compare sopra il hero, che è scuro: è una pastiglia di blu
+   chiaro con la scritta quasi nera, cioè la cosa più visibile della pagina.
+   Il bordo scuro è quello che la stacca da un fotogramma chiaro del video. */
 .salta-al-contenuto {
   position: absolute;
   top: var(--space-2);
@@ -425,8 +464,8 @@ hr {
   z-index: 100;
   padding: var(--space-3) var(--space-4);
   background-color: var(--colore-accento);
-  box-shadow: 0 0 0 2px var(--colore-testo-inverso);
-  color: var(--colore-testo-inverso);
+  box-shadow: 0 0 0 2px var(--colore-sfondo);
+  color: var(--colore-su-accento);
   font-size: var(--testo-sm);
   font-weight: 600;
   border-radius: var(--raggio);
@@ -437,7 +476,7 @@ hr {
 
 .salta-al-contenuto:focus {
   transform: translateY(0);
-  color: var(--colore-testo-inverso);
+  color: var(--colore-su-accento);
 }
 
 /* Occhiello */
@@ -450,10 +489,6 @@ hr {
   font-weight: 600;
   letter-spacing: var(--tracciatura-etichetta);
   text-transform: uppercase;
-}
-
-.sezione--scura .occhiello {
-  color: var(--colore-accento-chiaro);
 }
 
 /* Bottoni */
@@ -478,48 +513,42 @@ hr {
     color var(--transizione);
 }
 
+/* Il bottone pieno è una campitura di blu marchio con la scritta quasi
+   nera: su fondo scuro è più leggibile del blu con la scritta bianca
+   (5,6:1 contro 3,4:1) ed è anche più vicino a una targhetta di macchina. */
 .bottone--primario {
-  background-color: var(--colore-accento);
-  border-color: var(--colore-accento);
-  color: var(--colore-testo-inverso);
+  background-color: var(--marchio-blu);
+  border-color: var(--marchio-blu);
+  color: var(--colore-su-accento);
 }
 
 .bottone--primario:hover {
-  background-color: var(--colore-accento-scuro);
-  border-color: var(--colore-accento-scuro);
-  color: var(--colore-testo-inverso);
+  background-color: var(--colore-accento);
+  border-color: var(--colore-accento);
+  color: var(--colore-su-accento);
 }
 
 .bottone--secondario {
   background-color: transparent;
-  border-color: var(--colore-primario);
-  color: var(--colore-primario);
+  border-color: var(--colore-bordo-forte);
+  color: var(--colore-testo);
 }
 
 .bottone--secondario:hover {
-  background-color: var(--colore-primario);
-  color: var(--colore-testo-inverso);
-}
-
-.sezione--scura .bottone--secondario {
-  border-color: var(--colore-testo-inverso);
-  color: var(--colore-testo-inverso);
-}
-
-.sezione--scura .bottone--secondario:hover {
-  background-color: var(--colore-testo-inverso);
-  color: var(--colore-primario);
+  background-color: rgb(255 255 255 / 7%);
+  border-color: var(--colore-testo);
+  color: var(--colore-titolo);
 }
 
 .bottone--chiaro {
-  background-color: var(--colore-superficie);
-  border-color: var(--colore-superficie);
-  color: var(--colore-primario);
+  background-color: var(--colore-testo-inverso);
+  border-color: var(--colore-testo-inverso);
+  color: var(--colore-primario-scuro);
 }
 
 .bottone--chiaro:hover {
-  background-color: var(--colore-superficie-alt);
-  border-color: var(--colore-superficie-alt);
+  background-color: #ffffff;
+  border-color: #ffffff;
   color: var(--colore-primario-scuro);
 }
 
@@ -541,6 +570,7 @@ hr {
   flex-direction: column;
   height: 100%;
   background-color: var(--colore-superficie);
+  background-image: var(--lucido);
   border: 1px solid var(--colore-bordo);
   border-radius: var(--raggio-grande);
   overflow: hidden;
@@ -580,8 +610,7 @@ hr {
 
 .etichetta--chiara {
   background-color: rgb(255 255 255 / 92%);
-  color: var(--colore-primario);
-  box-shadow: var(--ombra);
+  color: var(--colore-primario-scuro);
 }
 
 /* Bollino «qui c'è un disegno da guardare»: la cosa che distingue una
@@ -628,8 +657,8 @@ hr {
   content: '';
   position: absolute;
   inset: auto 0 0;
-  height: 38%;
-  background: linear-gradient(180deg, transparent, rgb(30 34 35 / 34%));
+  height: 46%;
+  background: linear-gradient(180deg, transparent, rgb(6 10 12 / 62%));
   pointer-events: none;
 }
 
@@ -712,10 +741,13 @@ hr {
   text-transform: uppercase;
 }
 
+/* Campitura piena: blu marchio con la scritta quasi nera, come i bottoni.
+   Il blu chiaro dei collegamenti va bene come testo, non come fondo: sotto
+   una scritta chiara darebbe 1,8:1. */
 .etichetta--accento {
-  background-color: var(--colore-accento);
-  border-color: var(--colore-accento);
-  color: var(--colore-testo-inverso);
+  background-color: var(--marchio-blu);
+  border-color: var(--marchio-blu);
+  color: var(--colore-su-accento);
 }
 
 /* Briciole di pane */
@@ -839,15 +871,20 @@ hr {
 }
 
 /* -------------------------------------------------------------------------
-   10. Hero della home: video a schermo intero
+   10. Hero della home: video astratto a schermo intero
+
+   L'intestazione è fissa e trasparente e ci passa sopra: il hero comincia
+   dal bordo della finestra, non sotto una barra. Il contenuto è spinto giù
+   dell'altezza dell'intestazione, così il titolo non ci finisce dietro.
    ------------------------------------------------------------------------- */
 .eroe {
   position: relative;
   display: grid;
   align-items: center;
-  min-height: max(30rem, calc(100svh - var(--altezza-intestazione)));
+  min-height: max(34rem, 100svh);
+  padding-top: var(--spazio-eroe);
   overflow: hidden;
-  background-color: var(--colore-primario-scuro);
+  background-color: #0a1013;
   color: var(--colore-testo-inverso);
   isolation: isolate;
 }
@@ -856,6 +893,9 @@ hr {
   position: absolute;
   inset: 0;
   z-index: -1;
+  /* Taglia lui il margine dell'ingrandimento, invece di lasciarlo fare alla
+     sezione: così il controllo del responsive continua a guardare il testo. */
+  overflow: hidden;
 }
 
 .eroe__poster,
@@ -868,6 +908,17 @@ hr {
   object-fit: cover;
 }
 
+/* Sfocatura e ombreggiatura del filmato. La scala serve a coprire i bordi:
+   sfocando, un'immagine perde nitidezza anche fuori dai propri margini e
+   comparirebbe una cornice sfumata lungo i lati.
+   `saturate` e `contrast` tirano il filmato verso il blu del marchio; la
+   luminosità scende, perché sopra ci va del testo bianco. */
+.eroe__poster,
+.eroe__video {
+  transform: scale(1.08);
+  filter: blur(14px) saturate(135%) contrast(108%) brightness(62%);
+}
+
 .eroe__poster {
   display: block;
 }
@@ -876,7 +927,7 @@ hr {
    resta il fermo immagine, così non si vede un rettangolo nero. */
 .eroe__video {
   opacity: 0;
-  transition: opacity 700ms ease-out;
+  transition: opacity 900ms ease-out;
 }
 
 .eroe__video--attivo {
@@ -889,175 +940,122 @@ hr {
   position: absolute;
   inset: 0;
   background-image: var(--trama-esagoni);
-  opacity: 0.28;
-  -webkit-mask-image: radial-gradient(60% 70% at 82% 40%, #000 0%, transparent 68%);
-  mask-image: radial-gradient(60% 70% at 82% 40%, #000 0%, transparent 68%);
+  opacity: 0.2;
+  -webkit-mask-image: radial-gradient(58% 68% at 84% 38%, #000 0%, transparent 70%);
+  mask-image: radial-gradient(58% 68% at 84% 38%, #000 0%, transparent 70%);
 }
 
+/* I veli: uno tinto di blu marchio, che dà al filmato il colore giusto, e
+   due neri che scuriscono il lato del testo e chiudono in basso, dove il
+   hero deve fondersi con il fondo della pagina senza una riga di stacco. */
 .eroe__velo {
   position: absolute;
   inset: 0;
-  /* Due veli sovrapposti: uno orizzontale che scurisce il lato del testo e
-     lascia leggere il disegno a destra, uno verticale che chiude in basso.
-     Serve al contrasto: sopra un video le linee chiare passerebbero dietro
-     il titolo bianco. */
   background:
     linear-gradient(
       90deg,
-      rgb(35 40 42 / 88%) 0%,
-      rgb(35 40 42 / 62%) 46%,
-      rgb(35 40 42 / 6%) 100%
+      rgb(10 16 19 / 86%) 0%,
+      rgb(10 16 19 / 58%) 48%,
+      rgb(10 16 19 / 10%) 100%
     ),
+    radial-gradient(80% 90% at 78% 34%, rgb(48 147 201 / 26%) 0%, transparent 66%),
     linear-gradient(
       180deg,
-      rgb(35 40 42 / 34%) 0%,
-      rgb(35 40 42 / 18%) 45%,
-      rgb(35 40 42 / 86%) 100%
+      rgb(10 16 19 / 62%) 0%,
+      rgb(10 16 19 / 14%) 38%,
+      var(--colore-sfondo) 100%
     );
 }
 
 .eroe__contenuto {
   position: relative;
-  padding-block: var(--space-8) var(--space-8);
+  padding-block: var(--space-8);
 }
 
-.eroe__blocco,
-.eroe__dati {
-  max-width: 52rem;
-}
-
-.eroe__occhiello {
-  max-width: 22rem;
-  margin: 0 0 var(--space-5);
-  color: var(--colore-accento-chiaro);
-}
-
-/* Il blocco del testo è squadrato come un riquadro di tavola: un filetto
-   verticale blu a sinistra e le due crocette agli angoli. */
-.eroe__blocco {
+/* Il titolo non è più tutto maiuscolo: in minuscolo respira, e Space
+   Grotesk in maiuscolo perderebbe proprio le forme che lo rendono
+   riconoscibile. Il filetto blu a sinistra è l'unico segno grafico
+   rimasto. */
+.eroe__titolo {
   position: relative;
+  max-width: 18ch;
+  margin: 0;
   padding-left: var(--space-5);
+  color: var(--colore-titolo);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 1.1rem + 6.4vw, 5.25rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
 }
 
-.eroe__blocco::before {
+.eroe__titolo::before {
   content: '';
   position: absolute;
-  top: 0.35rem;
-  bottom: 0.35rem;
+  top: 0.28em;
+  bottom: 0.16em;
   left: 0;
   width: 2px;
-  background: linear-gradient(
-    180deg,
-    var(--marchio-blu) 0%,
-    rgb(48 147 201 / 10%) 100%
-  );
-}
-
-.eroe__titolo {
-  margin: 0;
-  color: var(--colore-testo-inverso);
-  font-family: var(--font-display);
-  font-size: clamp(2.4rem, 1.1rem + 6.6vw, 5rem);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.015em;
-  text-transform: uppercase;
-  text-wrap: balance;
+  background: linear-gradient(180deg, var(--marchio-blu) 0%, rgb(48 147 201 / 8%) 100%);
 }
 
 .eroe__titolo-accento {
   display: block;
-  color: var(--colore-accento-chiaro);
+  color: var(--colore-accento);
 }
 
-.eroe__sommario {
-  max-width: 44ch;
+.eroe__didascalia {
+  max-width: 46ch;
   margin: var(--space-5) 0 0;
+  padding-left: var(--space-5);
   color: var(--colore-testo-inverso-tenue);
   font-size: var(--testo-md);
 }
 
-.eroe__azioni {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-6);
-}
-
-/* La riga di dati sotto il testo: fatti in monospaziato, separati da un
-   esagono. È la stessa idea del cartiglio di una tavola. */
-.eroe__dati {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3) var(--space-5);
-  margin: var(--space-7) 0 0;
-  padding: var(--space-4) 0 0;
-  border-top: 1px solid rgb(255 255 255 / 16%);
-  list-style: none;
-  color: var(--colore-testo-inverso-tenue);
-  font-family: var(--font-mono);
-  font-size: var(--testo-xs);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.eroe__dati li {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.eroe__dati li::before {
-  content: '';
-  flex: none;
-  width: 0.375rem;
-  height: calc(0.375rem / var(--esagono-proporzione));
-  background-color: var(--marchio-blu);
-  clip-path: var(--esagono);
-}
-
+/* Il segno «si scorre»: un filo verticale che scende, senza parole.
+   L'etichetta c'è, ma solo per i lettori di schermo: il hero deve restare
+   titolo e didascalia, e basta. */
 .eroe__scorri {
   position: absolute;
   right: var(--space-6);
-  bottom: var(--space-5);
+  bottom: 0;
   display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--colore-testo-inverso-tenue);
-  font-size: var(--testo-xs);
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  text-decoration: none;
+  width: 1px;
+  height: 4.5rem;
+  background-color: rgb(255 255 255 / 18%);
+  overflow: hidden;
 }
 
-.eroe__scorri:hover {
-  color: var(--colore-testo-inverso);
+.eroe__scorri-filo {
+  display: block;
+  width: 100%;
+  height: 40%;
+  background-color: var(--colore-accento);
+  animation: scorri-filo 2.6s ease-in-out infinite;
 }
 
-.eroe__scorri svg {
-  animation: scorri 2.4s ease-in-out infinite;
+.eroe__scorri:hover .eroe__scorri-filo {
+  background-color: var(--colore-testo-inverso);
 }
 
-@keyframes scorri {
-  0%,
-  100% {
-    transform: translateY(-3px);
+@keyframes scorri-filo {
+  0% {
+    transform: translateY(-100%);
   }
-  50% {
-    transform: translateY(3px);
+  100% {
+    transform: translateY(250%);
   }
 }
 
 @media (min-width: 48em) {
   :root {
-    --altezza-intestazione: 5.7rem;
+    --altezza-intestazione: 5.25rem;
+    --spazio-eroe: 5.75rem;
   }
 
   .eroe__scorri {
-    display: flex;
+    display: block;
   }
 }
 
@@ -1121,14 +1119,17 @@ hr {
   font-weight: 600;
 }
 
+/* Il disegno scelto: campitura di blu marchio e scritta quasi nera, come i
+   bottoni pieni. Su fondo scuro la campitura bianca con la scritta chiara
+   spariva. */
 .visualizzatore__radio:checked + .visualizzatore__etichetta {
-  background-color: var(--colore-superficie);
-  border-color: var(--colore-superficie);
-  color: var(--colore-primario);
+  background-color: var(--marchio-blu);
+  border-color: var(--marchio-blu);
+  color: var(--colore-su-accento);
 }
 
 .visualizzatore__radio:checked + .visualizzatore__etichetta .visualizzatore__tipo {
-  color: var(--colore-accento);
+  color: var(--colore-su-accento);
 }
 
 .visualizzatore__radio:focus-visible + .visualizzatore__etichetta {
@@ -1210,6 +1211,22 @@ hr {
   display: none;
 }
 
+/* Dentro il percorso della pagina Lavori il visualizzatore ha già una
+   colonna sola: la lista dei disegni va sopra, non di fianco, altrimenti la
+   tavola resta un francobollo. */
+.percorso__tappa--disegni .visualizzatore {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.percorso__tappa--disegni .visualizzatore__voci {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.percorso__tappa--disegni .visualizzatore__etichetta {
+  width: auto;
+}
+
 .scena__stato {
   position: absolute;
   inset: auto var(--space-4) var(--space-4) var(--space-4);
@@ -1256,9 +1273,9 @@ hr {
 }
 
 .comando[aria-pressed='true'] {
-  background-color: var(--colore-superficie);
-  border-color: var(--colore-superficie);
-  color: var(--colore-primario);
+  background-color: var(--marchio-blu);
+  border-color: var(--marchio-blu);
+  color: var(--colore-su-accento);
 }
 
 .comando--testo {
@@ -1334,8 +1351,8 @@ hr {
   place-items: center;
   aspect-ratio: var(--esagono-proporzione);
   clip-path: var(--esagono);
-  background-color: var(--colore-accento);
-  color: var(--colore-testo-inverso);
+  background-color: var(--marchio-blu);
+  color: var(--colore-su-accento);
 }
 
 /* Etichetta tecnica: monospaziata, maiuscola, con l'esagono davanti. */
@@ -1369,10 +1386,6 @@ hr {
   height: 1px;
   background: linear-gradient(90deg, currentcolor, transparent);
   opacity: 0.45;
-}
-
-.sezione--scura .etichetta-tecnica {
-  color: var(--colore-accento-chiaro);
 }
 
 /* Trama a favo. Sta su uno pseudo-elemento per poterla sfumare: a piena
@@ -1454,32 +1467,6 @@ hr {
   margin-top: var(--space-4);
 }
 
-/* Sezione scura: fondo profondo con un alone blu, non un grigio piatto. */
-.sezione--scura {
-  background-image:
-    radial-gradient(80% 120% at 85% -10%, rgb(48 147 201 / 16%) 0%, transparent 60%),
-    linear-gradient(180deg, var(--colore-primario-scuro) 0%, var(--colore-primario) 100%);
-}
-
-/* Fascia chiara alternata: favo finissimo, quasi invisibile, che si spegne
-   verso il centro. Serve a dare consistenza al fondo, non a farsi notare. */
-.sezione--alt {
-  position: relative;
-  isolation: isolate;
-}
-
-.sezione--alt::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image: var(--trama-esagoni-fitta);
-  opacity: 0.14;
-  -webkit-mask-image: linear-gradient(105deg, #000 0%, transparent 42%);
-  mask-image: linear-gradient(105deg, #000 0%, transparent 42%);
-  pointer-events: none;
-}
-
 /* Blocco numerico: ogni cifra ha il suo esagono dietro. */
 .numero {
   position: relative;
@@ -1514,6 +1501,42 @@ hr {
   color: var(--colore-testo-inverso-tenue);
   font-size: var(--testo-sm);
   max-width: 22ch;
+}
+
+/* Indice della testata di sezione: il numero, un filetto, l'etichetta. */
+.intestazione-sezione__indice span:first-of-type {
+  padding-right: var(--space-3);
+  border-right: 1px solid currentcolor;
+}
+
+/* Utility di impaginazione usate dalle griglie di schede.
+   Stanno qui e non nel foglio della singola pagina per una ragione di
+   velocità: ogni foglio di stile in più è una richiesta in più sul percorso
+   critico, e su una connessione lenta si paga tutta. */
+.elenco-piatto {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.griglia > li {
+  display: flex;
+}
+
+.griglia > li > * {
+  width: 100%;
+}
+
+.gruppo-bottoni--centrato {
+  justify-content: center;
+}
+
+.richiamo__testo {
+  margin-top: var(--space-4);
+  margin-inline: auto;
+  max-width: var(--misura);
+  color: var(--colore-testo-tenue);
+  font-size: var(--testo-md);
 }
 
 /* Il processo: quattro passi in fila, uniti da una linea tratteggiata. */
@@ -1866,10 +1889,6 @@ a:focus-visible .scorri-testo > span {
   color: var(--colore-accento);
 }
 
-.sezione--scura .parole-rotanti > span {
-  color: var(--colore-accento-chiaro);
-}
-
 /* Senza animazioni resta visibile solo la prima parola: le altre sono
    comunque nel documento, quindi un lettore di schermo le legge tutte. */
 .parole-rotanti > span:not(:first-child) {
@@ -1996,7 +2015,75 @@ a:focus-visible .scorri-testo > span {
 }
 
 /* -------------------------------------------------------------------------
-   13. Movimento ridotto
+   13. Passaggio da una pagina all'altra
+
+   Cliccando una voce del menu la pagina non si sostituisce di colpo: quella
+   vecchia arretra e sfuma, quella nuova sale da sotto dietro una lama di
+   luce blu. È la funzione «view transition» fra documenti diversi, e si
+   dichiara **solo in CSS**: nessun router, nessun JavaScript, nessuna
+   libreria. Dove il browser non la conosce la riga viene ignorata e i
+   collegamenti funzionano come sempre.
+
+   L'intestazione porta `view-transition-name: intestazione` (in
+   Header.astro): il browser la riconosce come lo stesso elemento nelle due
+   pagine e la lascia ferma mentre tutto il resto si muove.
+   ------------------------------------------------------------------------- */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation-name: pagina-esce;
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
+}
+
+::view-transition-new(root) {
+  animation-name: pagina-entra;
+  animation-duration: 460ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+/* La barra fissa non partecipa al movimento: si limita a restare dov'è. */
+::view-transition-group(intestazione) {
+  animation-duration: 320ms;
+}
+
+@keyframes pagina-esce {
+  to {
+    opacity: 0;
+    transform: scale(0.985) translateY(-1.5rem);
+    filter: blur(6px);
+  }
+}
+
+@keyframes pagina-entra {
+  from {
+    /* La lama: la pagina nuova è scoperta dal basso da un taglio netto,
+       come una tavola che esce dal plotter. */
+    clip-path: inset(100% 0 0 0);
+    opacity: 0.4;
+    transform: translateY(2rem);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Chi ha chiesto meno animazioni cambia pagina e basta. */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   14. Movimento ridotto
    ------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html {

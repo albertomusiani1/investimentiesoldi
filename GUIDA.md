@@ -60,11 +60,11 @@ interpreta.
 > di tutte le richieste: la pagina, il CSS, i file dei caratteri, le immagini.
 > Ognuna col suo codice di stato e il suo peso. Non c'è nient'altro.
 
-Un dettaglio che conta: la home del tuo sito pesa **circa 104 kB alla prima
-visita** — e più della metà è il fermo immagine del video di apertura. Le altre
-pagine ne chiedono **una ventina**, perché i caratteri tipografici e il foglio di
-stile restano nella memoria del browser. Per riferimento, una singola foto
-scattata col telefono pesa venti volte tanto.
+Un dettaglio che conta: la home del tuo sito pesa **circa 139 kB alla prima
+visita** — e due terzi sono i quattro file dei caratteri tipografici. Le altre
+pagine ne chiedono **una ventina**, perché caratteri e foglio di stile restano
+nella memoria del browser. Per riferimento, una singola foto scattata col
+telefono pesa quindici volte tanto.
 
 ---
 
@@ -297,6 +297,7 @@ projectune-sito/
 │
 ├── public/                 ← File copiati così come sono: immagini, caratteri,
 │                            video del hero, disegni e modelli 3D.
+│   └── temi/tema-2.css        Il secondo vestito del sito (vedi la ricetta).
 │
 ├── netlify/functions/      ← Il pezzo "vivo": riceve il modulo contatti.
 │
@@ -355,6 +356,21 @@ Attenzione al **contrasto**: testo troppo chiaro su fondo chiaro diventa
 illeggibile per chi ha vista debole, e fa scendere il punteggio di accessibilità.
 La regola è che testo e sfondo devono avere un rapporto di almeno 4,5 a 1.
 Si controlla in due secondi su un sito come *WebAIM Contrast Checker*.
+
+### Cambiare il vestito del sito
+
+Il sito ha due linee grafiche. Quella di serie è scura e metallica; la seconda
+fa sembrare il sito disegnato su un foglio da disegno tecnico, con le quote
+rosse intorno alle sezioni. Contenuti e struttura non cambiano: cambia solo
+l'aspetto.
+
+```bash
+npm run dev:tema2      # per guardarlo mentre lavori
+npm run build:tema2    # per costruirlo davvero
+```
+
+Su Netlify si ottiene lo stesso aggiungendo la variabile `PUBLIC_TEMA=2` e
+rilanciando la costruzione. Per tornare indietro basta toglierla.
 
 ### Aggiungere un progetto
 
