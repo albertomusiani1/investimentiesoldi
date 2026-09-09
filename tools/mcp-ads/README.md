@@ -1,4 +1,4 @@
-# mcp-ads — server MCP per Meta Ads
+# ads-mcp — server MCP per Meta Ads
 
 Server MCP che permette a Claude di leggere e modificare gli account pubblicitari
 Meta. È il "centralinista": tiene lui il token, Claude non lo vede mai — gli chiede
@@ -22,6 +22,10 @@ Un unico nucleo di logica, tre "gusci" a scelta:
 | `src/stdio.ts` | **In locale.** Claude Code avvia il processo e ci parla su stdin/stdout. Nessuna porta aperta, nessun URL pubblico. |
 | `src/http.ts` | Server online su Node (Fly.io, Railway, Render, VPS). Protetto da bearer token. |
 | `src/worker.ts` | Server online su Cloudflare Workers. |
+| `netlify/functions/mcp.mts` | Server online su Netlify Functions. |
+
+Cloudflare, Netlify e i runtime web-standard condividono `src/remote.ts`, che
+contiene autenticazione e smistamento: i tre entrypoint sono involucri di poche righe.
 
 Passare da locale a online non richiede di riscrivere nulla: cambia solo quale
 entrypoint avvii.
@@ -141,20 +145,62 @@ npm start           # avvia in stdio (di norma lo fa Claude Code)
 npm run start:http  # avvia in modalità HTTP (richiede MCP_AUTH_TOKEN)
 ```
 
-## 7. Se un giorno lo vuoi online
+## 7. Metterlo online
 
-Serve solo se vuoi usarlo da Claude web o dall'app sul telefono. In locale non
-serve a niente.
+Serve se vuoi usarlo da Claude web o dall'app sul telefono, o a computer spento.
 
-- **Cloudflare Workers**: `npx wrangler secret put META_ACCESS_TOKEN`, poi
-  `npx wrangler secret put MCP_AUTH_TOKEN`, poi `npx wrangler deploy`.
-- **Node (Fly.io, Railway, Render, VPS)**: avvia `dist/http.js`, imposta
-  `MCP_AUTH_TOKEN` (obbligatorio, minimo 32 caratteri) e `META_ACCESS_TOKEN`
-  fra i secret del provider.
+Genera prima il token dell'endpoint:
 
-In entrambi i casi l'endpoint MCP è protetto da bearer token: senza
-`MCP_AUTH_TOKEN` il server HTTP si rifiuta di partire, perché un endpoint aperto
-equivarrebbe a lasciare le chiavi dell'account pubblicitario su internet.
+```bash
+openssl rand -hex 32
+```
+
+### Cloudflare Workers
+
+```bash
+npx wrangler secret put META_ACCESS_TOKEN
+npx wrangler secret put MCP_AUTH_TOKEN
+npx wrangler deploy
+```
+
+I guardrail non segreti stanno in `wrangler.toml`, sezione `[vars]`.
+
+### Netlify
+
+Collega il repo, poi in **Site configuration → Environment variables** imposta
+`META_ACCESS_TOKEN`, `MCP_AUTH_TOKEN` e i guardrail. Il `netlify.toml` già
+presente compila il progetto prima del deploy. L'endpoint sarà
+`https://<tuo-sito>.netlify.app/mcp`.
+
+### Node (Fly.io, Railway, Render, VPS)
+
+Avvia `dist/http.js` con `MCP_AUTH_TOKEN` e `META_ACCESS_TOKEN` fra i secret
+del provider.
+
+### Collegare il server online
+
+Da Claude Code:
+
+```bash
+claude mcp add --transport http --scope user ads-mcp https://<tuo-host>/mcp \
+  --header "Authorization: Bearer <MCP_AUTH_TOKEN>"
+```
+
+Da claude.ai (per l'uso da browser e da telefono): Impostazioni → Connettori →
+connettore personalizzato, con l'URL `https://<tuo-host>/mcp`.
+
+**Attenzione, punto da verificare sul campo:** l'autenticazione via bearer token
+è certa di funzionare con Claude Code. Non è invece confermato che l'interfaccia
+di claude.ai accetti un token statico anziché un flusso OAuth completo. Se
+l'aggiunta del connettore personalizzato dovesse fallire lì, serve uno strato
+OAuth 2.1 davanti all'endpoint — la logica Meta non cambia, si aggiunge solo
+l'autenticazione. Conviene quindi verificare *prima* di scrivere quello strato.
+
+In ogni caso l'endpoint non è mai aperto: senza `MCP_AUTH_TOKEN` (o con un token
+sotto i 32 caratteri) il server rifiuta ogni richiesta, perché un endpoint MCP
+senza autenticazione equivarrebbe a pubblicare le chiavi dell'account
+pubblicitario. C'è anche un `/health` non autenticato, che risponde solo
+`{"status":"ok"}` e non espone nulla.
 
 ## 8. Limiti noti
 

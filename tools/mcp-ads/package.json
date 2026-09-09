@@ -1,8 +1,8 @@
 {
-  "name": "@investimentiesoldi/mcp-ads",
+  "name": "ads-mcp",
   "version": "0.1.0",
   "private": true,
-  "description": "MCP server per gestire Meta Ads (e in futuro Google Ads / GA4) da Claude",
+  "description": "Server MCP per gestire Meta Ads, Google Ads e GA4 da Claude",
   "type": "module",
   "bin": {
     "mcp-ads": "dist/stdio.js"

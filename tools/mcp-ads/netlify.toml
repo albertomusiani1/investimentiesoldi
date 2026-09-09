@@ -1,0 +1,12 @@
+# Deploy su Netlify Functions.
+#
+# I segreti NON vanno qui: si impostano in
+#   Site configuration -> Environment variables
+# dove serve almeno META_ACCESS_TOKEN e MCP_AUTH_TOKEN.
+
+[build]
+  command = "npm ci && npm run build"
+  publish = "public"
+
+[functions]
+  node_bundler = "esbuild"

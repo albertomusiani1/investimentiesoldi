@@ -9,6 +9,7 @@
 import { createServer as createHttpServer, type IncomingMessage } from 'node:http';
 import { timingSafeEqual } from 'node:crypto';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { MIN_AUTH_TOKEN_LENGTH } from './remote.js';
 import { loadDotEnv } from './dotenv.js';
 import { createServer } from './server.js';
 
@@ -25,8 +26,8 @@ if (!AUTH_TOKEN) {
   );
   process.exit(1);
 }
-if (AUTH_TOKEN.length < 32) {
-  console.error('[mcp-ads] MCP_AUTH_TOKEN troppo corto: usa almeno 32 caratteri casuali.');
+if (AUTH_TOKEN.length < MIN_AUTH_TOKEN_LENGTH) {
+  console.error(`[mcp-ads] MCP_AUTH_TOKEN troppo corto: usa almeno ${MIN_AUTH_TOKEN_LENGTH} caratteri casuali.`);
   process.exit(1);
 }
 

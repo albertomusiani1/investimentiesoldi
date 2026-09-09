@@ -8,7 +8,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { loadMetaConfig, type Env } from './config.js';
 import { registerMetaTools } from './meta/tools.js';
 
-export const SERVER_NAME = 'investimentiesoldi-ads';
+export const SERVER_NAME = 'ads-mcp';
 export const SERVER_VERSION = '0.1.0';
 
 export function createServer(env: Env): McpServer {

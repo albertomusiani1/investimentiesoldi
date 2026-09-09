@@ -5,7 +5,7 @@
 #   npx wrangler secret put MCP_AUTH_TOKEN
 # e restano cifrati lato Cloudflare.
 
-name = "investimentiesoldi-ads-mcp"
+name = "ads-mcp"
 main = "src/worker.ts"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
