@@ -129,9 +129,13 @@
   --space-7: 3rem;
   --space-8: 5rem;
 
-  /* Forme e profondità */
-  --raggio-sm: 3px;
-  --raggio: 6px;
+  /* Forme e profondità. I raggi sono ampi: è la differenza fra un riquadro
+     e una scheda. L'esagono resta lo spigolo del sito, tutto il resto è
+     morbido. */
+  --raggio-sm: 4px;
+  --raggio: 10px;
+  --raggio-grande: 20px;
+  --grana: url('/img/grana.webp');
   --ombra: 0 1px 2px rgb(30 34 35 / 7%), 0 2px 8px rgb(30 34 35 / 5%);
   --ombra-forte: 0 2px 4px rgb(30 34 35 / 9%), 0 8px 20px rgb(30 34 35 / 9%);
 
@@ -232,16 +236,18 @@ h4 {
 }
 
 h1 {
-  font-size: clamp(var(--testo-2xl), 1.55rem + 2.4vw, var(--testo-3xl));
-  letter-spacing: -0.01em;
+  font-size: clamp(2.4rem, 1.4rem + 4.4vw, 4.25rem);
+  letter-spacing: -0.03em;
 }
 
 h2 {
-  font-size: clamp(var(--testo-xl), 1.35rem + 1.4vw, var(--testo-2xl));
+  font-size: clamp(1.9rem, 1.25rem + 2.8vw, 3.1rem);
+  letter-spacing: -0.025em;
 }
 
 h3 {
   font-size: var(--testo-lg);
+  letter-spacing: -0.015em;
 }
 
 h4 {
@@ -303,7 +309,9 @@ hr {
 }
 
 .sezione {
-  padding-block: var(--space-7);
+  /* Il respiro fa metà del lavoro: sezioni strette sembrano un volantino,
+     sezioni larghe sembrano un progetto. */
+  padding-block: clamp(4rem, 7vw, 8rem);
 }
 
 .sezione--alt {
@@ -346,7 +354,7 @@ hr {
 
 .intestazione-sezione {
   max-width: var(--misura);
-  margin-bottom: var(--space-6);
+  margin-bottom: clamp(var(--space-6), 4vw, var(--space-8));
 }
 
 .intestazione-sezione p {
@@ -534,14 +542,16 @@ hr {
   height: 100%;
   background-color: var(--colore-superficie);
   border: 1px solid var(--colore-bordo);
-  border-radius: var(--raggio);
+  border-radius: var(--raggio-grande);
   overflow: hidden;
-  transition: border-color var(--transizione), box-shadow var(--transizione);
+  transition: border-color var(--transizione), box-shadow var(--transizione),
+    transform var(--transizione);
 }
 
 .scheda:hover {
-  border-color: var(--colore-primario-chiaro);
-  box-shadow: var(--ombra);
+  border-color: var(--colore-bordo-forte);
+  box-shadow: var(--ombra-forte);
+  transform: translateY(-4px);
 }
 
 .scheda__media {
@@ -557,6 +567,21 @@ hr {
 
 .scheda:hover .scheda__media img {
   transform: scale(1.03);
+}
+
+/* La categoria sta sull'immagine, non sopra il titolo: libera la colonna di
+   testo e dà alla scheda un punto di colore in alto. */
+.scheda__categoria {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  margin: 0;
+}
+
+.etichetta--chiara {
+  background-color: rgb(255 255 255 / 92%);
+  color: var(--colore-primario);
+  box-shadow: var(--ombra);
 }
 
 /* Bollino «qui c'è un disegno da guardare»: la cosa che distingue una
@@ -595,6 +620,17 @@ hr {
   height: auto;
   aspect-ratio: 16 / 10;
   object-fit: cover;
+}
+
+/* Velo in basso sull'immagine: ci si appoggiano la categoria e il bollino,
+   e stacca la scheda dal fondo bianco. */
+.scheda__media::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 38%;
+  background: linear-gradient(180deg, transparent, rgb(30 34 35 / 34%));
+  pointer-events: none;
 }
 
 .scheda__corpo {
@@ -1464,8 +1500,14 @@ hr {
 
 .numero__cifra {
   position: relative;
-  font-size: clamp(2.25rem, 1.4rem + 3vw, 3.25rem);
-  letter-spacing: -0.02em;
+  font-size: clamp(2.75rem, 1.6rem + 5vw, 5rem);
+  letter-spacing: -0.04em;
+}
+
+.numero__simbolo {
+  font-size: 0.45em;
+  vertical-align: super;
+  color: var(--colore-accento-chiaro);
 }
 
 .numero__etichetta {
@@ -1544,6 +1586,7 @@ hr {
 
 /* Scheda servizio in home: icona esagonale, filetto blu allo hover. */
 .scheda-servizio {
+  border-radius: var(--raggio-grande);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -1552,7 +1595,6 @@ hr {
   padding: var(--space-5);
   background-color: var(--colore-superficie);
   border: 1px solid var(--colore-bordo);
-  border-radius: var(--raggio);
   overflow: hidden;
   transition: border-color var(--transizione), transform var(--transizione),
     box-shadow var(--transizione);
@@ -1632,9 +1674,9 @@ hr {
    in mezzo al bianco. */
 .richiamo__riquadro {
   position: relative;
-  padding: var(--space-7) var(--space-5);
+  padding: clamp(var(--space-7), 6vw, var(--space-8)) var(--space-5);
   border: 1px solid var(--colore-bordo);
-  border-radius: var(--raggio);
+  border-radius: var(--raggio-grande);
   background-color: var(--colore-superficie);
   overflow: hidden;
   isolation: isolate;
@@ -1692,15 +1734,246 @@ hr {
   background-color: rgb(48 147 201 / 8%);
 }
 
+/* Grana: un velo di rumore fisso su tutta la pagina. Rompe le campiture
+   piatte e le sfumature — che sui fondi scuri mostrano le bande di colore —
+   e dà alla schermata la consistenza di una cosa stampata. Sta sopra tutto,
+   ma non intercetta il puntatore, quindi non tocca niente. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background-image: var(--grana);
+  background-size: 160px 160px;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* Titoli che si accendono parola per parola mentre si scorre.
+   La sequenza non è fatta con un ritardo — le animazioni legate allo
+   scorrimento non ne hanno uno — ma spostando di poco l'intervallo di ogni
+   parola: la prima finisce prima, l'ultima dopo. Le regole sono ventiquattro
+   perché tanto lunghi possono essere i titoli, e perché scriverle a mano è
+   l'unico modo di stare dentro una CSP senza attributi `style`. */
+.rivela-parole > span {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* Attenzione: `animation-timeline` non va mai messo accanto alla
+       scorciatoia `animation`. Il minificatore le fonde in
+       `animation: linear both accendi view()`, che nessun browser accetta:
+       la dichiarazione viene scartata e l'animazione non parte più — con
+       l'aggravante che il testo resta all'opacità di partenza. Qui le
+       proprietà stanno separate apposta, e il timeline sta nelle regole
+       per indice qui sotto. */
+    .rivela-parole > span {
+      opacity: 0.16;
+      animation-name: accendi;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+
+    .rivela-parole > span:nth-child(1) { animation-timeline: view(); animation-range: entry 20% entry 42%; }
+    .rivela-parole > span:nth-child(2) { animation-timeline: view(); animation-range: entry 23% entry 45%; }
+    .rivela-parole > span:nth-child(3) { animation-timeline: view(); animation-range: entry 26% entry 48%; }
+    .rivela-parole > span:nth-child(4) { animation-timeline: view(); animation-range: entry 29% entry 51%; }
+    .rivela-parole > span:nth-child(5) { animation-timeline: view(); animation-range: entry 32% entry 54%; }
+    .rivela-parole > span:nth-child(6) { animation-timeline: view(); animation-range: entry 35% entry 57%; }
+    .rivela-parole > span:nth-child(7) { animation-timeline: view(); animation-range: entry 38% entry 60%; }
+    .rivela-parole > span:nth-child(8) { animation-timeline: view(); animation-range: entry 41% entry 63%; }
+    .rivela-parole > span:nth-child(9) { animation-timeline: view(); animation-range: entry 44% entry 66%; }
+    .rivela-parole > span:nth-child(10) { animation-timeline: view(); animation-range: entry 47% entry 69%; }
+    .rivela-parole > span:nth-child(11) { animation-timeline: view(); animation-range: entry 50% entry 72%; }
+    .rivela-parole > span:nth-child(12) { animation-timeline: view(); animation-range: entry 53% entry 75%; }
+    .rivela-parole > span:nth-child(n + 13) { animation-timeline: view(); animation-range: entry 53% entry 100%; }
+  }
+}
+
+@keyframes accendi {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Il hero si dissolve mentre lo si scorre via, invece di sparire di colpo
+   sotto la barra. Anche questa è una animazione legata allo scorrimento:
+   dove non è supportata, il hero resta semplicemente fermo. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .eroe__contenuto,
+    .eroe__scorri {
+      animation-name: allontana;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 85%;
+    }
+  }
+}
+
+@keyframes allontana {
+  to {
+    opacity: 0;
+    transform: translateY(-2.5rem);
+  }
+}
+
+/* Testo che scorre verso l'alto lasciando il posto alla sua copia: è
+   l'effetto dei menu dei siti che si fanno notare, e costa due righe.
+   La copia sta sotto il bordo di un contenitore che taglia: per questo il
+   markup porta `data-taglio-voluto`, che dice al check del responsive che
+   quel taglio è voluto e non un testo che non ci sta. */
+.scorri-testo {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1.35;
+}
+
+.scorri-testo > span {
+  display: inline-block;
+  position: relative;
+  transition: transform 450ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.scorri-testo > span::after {
+  content: attr(data-testo);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+}
+
+a:hover .scorri-testo > span,
+a:focus-visible .scorri-testo > span {
+  transform: translateY(-100%);
+}
+
+/* Parola che ruota dentro un titolo. Le parole stanno impilate nella stessa
+   cella di griglia: la larghezza è quella della più lunga e non cambia, così
+   il titolo non balla mentre la parola cambia. */
+.parole-rotanti {
+  display: inline-grid;
+  vertical-align: bottom;
+  text-align: left;
+}
+
+.parole-rotanti > span {
+  grid-area: 1 / 1;
+  color: var(--colore-accento);
+}
+
+.sezione--scura .parole-rotanti > span {
+  color: var(--colore-accento-chiaro);
+}
+
+/* Senza animazioni resta visibile solo la prima parola: le altre sono
+   comunque nel documento, quindi un lettore di schermo le legge tutte. */
+.parole-rotanti > span:not(:first-child) {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .parole-rotanti > span {
+    animation-name: ruota-parola;
+    animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+  }
+
+  .parole-rotanti--2 > span {
+    animation-duration: 5.2s;
+  }
+  .parole-rotanti--2 > span:nth-child(1) {
+    animation-delay: 0.0s;
+  }
+  .parole-rotanti--2 > span:nth-child(2) {
+    animation-delay: -2.6s;
+  }
+  .parole-rotanti--3 > span {
+    animation-duration: 7.8s;
+  }
+  .parole-rotanti--3 > span:nth-child(1) {
+    animation-delay: 0.0s;
+  }
+  .parole-rotanti--3 > span:nth-child(2) {
+    animation-delay: -2.6s;
+  }
+  .parole-rotanti--3 > span:nth-child(3) {
+    animation-delay: -5.2s;
+  }
+  .parole-rotanti--4 > span {
+    animation-duration: 10.4s;
+  }
+  .parole-rotanti--4 > span:nth-child(1) {
+    animation-delay: 0.0s;
+  }
+  .parole-rotanti--4 > span:nth-child(2) {
+    animation-delay: -2.6s;
+  }
+  .parole-rotanti--4 > span:nth-child(3) {
+    animation-delay: -5.2s;
+  }
+  .parole-rotanti--4 > span:nth-child(4) {
+    animation-delay: -7.8s;
+  }
+  .parole-rotanti--5 > span {
+    animation-duration: 13.0s;
+  }
+  .parole-rotanti--5 > span:nth-child(1) {
+    animation-delay: 0.0s;
+  }
+  .parole-rotanti--5 > span:nth-child(2) {
+    animation-delay: -2.6s;
+  }
+  .parole-rotanti--5 > span:nth-child(3) {
+    animation-delay: -5.2s;
+  }
+  .parole-rotanti--5 > span:nth-child(4) {
+    animation-delay: -7.8s;
+  }
+  .parole-rotanti--5 > span:nth-child(5) {
+    animation-delay: -10.4s;
+  }
+}
+
+@keyframes ruota-parola {
+  0%,
+  4% {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+
+  10%,
+  30% {
+    opacity: 1;
+    transform: none;
+  }
+
+  38%,
+  100% {
+    opacity: 0;
+    transform: translateY(-0.5em);
+  }
+}
+
 /* Comparsa allo scorrimento, senza una riga di JavaScript.
    `animation-timeline: view()` è supportato dai browser recenti; dove non
    c'è, il contenuto è semplicemente già al suo posto. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .rivela {
-      animation: comparsa linear both;
+      animation-name: comparsa;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: view();
-      animation-range: entry 0% cover 20%;
+      /* L'intervallo si chiude dentro la fase di ingresso, non su `cover`:
+         un blocco in fondo alla pagina non arriva mai a metà di `cover`,
+         e resterebbe per sempre mezzo trasparente. */
+      animation-range: entry 5% entry 85%;
     }
   }
 }

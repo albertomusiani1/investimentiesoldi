@@ -77,6 +77,11 @@ const CERCA_TAGLIATI = () => {
     // sono minuscoli: non sono testo tagliato.
     if (elemento.clientWidth <= 1 || elemento.clientHeight <= 1) continue;
 
+    // Alcuni tagli sono l'effetto, non il difetto: il testo dei menu che
+    // scorre verso l'alto tiene la propria copia nascosta sotto il bordo.
+    // Vanno dichiarati nel markup, così restano una scelta visibile.
+    if (elemento.closest('[data-taglio-voluto]')) continue;
+
     const troppoLargo = nascondeX && elemento.scrollWidth - elemento.clientWidth > tolleranza;
     const troppoAlto = nascondeY && elemento.scrollHeight - elemento.clientHeight > tolleranza;
 

@@ -66,7 +66,8 @@
     "disegniTitolo": "I disegni si guardano, non si immaginano",
     "disegniSottotitolo": "Sulle schede dei lavori pubblichiamo le tavole e i modelli 3D: si ingrandiscono, si ruotano col mouse o inclinando il telefono. Questo è uno di quelli.",
     "approfondisci": "Servizio completo",
-    "ctaTitolo": "Parliamo del vostro lavoro",
+    "ctaTitolo": "Parliamo del vostro",
+    "ctaParole": ["disegno", "montaggio", "collaudo"],
     "ctaTesto": "Un disegno da fare, un gruppo da montare, una pompa che non tiene: chiamateci o scriveteci. Il preventivo è gratuito e la prima risposta arriva presto.",
     "heroScorri": "Scorri",
     "heroVideoDescrizione": "Animazione del modello a filo di ferro di una flangia che ruota su un fondo a griglia da tavolo da disegno."

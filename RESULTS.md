@@ -4,8 +4,8 @@ Sito vetrina **PROJECTUNE di Matteuzzi Davide** (progettazione meccanica,
 montaggi e revisioni), costruito con Astro. Tutti i comandi sono stati eseguiti
 davvero; sotto c'è il loro output reale, non una stima.
 
-- **Data dell'esecuzione:** 9 settembre 2026 (rieseguita dopo il rifacimento
-  grafico: sistema di elementi esagonali, sezioni numerate, viewport 3D)
+- **Data dell'esecuzione:** 9 settembre 2026 (rieseguita dopo il secondo giro
+  sul design: grana, tipografia grande, animazioni legate allo scorrimento)
 - **Ambiente:** Linux x86-64, Node.js v22.22.2, npm 10.9.7
 - **Comando di partenza:** `rm -rf dist && npm run build`
 - **Esito complessivo: 15 check su 15 passati.**
@@ -17,7 +17,7 @@ davvero; sotto c'è il loro output reale, non una stima.
 | # | Check | Esito | Sintesi |
 |---|---|---|---|
 | 1 | Build | ✅ | exit 0, 16 pagine, nessun warning |
-| 2 | Type check | ✅ | 0 errori, 0 warning, 0 hint su 55 file |
+| 2 | Type check | ✅ | 0 errori, 0 warning, 0 hint su 56 file |
 | 3 | Pagine raggiungibili | ✅ | 24/24 risorse a 200 |
 | 4 | 404 personalizzata | ✅ | stato 404 e contenuto della pagina del sito |
 | 5 | Lighthouse home (mobile) | ✅ | 100 / 100 / 100 / 100 |
@@ -100,7 +100,7 @@ $ npm run check
 [content] Synced content
 [types] Generated 626ms
 [check] Getting diagnostics for Astro files in /home/user/investimentiesoldi...
-Result (55 files): 
+Result (56 files): 
 - 0 errors
 - 0 warnings
 - 0 hints
@@ -436,7 +436,7 @@ che dentro la frase.
 
 ```console
 $ npm run check:i18n
-File .astro esaminati in src/components e src/layouts: 14
+File .astro esaminati in src/components e src/layouts: 15
 Nessuna stringa di interfaccia scritta a mano: tutte passano da src/i18n/it.json.
 EXIT=0
 
@@ -479,16 +479,18 @@ scelta è quella che porta **entrambi** i tipi di disegno, tavola 2D e modello
 | Metrica | Home | Dettaglio progetto |
 |---|---|---|
 | First Contentful Paint | 1,4 s | 1,4 s |
-| Largest Contentful Paint | 1,5 s | 1,5 s |
+| Largest Contentful Paint | 1,7 s | 1,5 s |
 | Total Blocking Time | 0 ms | 0 ms |
 | Cumulative Layout Shift | 0 | 0 |
-| Peso totale della pagina | 100 KiB | 86 KiB |
+| Peso totale della pagina | 110 KiB | 99 KiB |
 
-Il rifacimento grafico è costato 11 KiB sulla home: 12 kB di CSS in più e
-l'emblema incorporato in ogni pagina, meno quello che si è risparmiato altrove.
-Le comparse allo scorrimento non pesano perché sono CSS, e il modello 3D della
-sezione 03 non entra nella misura: viene chiesto solo quando la sezione entra in
-vista, cioè mai durante il caricamento.
+Il secondo giro sul design è costato altri 10 KiB sulla home: 12 kB di grana e
+qualche kB di CSS. Le animazioni non pesano nulla, perché sono dichiarazioni
+CSS e non codice; il modello 3D della sezione 03 non entra nella misura, perché
+viene chiesto solo quando la sezione entra in vista, cioè mai durante il
+caricamento. La parola che ruota nel richiamo finale non sposta niente: le
+parole sono impilate nella stessa cella di griglia, e infatti il Cumulative
+Layout Shift resta a zero.
 
 Lighthouse 13.4.1, profilo mobile predefinito, throttling simulato, Chromium
 headless. I report completi in JSON sono in `reports/`.
@@ -629,6 +631,16 @@ Ricopiate da `PLAN.md`, dove ognuna ha anche l'alternativa scartata.
 41. **Intestazione appiccicosa** con `position: sticky`, senza JavaScript.
 42. **Le sigle dei clienti si calcolano dal nome commerciale**, non si scrivono
     a mano.
+43. **Anche le animazioni allo scorrimento restano in CSS**: titoli parola per
+    parola, hero che si dissolve, comparse dei blocchi. Nessuna quarta isola di
+    JavaScript per un effetto decorativo.
+44. **`animation-timeline` non va mai accanto alla scorciatoia `animation`**:
+    il minificatore le fonde in una dichiarazione che nessun browser accetta, e
+    l'animazione sparisce in silenzio.
+45. **Gli intervalli si chiudono dentro `entry`**, altrimenti l'ultima sezione
+    della pagina resta per sempre a metà animazione.
+46. **Il taglio voluto si dichiara nel markup** (`data-taglio-voluto`), invece
+    di allentare il check del responsive.
 
 ---
 
@@ -702,14 +714,14 @@ $ du -sh dist
 | Tipo | File | Peso su disco |
 |---|---|---|
 | MP4 (video del hero) | 1 | 400,8 kB |
-| HTML | 16 | 343,9 kB |
+| HTML | 16 | 358,4 kB |
 | STL (modelli 3D) | 2 | 225,1 kB |
 | WOFF2 (3 caratteri) | 3 | 61,1 kB |
 | JPEG (fermo immagine) | 1 | 54,4 kB |
-| CSS | 13 | 45,5 kB |
+| CSS | 13 | 50,1 kB |
 | SVG | 13 | 39,6 kB |
 | PNG | 4 | 38,0 kB |
-| WebP (fermi immagine) | 2 | 22,6 kB |
+| WebP (fermi immagine e grana) | 3 | 34,5 kB |
 | JavaScript | 3 | 14,6 kB |
 | TXT | 3 | 9,1 kB |
 | XML (sitemap) | 2 | 1,3 kB |

@@ -5,6 +5,11 @@
  * L'indice («01», «02»…) non è decorazione fine a sé stessa: dà alla pagina
  * l'aria di un fascicolo tecnico e, insieme all'etichetta monospaziata, è il
  * filo che tiene insieme tutte le sezioni del sito.
+ *
+ * Il titolo esce diviso in parole, ognuna nel suo `<span>`: servono al CSS
+ * per accenderle una dopo l'altra mentre si scorre. La divisione avviene
+ * qui, alla costruzione del sito, non nel browser: nessun JavaScript, e il
+ * testo resta una frase normale per chi legge con un lettore di schermo.
  */
 export interface Props {
   /** Numero progressivo della sezione nella pagina, es. "01". */
@@ -20,6 +25,8 @@ export interface Props {
 }
 
 const { indice, etichetta, titolo, id, testo, principale = false } = Astro.props;
+
+const parole = titolo.split(' ');
 ---
 
 <div class="intestazione-sezione rivela">
@@ -27,7 +34,25 @@ const { indice, etichetta, titolo, id, testo, principale = false } = Astro.props
     <span>{indice}</span>
     <span>{etichetta}</span>
   </p>
-  {principale ? <h1 id={id}>{titolo}</h1> : <h2 id={id}>{titolo}</h2>}
+  {
+    principale ? (
+      <h1 class="rivela-parole" id={id}>
+        {parole.map((parola) => (
+          <>
+            <span>{parola}</span>{' '}
+          </>
+        ))}
+      </h1>
+    ) : (
+      <h2 class="rivela-parole" id={id}>
+        {parole.map((parola) => (
+          <>
+            <span>{parola}</span>{' '}
+          </>
+        ))}
+      </h2>
+    )
+  }
   {testo && <p>{testo}</p>}
 </div>
 

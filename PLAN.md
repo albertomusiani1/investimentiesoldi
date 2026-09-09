@@ -19,6 +19,21 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
   `npm run check:js`. Nessun'altra parte del sito è stata toccata. Tutte le verifiche
   rieseguite: Lighthouse 100/100/100/100 su home e su una pagina progetto col
   visualizzatore.
+- 2026-09-09 17:55 — **Secondo giro sul design, sui riferimenti del proprietario.**
+  Ha passato due siti che gli piacciono (Logic Automation e Besa) chiedendo di
+  prenderne il tipo di design e le animazioni, restando sull'esagono. Da lì:
+  grana su tutta la pagina, tipografia molto più grande e stretta, angoli
+  ampiamente arrotondati, sezioni più larghe, titoli che si accendono parola per
+  parola scorrendo, hero che si dissolve uscendo, barra in alto translucida e
+  sfocata, voci di menu con il testo che scorre, numeri giganti con simbolo in
+  apice, categoria e bollino sull'immagine delle schede, una parola che ruota nel
+  richiamo finale. Tutto in CSS: le isole restano tre, 14,6 kB.
+  Due difetti trovati **guardando il CSS costruito e le pagine scorse fino in
+  fondo**, non il sorgente: il minificatore fondeva `animation` e
+  `animation-timeline` in una scorciatoia non valida (nessuna animazione partiva,
+  e i titoli restavano al 16 % di opacità), e gli intervalli su `cover` non si
+  chiudevano mai per l'ultima sezione della pagina. Verifiche rieseguite:
+  Lighthouse 100/100/100/100, CLS 0, responsive 48/48.
 - 2026-09-09 17:05 — **Rifacimento grafico: il sito diventa tecnico, non solo
   sobrio.** Su richiesta del proprietario («troppo semplice»): sistema di elementi
   grafici derivati dall'esagono del marchio — pastiglie, trame a favo, etichette
@@ -457,6 +472,38 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
     si scartano le forme societarie e si tiene la sigla se il nome ne è già una.
     Scriverle a mano avrebbe voluto dire ricordarsi di farlo a ogni cliente nuovo.
 
+43. **Le animazioni allo scorrimento restano in CSS anche quando diventano
+    tante.** Titoli parola per parola, hero che si dissolve, comparse dei
+    blocchi: con `animation-timeline: view()` sono tutte dichiarative, non
+    costano JavaScript e si spengono da sole con `prefers-reduced-motion`. Il
+    prezzo è che la sequenza fra le parole non si fa con un ritardo — le
+    animazioni legate allo scorrimento non ne hanno uno — ma sfasando
+    l'intervallo di ogni parola, e siccome una CSP senza 'unsafe-inline' vieta
+    gli attributi `style`, le regole per indice sono scritte a mano fino a
+    dodici parole. Alternativa scartata: un IntersectionObserver, cioè una
+    quarta isola di JavaScript per un effetto decorativo.
+
+44. **`animation-timeline` non va mai accanto alla scorciatoia `animation`.**
+    Il minificatore le fonde in `animation: linear both nome view()`, che
+    nessun browser accetta: la dichiarazione sparisce e resta solo lo stato di
+    partenza, cioè un titolo quasi invisibile. Il difetto non si vede nel
+    sorgente, solo nel CSS costruito: è stato trovato leggendo `dist/` e poi
+    interrogando il browser (`getComputedStyle`, `getAnimations()`).
+
+45. **Gli intervalli delle animazioni si chiudono dentro `entry`.** Con
+    `cover 20%` l'ultima sezione della pagina non arriva mai in fondo
+    all'intervallo — non c'è abbastanza scorrimento sotto — e resta per sempre
+    a metà. Vale per tutte le animazioni legate allo scorrimento e non c'è modo
+    di accorgersene se non scorrendo la pagina fino in fondo e misurando
+    l'opacità.
+
+46. **Il taglio voluto si dichiara nel markup.** L'effetto del testo che scorre
+    nei menu tiene la copia nascosta sotto il bordo di un contenitore che
+    taglia, e il check del responsive lo segnalava — giustamente — come testo
+    tagliato. Invece di allentare il controllo, il markup porta
+    `data-taglio-voluto`: il check continua a trovare tutti gli altri casi, e
+    l'eccezione è scritta dove la si può vedere.
+
 ---
 
 ## Versioni installate
@@ -482,7 +529,8 @@ Caratteri: Inter 400/600 (testo) e **Archivo 700** (titoli e hero), sottoinsieme
 licenza SIL Open Font License 1.1. Source Serif 4 è stato rimosso con il cambio di
 identità: i file dei caratteri passano da quattro a tre.
 
-`ffmpeg` serve solo a `npm run video` e non è dipendenza del progetto: il video è
+`sharp` serve agli script delle immagini e della grana, e arriva già come
+dipendenza di Astro. `ffmpeg` serve solo a `npm run video` e non è dipendenza del progetto: il video è
 committato già codificato.
 
 Strumenti di verifica eseguiti con `npx`, non installati nel progetto:

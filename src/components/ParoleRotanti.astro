@@ -1,0 +1,31 @@
+---
+/**
+ * Una parola che cambia da sola dentro un titolo.
+ *
+ * Le parole sono tutte nel documento, impilate nella stessa cella di una
+ * griglia: la larghezza è quella della parola più lunga e non cambia mai,
+ * quindi il titolo non si sposta mentre la parola ruota. Chi legge con un
+ * lettore di schermo le sente tutte, una dopo l'altra, come un elenco.
+ *
+ * Nessun JavaScript: la rotazione è una sola animazione CSS, sfasata di una
+ * frazione per ogni parola. Se il sistema chiede meno animazioni resta ferma
+ * la prima.
+ */
+export interface Props {
+  parole: string[];
+}
+
+const { parole } = Astro.props;
+
+/**
+ * Le regole di sfasamento sono statiche in `global.css` (una CSP senza
+ * 'unsafe-inline' vieta gli attributi `style`), quindi il numero di parole
+ * che il CSS sa gestire è fissato: cinque.
+ */
+const MASSIMO = 5;
+const mostrate = parole.slice(0, MASSIMO);
+---
+
+<span class:list={['parole-rotanti', `parole-rotanti--${mostrate.length}`]}>
+  {mostrate.map((parola) => <span>{parola}</span>)}
+</span>

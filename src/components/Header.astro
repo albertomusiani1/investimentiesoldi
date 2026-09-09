@@ -38,7 +38,9 @@ const isAttiva = (href: string) =>
                 aria-current={isAttiva(voce.href) ? 'page' : undefined}
                 class:list={['intestazione__link', { 'intestazione__link--attivo': isAttiva(voce.href) }]}
               >
-                {voce.etichetta}
+                <span class="scorri-testo" data-taglio-voluto>
+                  <span data-testo={voce.etichetta}>{voce.etichetta}</span>
+                </span>
               </a>
             </li>
           ))
@@ -57,7 +59,11 @@ const isAttiva = (href: string) =>
     position: sticky;
     top: 0;
     z-index: 20;
-    background-color: var(--colore-primario-scuro);
+    /* Antracite translucido con sfocatura: scorrendo, il contenuto passa
+       sotto la barra invece di sparirci dietro. */
+    background-color: rgb(35 40 42 / 82%);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
     border-bottom: 2px solid var(--marchio-blu);
     color: var(--colore-testo-inverso);
   }

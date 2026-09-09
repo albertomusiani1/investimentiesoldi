@@ -84,7 +84,7 @@ l'invio del modulo non funziona.
 | `npm run logo` | Ricava gli SVG del marchio e la favicon dal PDF in `brand/` |
 | `npm run immagini:social` | Rigenera `og-default.png` e `apple-touch-icon.png` |
 | `npm run immagini:progetti` | Rigenera le sei illustrazioni delle schede lavoro |
-| `npm run trame` | Rigenera le tessere a favo usate come sfondo |
+| `npm run trame` | Rigenera le tessere a favo e la grana |
 | `npm run disegni` | Rigenera i disegni e i modelli di esempio |
 | `npm run video` | Rigenera il video del hero e i fermi immagine (serve ffmpeg) |
 
@@ -402,7 +402,15 @@ sezione **12**, e si applicano aggiungendo una classe.
 | `.trama` / `.trama--fitta` | Favo di sfondo, sfumato con una maschera | Fasce scure, intestazione, piè di pagina, riquadro finale |
 | `.squadrato` | Due angoli blu che compaiono al passaggio del mouse | Schede lavoro, schede del credo |
 | `.rivela` | Comparsa dal basso mentre si scorre | Quasi tutti i blocchi |
+| `.rivela-parole` | Titolo che si accende **parola per parola** mentre si scorre | Tutte le testate di sezione |
+| `.scorri-testo` | Testo che scorre in su lasciando il posto alla sua copia | Voci del menu |
+| `.parole-rotanti` | Una parola che cambia da sola dentro un titolo | Richiamo finale della home |
 | `.collegamento-tecnico` | Collegamento a pastiglia, monospaziato | «Guarda i disegni» nelle schede lavoro |
+
+Sopra tutto c'è la **grana** (`body::after`): un velo di rumore fisso, al 5 %
+di opacità, che rompe le campiture piatte e le sfumature — quelle che sui fondi
+scuri mostrano le bande di colore. È l'unica cosa che sta sopra ogni altro
+elemento, ma non intercetta il puntatore.
 
 Il componente `IntestazioneSezione.astro` mette insieme indice, etichetta,
 titolo ed eventuale sommario: è quello che dà alle pagine l'aria del fascicolo
@@ -422,6 +430,21 @@ tecnico numerato. Si usa così:
 `animation-timeline: view()`, una funzione CSS recente: dove il browser non la
 supporta il contenuto è semplicemente già al suo posto, senza né errori né
 salti. Ed è disattivata quando il sistema chiede meno animazioni.
+
+> **Due trappole, se ci si mette mano.**
+>
+> 1. **Non scrivere mai `animation-timeline` accanto alla scorciatoia
+>    `animation`.** Il minificatore le fonde in
+>    `animation: linear both nome view()`, che nessun browser accetta: la
+>    dichiarazione viene scartata in silenzio e l'animazione non parte più,
+>    lasciando il testo all'opacità di partenza. Nel foglio di stile le
+>    proprietà stanno separate apposta (`animation-name`,
+>    `animation-timing-function`, `animation-fill-mode`, e il timeline in una
+>    regola a parte). Si controlla guardando il CSS costruito, non il sorgente.
+> 2. **L'intervallo deve chiudersi dentro la fase `entry`.** Un `cover 20%`
+>    sembra funzionare finché il blocco non è l'ultimo della pagina: lì non si
+>    può scorrere abbastanza per arrivarci, e il blocco resta per sempre a metà
+>    animazione.
 
 **Il monospaziato è quello di sistema** (`ui-monospace`, poi Menlo, Consolas…):
 dà il tono da manuale tecnico senza far scaricare un quarto file di caratteri.

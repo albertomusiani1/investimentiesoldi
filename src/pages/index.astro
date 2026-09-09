@@ -6,8 +6,9 @@ import IconaServizio from '../components/IconaServizio.astro';
 import SchedaProgetto from '../components/SchedaProgetto.astro';
 import VisualizzatoreDisegni from '../components/VisualizzatoreDisegni.astro';
 import Clienti from '../components/Clienti.astro';
+import ParoleRotanti from '../components/ParoleRotanti.astro';
 import { getCollection } from 'astro:content';
-import { t } from '../i18n';
+import { t, tElenco } from '../i18n';
 import { servizi } from '../lib/servizi';
 import { processo } from '../lib/processo';
 import { schemaAttivita } from '../lib/schema';
@@ -31,10 +32,10 @@ const modelloInVetrina = progetti
 
 /** CONTENUTO — Cifre di sintesi mostrate in home. Solo dati verificabili. */
 const numeri = [
-  { cifra: '2025', etichetta: 'Anno in cui abbiamo iniziato' },
-  { cifra: '10', etichetta: 'Anni di progettazione nel farmaceutico' },
-  { cifra: '500', etichetta: 'Metri quadri di officina attrezzata' },
-  { cifra: '7', etichetta: 'Aziende che ci hanno dato fiducia' },
+  { cifra: '2025', simbolo: '', etichetta: 'Anno in cui abbiamo iniziato' },
+  { cifra: '10', simbolo: '+', etichetta: 'Anni di progettazione nel farmaceutico' },
+  { cifra: '500', simbolo: 'm²', etichetta: 'Officina attrezzata, condivisa con AZ Vacuum' },
+  { cifra: '7', simbolo: '', etichetta: 'Aziende che ci hanno dato fiducia' },
 ];
 ---
 
@@ -84,7 +85,10 @@ const numeri = [
         {
           numeri.map((n) => (
             <li class="numero rivela">
-              <span class="numero__cifra">{n.cifra}</span>
+              <span class="numero__cifra">
+                {n.cifra}
+                {n.simbolo && <span class="numero__simbolo">{n.simbolo}</span>}
+              </span>
               <span class="numero__etichetta">{n.etichetta}</span>
             </li>
           ))
@@ -158,7 +162,9 @@ const numeri = [
   <section class="sezione richiamo" aria-labelledby="titolo-cta">
     <div class="contenitore">
       <div class="richiamo__riquadro centrato rivela">
-        <h2 id="titolo-cta">{t('home.ctaTitolo')}</h2>
+        <h2 id="titolo-cta">
+          {t('home.ctaTitolo')} <ParoleRotanti parole={tElenco('home.ctaParole')} />
+        </h2>
         <p class="richiamo__testo">{t('home.ctaTesto')}</p>
         <div class="gruppo-bottoni gruppo-bottoni--centrato">
           <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>

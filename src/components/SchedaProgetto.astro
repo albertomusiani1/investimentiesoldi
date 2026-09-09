@@ -35,6 +35,9 @@ const conDisegni = (disegni ?? []).length > 0;
       loading={prioritaria ? 'eager' : 'lazy'}
       decoding="async"
     />
+    <p class="scheda__categoria">
+      <span class="etichetta etichetta--chiara">{categoria}</span>
+    </p>
     {
       conDisegni && (
         <p class="scheda__bollino">
@@ -50,7 +53,6 @@ const conDisegni = (disegni ?? []).length > 0;
     }
   </div>
   <div class="scheda__corpo">
-    <p><span class="etichetta">{categoria}</span></p>
     <h3 class="scheda__titolo"><a href={percorso}>{titolo}</a></h3>
     <p class="scheda__testo">{descrizioneBreve}</p>
     <dl class="scheda__meta">
