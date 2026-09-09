@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-hidden="true" focusable="false">
+  <rect width="800" height="500" fill="#e7ebeb"/>
+  <g stroke="#aab3b4" stroke-width="1" opacity="0.65">
+    <path d="M0 100H800M0 200H800M0 300H800M0 400H800"/>
+    <path d="M100 0V500M200 0V500M300 0V500M400 0V500M500 0V500M600 0V500M700 0V500"/>
+  </g>
+    <g fill="none" stroke="#303435" stroke-width="8">
+      <path d="M330 130h140a60 60 0 0 1 60 60v160a60 60 0 0 1-60 60H330a60 60 0 0 1-60-60V190a60 60 0 0 1 60-60z"/>
+      <path d="M270 260c50-40 210-40 260 0"/>
+      <path d="M370 100h60v30h-60zM370 410h60v30h-60z"/>
+    </g>
+    <path d="M272 258c50-38 206-38 256 0v96c-50 34-206 34-256 0z" fill="#3093c9" opacity="0.22"/>
+    <g stroke="#303435" stroke-width="6" stroke-linecap="round">
+      <path d="M600 190v170M590 200l10-14 10 14M590 350l10 14 10-14"/>
+    </g>
+    <g fill="none" stroke="#3093c9" stroke-width="6">
+      <path d="M180 210h60M180 300h60M180 390h60"/>
+    </g>
+  <g stroke="#aab3b4" stroke-width="6" fill="none" opacity="0.5">
+    <path d="M604 470V430l76-42 76 42v40"/>
+  </g></svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-hidden="true" focusable="false">
+  <rect width="800" height="500" fill="#e7ebeb"/>
+  <g stroke="#aab3b4" stroke-width="1" opacity="0.65">
+    <path d="M0 100H800M0 200H800M0 300H800M0 400H800"/>
+    <path d="M100 0V500M200 0V500M300 0V500M400 0V500M500 0V500M600 0V500M700 0V500"/>
+  </g>
+    <g fill="none" stroke="#303435" stroke-width="8">
+      <rect x="230" y="120" width="340" height="120" rx="8"/>
+      <rect x="230" y="270" width="340" height="120" rx="8"/>
+      <path d="M290 120V90M510 120V90M290 390v30M510 390v30"/>
+    </g>
+    <path d="M356 176h88v64h-24v30h-40v-30h-24z" fill="#3093c9" opacity="0.9"/>
+    <path d="M368 300h64v-30h-64z" fill="#3093c9" opacity="0.35"/>
+    <g fill="none" stroke="#303435" stroke-width="6">
+      <path d="M366 120l14-34h40l14 34"/>
+    </g>
+    <g fill="none" stroke="#3093c9" stroke-width="6" stroke-linecap="round">
+      <path d="M640 200v110M626 290l14 20 14-20"/>
+    </g>
+    <g stroke="#303435" stroke-width="3" stroke-dasharray="12 8">
+      <path d="M180 255h440"/>
+    </g>
+  <g stroke="#aab3b4" stroke-width="6" fill="none" opacity="0.5">
+    <path d="M604 470V430l76-42 76 42v40"/>
+  </g></svg>

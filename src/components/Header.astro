@@ -1,7 +1,8 @@
 ---
 /**
- * Intestazione del sito. Navigazione interamente in HTML e CSS:
- * nessun JavaScript, i link vanno a capo sugli schermi stretti.
+ * Intestazione del sito: barra antracite con la scritta del marchio e la
+ * navigazione. Interamente in HTML e CSS, nessun JavaScript: i link vanno a
+ * capo sugli schermi stretti.
  */
 import Logo from './Logo.astro';
 import { t } from '../i18n';
@@ -23,7 +24,7 @@ const isAttiva = (href: string) =>
 <header class="intestazione">
   <div class="contenitore intestazione__interno">
     <a class="intestazione__marchio" href="/">
-      <Logo />
+      <Logo variante="testo" />
       <span class="solo-screen-reader">— {t('nav.home')}</span>
     </a>
 
@@ -49,8 +50,11 @@ const isAttiva = (href: string) =>
 
 <style>
   .intestazione {
-    background-color: var(--colore-superficie);
-    border-bottom: 1px solid var(--colore-bordo);
+    /* Antracite e filetto blu: gli stessi due colori del marchio, nello
+       stesso rapporto del biglietto da visita. */
+    background-color: var(--colore-primario);
+    border-bottom: 2px solid var(--marchio-blu);
+    color: var(--colore-testo-inverso);
   }
 
   .intestazione__interno {
@@ -62,6 +66,7 @@ const isAttiva = (href: string) =>
 
   .intestazione__marchio {
     align-self: flex-start;
+    color: var(--colore-testo-inverso);
     text-decoration: none;
   }
 
@@ -78,21 +83,22 @@ const isAttiva = (href: string) =>
     display: inline-block;
     padding-block: var(--space-1);
     border-bottom: 2px solid transparent;
-    color: var(--colore-testo-tenue);
+    color: var(--colore-testo-inverso-tenue);
     font-size: var(--testo-sm);
     font-weight: 600;
+    letter-spacing: 0.02em;
     text-decoration: none;
     transition: color var(--transizione), border-color var(--transizione);
   }
 
   .intestazione__link:hover {
-    color: var(--colore-accento);
-    border-bottom-color: var(--colore-accento);
+    color: var(--colore-accento-chiaro);
+    border-bottom-color: var(--colore-accento-chiaro);
   }
 
   .intestazione__link--attivo {
-    color: var(--colore-primario);
-    border-bottom-color: var(--colore-accento);
+    color: var(--colore-testo-inverso);
+    border-bottom-color: var(--marchio-blu);
   }
 
   @media (min-width: 40em) {

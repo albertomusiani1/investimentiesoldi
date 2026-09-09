@@ -25,12 +25,12 @@ const CARTELLA_MODELLI = path.join(radice, 'public', 'modelli');
 const CARTELLA_DISEGNI = path.join(radice, 'public', 'disegni');
 
 // palette del sito
-const INCHIOSTRO = '#16232e';
-const PRIMARIO = '#1d3648';
-const ACCENTO = '#8f3d18';
-const TENUE = '#4d5a66';
-const CARTA = '#faf8f5';
-const BORDO = '#c9c2b6';
+const INCHIOSTRO = '#1e2223';
+const PRIMARIO = '#303435';
+const ACCENTO = '#1b6e9b';
+const TENUE = '#4f5658';
+const CARTA = '#f8faf9';
+const BORDO = '#c6cdcd';
 
 // ===========================================================================
 // 1. Geometria: profili chiusi "a stella" rispetto al centro
@@ -367,9 +367,9 @@ function tavolaSedePistone() {
 
   ${cartiglio(L, H, [
     ['DISEGNO', 'Sede pistone — sez. A-A'],
-    ['CODICE', 'BF-4471-03'],
+    ['CODICE', 'PT-0104-A'],
     ['SCALA', '1:2'],
-    ['REVISIONE', 'C — 05/11/2024'],
+    ['REVISIONE', 'A — 18/06/2025'],
   ])}
 </svg>`;
 }
@@ -381,7 +381,7 @@ function tavolaSchemaCollaudo() {
 
   const stazione = (x, y, etichetta, evidenziata) => `
     <g>
-      <rect x="${x}" y="${y}" width="180" height="120" rx="4" fill="${evidenziata ? '#f2e6df' : 'none'}" stroke="${evidenziata ? ACCENTO : INCHIOSTRO}" stroke-width="1.8"/>
+      <rect x="${x}" y="${y}" width="180" height="120" rx="4" fill="${evidenziata ? '#e2eef5' : 'none'}" stroke="${evidenziata ? ACCENTO : INCHIOSTRO}" stroke-width="1.8"/>
       <text x="${x + 90}" y="${y + 52}" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="${INCHIOSTRO}">${etichetta[0]}</text>
       <text x="${x + 90}" y="${y + 76}" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="${TENUE}">${etichetta[1]}</text>
     </g>`;
@@ -458,9 +458,9 @@ function tavolaSchemaCollaudo() {
 
   ${cartiglio(L, H, [
     ['DISEGNO', 'Linea collaudo — schema'],
-    ['CODICE', 'BF-5120-01'],
+    ['CODICE', 'PT-0207-A'],
     ['SCALA', 'NON IN SCALA'],
-    ['REVISIONE', 'A — 11/09/2023'],
+    ['REVISIONE', 'A — 14/04/2025'],
   ])}
 </svg>`;
 }
@@ -473,8 +473,8 @@ await mkdir(CARTELLA_MODELLI, { recursive: true });
 await mkdir(CARTELLA_DISEGNI, { recursive: true });
 
 const modelli = [
-  { nome: 'puleggia-dentata', triangoli: puleggiaDentata(), titolo: 'Puleggia dentata Z=24 - Brambilla Future' },
-  { nome: 'boccola-flangiata', triangoli: boccolaFlangiata(), titolo: 'Boccola flangiata - Brambilla Future' },
+  { nome: 'puleggia-dentata', triangoli: puleggiaDentata(), titolo: 'Puleggia dentata Z=24 - PROJECTUNE' },
+  { nome: 'boccola-flangiata', triangoli: boccolaFlangiata(), titolo: 'Boccola flangiata - PROJECTUNE' },
 ];
 
 for (const modello of modelli) {

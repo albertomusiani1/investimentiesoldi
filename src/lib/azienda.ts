@@ -1,47 +1,75 @@
 /**
  * Dati anagrafici dell'attività.
  *
- * SOSTITUIRE PRIMA DI ANDARE ONLINE: ogni valore di questo file è un
- * segnaposto realistico ma inventato. È l'unico punto in cui compaiono
- * indirizzo, telefono, email e dati societari: footer, pagina contatti,
- * privacy policy e JSON-LD leggono tutti da qui.
+ * È l'unico punto in cui compaiono indirizzo, telefoni, email e dati fiscali:
+ * footer, pagina contatti, privacy policy e JSON-LD leggono tutti da qui.
+ *
+ * I valori sono quelli reali forniti dal cliente. Restano da completare due
+ * cose, segnate qui sotto con DA COMPLETARE: la via della sede e gli orari.
+ * Finché mancano il sito non le mostra, invece di inventarle.
  */
+
+/** Una persona di riferimento con il suo numero diretto. */
+export interface Referente {
+  nome: string;
+  ruolo: string;
+  /** Con spazi unificatori (U+00A0): il numero non deve andare a capo. */
+  telefono: string;
+  /** Solo cifre e prefisso, per l'attributo href="tel:". */
+  telefonoLink: string;
+}
+
+export const referenti: Referente[] = [
+  {
+    nome: 'Davide Matteuzzi',
+    ruolo: 'Progettazione meccanica',
+    telefono: '+39 334 5990060',
+    telefonoLink: '+393345990060',
+  },
+  {
+    nome: 'Simone Matteuzzi',
+    ruolo: 'Montaggi e revisioni',
+    telefono: '+39 334 9292614',
+    telefonoLink: '+393349292614',
+  },
+];
+
 export const azienda = {
-  nome: 'Brambilla Future',
-  nomeLegale: 'Brambilla Future S.r.l.',
+  nome: 'PROJECTUNE',
+  nomeLegale: 'PROJECTUNE di Matteuzzi Davide',
   descrizioneBreve:
-    "Progettazione, produzione e validazione di componenti per l'industria automotive.",
-  fondazione: '1978',
-  email: 'info@brambillafuture.it',
-  emailPec: 'brambillafuture@pec.it',
-  // Spazi unificatori (U+00A0): il numero non deve andare a capo.
-  telefono: '+39 0362 550 118',
-  telefonoLink: '+390362550118',
+    'Progettazione meccanica, montaggi e revisioni per macchine automatiche.',
+  fondazione: '2025',
+  email: 'service.projectune@gmail.com',
+  /** Primo riferimento telefonico: quello pubblicato nei dati strutturati. */
+  telefono: referenti[0]!.telefono,
+  telefonoLink: referenti[0]!.telefonoLink,
   indirizzo: {
-    via: "Via dell'Industria 24",
-    cap: '20831',
-    citta: 'Seregno',
-    provincia: 'MB',
-    regione: 'Lombardia',
+    /** DA COMPLETARE: via e numero civico della sede di Castel Maggiore. */
+    via: '',
+    /** DA COMPLETARE: CAP della sede (Castel Maggiore è 40013). */
+    cap: '',
+    citta: 'Castel Maggiore',
+    provincia: 'BO',
+    regione: 'Emilia-Romagna',
     nazione: 'IT',
     nazioneEstesa: 'Italia',
   },
-  coordinate: {
-    latitudine: 45.6501,
-    longitudine: 9.2038,
-  },
-  orari: [
-    { giorni: 'Lunedì – giovedì', orario: '08:00 – 12:30 / 13:30 – 17:30' },
-    { giorni: 'Venerdì', orario: '08:00 – 14:00' },
-    { giorni: 'Sabato e domenica', orario: 'Chiuso' },
-  ],
+  /** Metri quadri dell'officina condivisa con AZ Vacuum. */
+  superficieOfficina: 500,
   datiSocietari: {
-    partitaIva: 'IT01234567890',
-    rea: 'MB-1234567',
-    capitaleSociale: '250.000,00 € i.v.',
+    partitaIva: '04278521200',
   },
-  /** Numero di dipendenti, usato nella pagina Chi siamo e nel JSON-LD. */
-  dipendenti: 60,
+  /** Persone che compongono l'azienda. */
+  dipendenti: 2,
 } as const;
 
-export const indirizzoCompleto = `${azienda.indirizzo.via}, ${azienda.indirizzo.cap} ${azienda.indirizzo.citta} (${azienda.indirizzo.provincia})`;
+/** Indirizzo su una riga. Salta i pezzi non ancora forniti. */
+export const indirizzoCompleto = [
+  azienda.indirizzo.via,
+  [azienda.indirizzo.cap, `${azienda.indirizzo.citta} (${azienda.indirizzo.provincia})`]
+    .filter(Boolean)
+    .join(' '),
+]
+  .filter(Boolean)
+  .join(', ');

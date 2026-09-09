@@ -1,80 +1,88 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { t } from '../i18n';
-import { azienda } from '../lib/azienda';
+import { azienda, referenti } from '../lib/azienda';
 
-/** CONTENUTO — SOSTITUIRE: tappe della storia aziendale. */
+/** CONTENUTO — Come siamo arrivati fin qui. */
 const storia = [
   {
-    anno: '1978',
-    titolo: 'Nasce l\'officina',
+    anno: 'Prima',
+    titolo: 'Dieci anni di macchine automatiche',
     testo:
-      'Luigi Brambilla apre una piccola officina di tornitura in un capannone di trecento metri quadri a Seregno, con tre torni paralleli e due dipendenti.',
+      "Davide passa dieci anni a progettare macchine automatiche per il settore farmaceutico, e nel frattempo mette le mani anche su accumulatori oleodinamici e macchinari per fonderia. Simone monta gruppi meccanici in piccola e media serie per il packaging, e impara a revisionare pompe idrauliche e pompe per vuoto.",
   },
   {
-    anno: '1994',
-    titolo: 'Il primo controllo numerico',
+    anno: '2025',
+    titolo: 'Nasce PROJECTUNE',
     testo:
-      'L\'ingresso della seconda generazione porta il primo centro di lavoro a controllo numerico e le prime forniture dirette a un costruttore di veicoli industriali.',
+      "Decidiamo di provarci per conto nostro: mettere insieme la progettazione e il montaggio, che nelle aziende stanno in due reparti diversi e qui stanno nella stessa stanza. L'attività nasce a Castel Maggiore, dove siamo nati e cresciuti anche noi.",
   },
   {
-    anno: '2009',
-    titolo: 'Certificazione di sistema',
+    anno: 'Oggi',
+    titolo: "Un'officina condivisa e una fila di clienti",
     testo:
-      'Dopo la crisi del settore l\'azienda sceglie di specializzarsi: certificazione ISO/TS 16949, reparto qualità interno e laboratorio prove.',
-  },
-  {
-    anno: '2019',
-    titolo: 'Ufficio tecnico e banchi prova',
-    testo:
-      'Nasce l\'ufficio di progettazione interno. Da fornitore di lavorazioni l\'azienda diventa interlocutore tecnico, capace di prendersi il componente dal requisito alla serie.',
-  },
-  {
-    anno: '2024',
-    titolo: 'Elettrificazione',
-    testo:
-      'Il reparto retrofit consegna la prima flotta convertita a trazione elettrica e apre la linea di piastre di raffreddamento per pacchi batteria.',
+      "Lavoriamo dai clienti oppure nella nostra sede, cinquecento metri quadri condivisi con AZ Vacuum, che è insieme partner e cliente. Il modo di lavorare ci ha fatto conoscere in più ambiti, e con la maggior parte dei clienti il rapporto si è consolidato.",
   },
 ];
 
-/** CONTENUTO — SOSTITUIRE: valori aziendali. */
+/** CONTENUTO — Il nostro credo. */
 const valori = [
   {
-    titolo: 'Numeri, non impressioni',
+    titolo: 'Una realtà giovane e dinamica',
     testo:
-      'Ogni affermazione tecnica che facciamo è accompagnata dal dato che la sostiene. Se un dato non ce l\'abbiamo, lo diciamo e proponiamo come misurarlo.',
+      "PROJECTUNE nasce dalla voglia di intraprendere un percorso nostro e di crescere: come persone prima ancora che come azienda. È il motivo per cui esistiamo, non una frase da mettere in fondo alla pagina.",
   },
   {
-    titolo: 'Un solo referente',
+    titolo: 'Lavoro che resta sul territorio',
     testo:
-      'Chi vi risponde in offerta è la stessa persona che seguirà la commessa. Non passiamo la pratica ad altri dopo la firma.',
+      'Vogliamo costruire qualcosa che porti lavoro nella comunità in cui siamo cresciuti. Castel Maggiore non è un indirizzo scelto per comodità: è casa nostra.',
   },
   {
-    titolo: 'Tempi che teniamo',
+    titolo: 'Serietà, che si vede dopo',
     testo:
-      'Preferiamo una data più lontana ma rispettata a una data comoda che salta. Nel 2025 abbiamo consegnato in data il 96% delle commesse.',
+      'Un montaggio o un disegno fatti bene si riconoscono a distanza di mesi, quando la macchina lavora e nessuno deve tornarci sopra. È così che ci siamo fatti conoscere, ed è così che intendiamo continuare.',
   },
   {
-    titolo: 'Conoscenza che resta',
+    titolo: 'Due interlocutori, non un centralino',
     testo:
-      'Consegniamo sorgenti, disegni e dati grezzi. Quello che progettiamo per un cliente resta del cliente, anche se un giorno cambierà fornitore.',
+      'Siamo in due: chi risponde al telefono è la stessa persona che farà il lavoro. Non c’è nessuno a cui passare la pratica, e questo tiene le cose semplici.',
   },
 ];
 
-/** CONTENUTO — SOSTITUIRE: persone di riferimento. */
-const team = [
-  { nome: 'Chiara Brambilla', ruolo: 'Direzione generale' },
-  { nome: 'Marco Terzaghi', ruolo: 'Responsabile ufficio tecnico' },
-  { nome: 'Anna Riva', ruolo: 'Responsabile qualità' },
-  { nome: 'Youssef El Amrani', ruolo: 'Responsabile produzione' },
+/** CONTENUTO — Le due persone dell'azienda. */
+const persone = [
+  {
+    nome: referenti[0]!.nome,
+    ruolo: referenti[0]!.ruolo,
+    testo:
+      "Progettista meccanico con dieci anni di esperienza su macchine automatiche per il farmaceutico, e incursioni negli accumulatori oleodinamici e nei macchinari per fonderia.",
+  },
+  {
+    nome: referenti[1]!.nome,
+    ruolo: referenti[1]!.ruolo,
+    testo:
+      'Montatore meccanico: piccole e medie serie per macchine da packaging, revisione e manutenzione di pompe idrauliche e per vuoto, montaggio di componenti per accumulatori.',
+  },
 ];
 
-/** CONTENUTO — SOSTITUIRE: certificazioni realmente possedute. */
-const certificazioni = [
-  { sigla: 'IATF 16949:2016', testo: 'Sistema di gestione qualità per la filiera automotive.' },
-  { sigla: 'ISO 14001:2015', testo: 'Sistema di gestione ambientale dello stabilimento.' },
-  { sigla: 'ISO 45001:2018', testo: 'Salute e sicurezza sul lavoro.' },
-  { sigla: 'EN ISO 3834-2', testo: 'Requisiti di qualità per la saldatura per fusione.' },
+/** CONTENUTO — L'officina. */
+const officina = [
+  {
+    voce: `${azienda.superficieOfficina} m²`,
+    testo: 'Officina attrezzata a Castel Maggiore, condivisa con AZ Vacuum, partner e cliente.',
+  },
+  {
+    voce: 'Sale di test',
+    testo: "Prove sul vuoto per il settore farmaceutico e alimentare, nella stessa sede.",
+  },
+  {
+    voce: 'Montaggio e prova',
+    testo: 'Macchinari automatici montati e provati prima di partire per lo stabilimento di destinazione.',
+  },
+  {
+    voce: 'Oppure da voi',
+    testo: 'Siamo attrezzati per lavorare direttamente presso il cliente, quando conviene stare sulla macchina.',
+  },
 ];
 
 const iniziali = (nome: string) =>
@@ -121,7 +129,50 @@ const iniziali = (nome: string) =>
     </div>
   </section>
 
-  <section class="sezione" aria-labelledby="titolo-valori">
+  <section class="sezione" aria-labelledby="titolo-team">
+    <div class="contenitore">
+      <div class="intestazione-sezione">
+        <h2 id="titolo-team">{t('chiSiamo.teamTitolo')}</h2>
+      </div>
+      <ul class="griglia griglia--2 elenco-piatto">
+        {
+          persone.map((persona) => (
+            <li class="persona">
+              <svg
+                class="persona__monogramma"
+                width="72"
+                height="72"
+                viewBox="0 0 72 72"
+                role="img"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <rect width="72" height="72" rx="6" fill="#303435" />
+                <text
+                  x="36"
+                  y="46"
+                  text-anchor="middle"
+                  font-family="Arial, Helvetica, sans-serif"
+                  font-size="26"
+                  font-weight="bold"
+                  fill="#6fbbe6"
+                >
+                  {iniziali(persona.nome)}
+                </text>
+              </svg>
+              <div>
+                <h3 class="persona__nome">{persona.nome}</h3>
+                <p class="persona__ruolo">{persona.ruolo}</p>
+                <p class="persona__testo">{persona.testo}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione sezione--alt" aria-labelledby="titolo-valori">
     <div class="contenitore">
       <div class="intestazione-sezione">
         <h2 id="titolo-valori">{t('chiSiamo.valoriTitolo')}</h2>
@@ -141,58 +192,17 @@ const iniziali = (nome: string) =>
     </div>
   </section>
 
-  <section class="sezione sezione--alt" aria-labelledby="titolo-team">
+  <section class="sezione" aria-labelledby="titolo-sede">
     <div class="contenitore">
       <div class="intestazione-sezione">
-        <h2 id="titolo-team">{t('chiSiamo.teamTitolo')}</h2>
+        <h2 id="titolo-sede">{t('chiSiamo.sedeTitolo')}</h2>
       </div>
-      <ul class="griglia griglia--2 griglia--3 elenco-piatto">
+      <dl class="prosa officina">
         {
-          team.map((persona) => (
-            <li class="persona">
-              <svg
-                class="persona__monogramma"
-                width="72"
-                height="72"
-                viewBox="0 0 72 72"
-                role="img"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <rect width="72" height="72" rx="6" fill="#1d3648" />
-                <text
-                  x="36"
-                  y="47"
-                  text-anchor="middle"
-                  font-family="Georgia, serif"
-                  font-size="28"
-                  fill="#faf8f5"
-                >
-                  {iniziali(persona.nome)}
-                </text>
-              </svg>
-              <div>
-                <h3 class="persona__nome">{persona.nome}</h3>
-                <p class="persona__ruolo">{persona.ruolo}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <section class="sezione" aria-labelledby="titolo-certificazioni">
-    <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h2 id="titolo-certificazioni">{t('chiSiamo.certificazioniTitolo')}</h2>
-      </div>
-      <dl class="prosa certificazioni">
-        {
-          certificazioni.map((certificazione) => (
+          officina.map((riga) => (
             <>
-              <dt>{certificazione.sigla}</dt>
-              <dd>{certificazione.testo}</dd>
+              <dt>{riga.voce}</dt>
+              <dd>{riga.testo}</dd>
             </>
           ))
         }
@@ -201,7 +211,7 @@ const iniziali = (nome: string) =>
         <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
       </div>
       <p class="nota">
-        {`${azienda.nomeLegale} \u00b7 ${t('footer.capitaleSociale')} ${azienda.datiSocietari.capitaleSociale}`}
+        {`${azienda.nomeLegale} · ${t('footer.partitaIva')} ${azienda.datiSocietari.partitaIva}`}
       </p>
     </div>
   </section>
@@ -214,7 +224,6 @@ const iniziali = (nome: string) =>
     margin: 0;
     padding: 0;
     list-style: none;
-    counter-reset: tappa;
   }
 
   .tappa {
@@ -225,9 +234,11 @@ const iniziali = (nome: string) =>
   }
 
   .tappa__anno {
-    font-family: var(--font-serif);
-    font-size: var(--testo-lg);
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: var(--testo-md);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--colore-accento);
   }
 
@@ -250,7 +261,7 @@ const iniziali = (nome: string) =>
   .persona {
     display: flex;
     gap: var(--space-4);
-    align-items: center;
+    align-items: flex-start;
   }
 
   .persona__monogramma {
@@ -264,11 +275,20 @@ const iniziali = (nome: string) =>
 
   .persona__ruolo {
     margin-top: var(--space-1);
+    color: var(--colore-accento);
+    font-size: var(--testo-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracciatura-etichetta);
+    text-transform: uppercase;
+  }
+
+  .persona__testo {
+    margin-top: var(--space-3);
     color: var(--colore-testo-tenue);
     font-size: var(--testo-sm);
   }
 
-  .certificazioni {
+  .officina {
     margin-top: 0;
   }
 

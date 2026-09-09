@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FormContatti from '../components/FormContatti.astro';
 import { t } from '../i18n';
-import { azienda, indirizzoCompleto } from '../lib/azienda';
+import { azienda, indirizzoCompleto, referenti } from '../lib/azienda';
 ---
 
 <BaseLayout
@@ -19,15 +19,27 @@ import { azienda, indirizzoCompleto } from '../lib/azienda';
 
       <div class="contatti">
         <div class="contatti__dati">
-          <h2 class="contatti__titolo">{t('contatti.datiTitolo')}</h2>
+          <h2 class="contatti__titolo">{t('contatti.referentiTitolo')}</h2>
           <dl class="contatti__elenco">
-            <dt>{t('contatti.telefonoLabel')}</dt>
-            <dd><a href={`tel:${azienda.telefonoLink}`}>{azienda.telefono}</a></dd>
-            <dt>{t('contatti.emailLabel')}</dt>
-            <dd><a href={`mailto:${azienda.email}`}>{azienda.email}</a></dd>
-            <dt>{t('contatti.pecLabel')}</dt>
-            <dd><a href={`mailto:${azienda.emailPec}`}>{azienda.emailPec}</a></dd>
+            {
+              referenti.map((referente) => (
+                <>
+                  <dt>
+                    {referente.nome}
+                    <span class="contatti__ruolo">{referente.ruolo}</span>
+                  </dt>
+                  <dd>
+                    <a href={`tel:${referente.telefonoLink}`}>{referente.telefono}</a>
+                  </dd>
+                </>
+              ))
+            }
           </dl>
+
+          <h2 class="contatti__titolo">{t('contatti.emailLabel')}</h2>
+          <p class="contatti__email">
+            <a href={`mailto:${azienda.email}`}>{azienda.email}</a>
+          </p>
 
           <h2 class="contatti__titolo">{t('contatti.sedeTitolo')}</h2>
           <address class="contatti__indirizzo">
@@ -35,23 +47,12 @@ import { azienda, indirizzoCompleto } from '../lib/azienda';
             {indirizzoCompleto}<br />
             {azienda.indirizzo.nazioneEstesa}
           </address>
-
-          <h2 class="contatti__titolo">{t('contatti.orariTitolo')}</h2>
-          <dl class="contatti__elenco">
-            {
-              azienda.orari.map((riga) => (
-                <>
-                  <dt>{riga.giorni}</dt>
-                  <dd>{riga.orario}</dd>
-                </>
-              ))
-            }
-          </dl>
+          <p class="contatti__nota">{t('contatti.sedeTesto')}</p>
         </div>
 
         <div class="contatti__mappa">
           <img
-            src="/img/mappa-seregno.svg"
+            src="/img/mappa-castel-maggiore.svg"
             alt={t('contatti.mappaAlt')}
             width="800"
             height="500"
@@ -84,7 +85,7 @@ import { azienda, indirizzoCompleto } from '../lib/azienda';
     font-family: var(--font-sans);
     font-size: var(--testo-xs);
     font-weight: 600;
-    letter-spacing: 0.09em;
+    letter-spacing: var(--tracciatura-etichetta);
     text-transform: uppercase;
     color: var(--colore-testo-tenue);
   }
@@ -101,11 +102,31 @@ import { azienda, indirizzoCompleto } from '../lib/azienda';
 
   .contatti__elenco dt {
     font-size: var(--testo-sm);
+    color: var(--colore-testo);
+    font-weight: 600;
+  }
+
+  .contatti__ruolo {
+    display: block;
     color: var(--colore-testo-tenue);
+    font-size: var(--testo-xs);
+    font-weight: 400;
+  }
+
+  .contatti__nota {
+    margin-top: var(--space-4);
+    max-width: 46ch;
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-sm);
   }
 
   .contatti__elenco dd {
     margin: 0 0 var(--space-2);
+    font-weight: 600;
+  }
+
+  .contatti__email {
+    margin-top: var(--space-3);
     font-weight: 600;
   }
 

@@ -1,4 +1,4 @@
-# PLAN.md — Sito vetrina Brambilla Future (settore automotive)
+# PLAN.md — Sito vetrina PROJECTUNE (progettazione meccanica e montaggi)
 
 Sito statico Astro, italiano, corporate sobrio. CSS puro, zero JS al client tranne
 l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
@@ -19,6 +19,17 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
   `npm run check:js`. Nessun'altra parte del sito è stata toccata. Tutte le verifiche
   rieseguite: Lighthouse 100/100/100/100 su home e su una pagina progetto col
   visualizzatore.
+- 2026-09-09 16:30 — **Il sito diventa di PROJECTUNE.** Il proprietario ha passato il
+  marchio del cliente (PDF vettoriale e biglietto da visita) e il testo di presentazione
+  dell'azienda: identità, palette, tipografia e contenuti sono stati rifatti su quelli.
+  Antracite `#303435` e blu `#3093C9` letti dal PDF; marchio convertito in SVG da uno
+  script, non ridisegnato; titoli passati da un serif editoriale ad Archivo, che sta a un
+  marchio geometrico; intestazione e piè di pagina antracite come il biglietto da visita.
+  Contenuti veri: due referenti con i loro numeri, i quattro servizi che sanno fare
+  davvero, la storia dei due fratelli, l'officina di 500 m² condivisa con AZ Vacuum e la
+  fascia dei clienti in fondo alla home. Dove il cliente non ha ancora fornito un dato
+  (via della sede, orari) il sito lo omette invece di inventarlo. Tutte le verifiche
+  rieseguite: Lighthouse 100/100/100/100, responsive 48/48.
 - 2026-09-07 15:05 — Allineata la documentazione ai numeri nuovi: `GUIDA.md` (e la
   sua versione stampabile) diceva ancora «80 kB a pagina» e «2,4 kB di JavaScript su
   una pagina sola». Ora dice 104 kB in home, una ventina sulle altre, 14,6 kB di
@@ -320,6 +331,68 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
     resta più corto e le due chiamate all'azione restano visibili. Verificato a 360, 480,
     640, 768 e 1280 px.
 
+26. **Il marchio si converte, non si ridisegna.** Il PDF del cliente è vettoriale (esce
+    da Inkscape, testo già in tracciati): `scripts/genera-logo.mjs` ne legge il flusso di
+    contenuto e ne ricava gli SVG. Rifarlo a mano sarebbe stato più veloce ma avrebbe
+    prodotto un marchio *somigliante*; così è lo stesso identico disegno, e se il cliente
+    manda una versione nuova basta sostituire il PDF. Lo script si ferma se il numero di
+    tracciati cambia, invece di produrre in silenzio un marchio mutilato. Il PDF originale
+    resta nel repository, in `brand/`. Alternativa scartata: incollare l'SVG esportato a
+    mano una volta e dimenticarsi da dove viene.
+
+27. **Nella barra in alto va la sola scritta del marchio.** Il marchio completo ha
+    proporzione 304 × 224: a 190 px di larghezza sarebbe alto 140, cioè il doppio di una
+    barra di navigazione, e rimpicciolito a 60 px di altezza avrebbe la scritta alta 5 px.
+    Le due alternative erano inventare un blocco orizzontale spostando l'ingranaggio
+    accanto alla scritta — cioè modificare il disegno del cliente — oppure usarne una
+    parte così com'è. Ho scelto la seconda: la scritta in alto, il marchio intero nel piè
+    di pagina, nella favicon e nell'immagine per i social, dove lo spazio c'è.
+
+28. **Tre blu invece di uno.** Il blu del marchio su bianco dà 3,42:1, sotto il 4,5:1
+    richiesto per il testo (e 3,68:1 su antracite, sempre sotto). Tenerlo per il testo
+    avrebbe rotto un requisito del progetto; cambiarlo avrebbe rotto il marchio. Il foglio
+    di stile ha quindi `--marchio-blu` per la grafica e i titoli grandi, `--colore-accento`
+    (`#1B6E9B`, 5,6:1) per testo e bottoni su chiaro, `--colore-accento-chiaro`
+    (`#6FBBE6`, 5,95:1) per il testo su antracite. È lo stesso blu, scurito o schiarito
+    quanto basta: a occhio la differenza non si nota, a leggerlo sì.
+
+29. **Il sito resta chiaro, con l'antracite nelle fasce.** Marchio e biglietto da visita
+    sono su fondo scuro, e la tentazione di fare tutto il sito scuro era forte. Ma dieci
+    pagine di testo tecnico su fondo scuro si leggono peggio, e il sito ne ha parecchio.
+    Compromesso: intestazione, piè di pagina, hero e due fasce interne in antracite, il
+    corpo del testo su fondo chiaro. Il rapporto fra i due colori resta quello del
+    biglietto da visita.
+
+30. **Il serif editoriale è stato sostituito da Archivo per tutti i titoli.** Source Serif
+    stava bene con la vecchia identità, non sta con un marchio geometrico e tecnico. I
+    caratteri restano due (Inter per il testo, Archivo per i titoli): un file in meno da
+    scaricare rispetto a prima, e le etichette maiuscole riprendono la spaziatura
+    larghissima della scritta del logo.
+
+31. **Dove manca un dato, non si inventa: si omette.** Via e CAP della sede non sono stati
+    forniti, gli orari nemmeno. Un indirizzo plausibile ma sbagliato finirebbe nei dati
+    strutturati e da lì nelle schede di Google, dove correggerlo è molto più difficile che
+    non scriverlo. Il sito mostra «Castel Maggiore (BO)», il JSON-LD omette la via, e i
+    campi sono segnati `DA COMPLETARE` in `src/lib/azienda.ts`.
+
+32. **I marchi dei clienti non si scaricano da internet.** Il proprietario
+    li ha chiesti, ma un logo altrui si pubblica se l'azienda lo manda o dà il consenso.
+    `src/lib/clienti.ts` ha il campo `logo` facoltativo: finché è vuoto la targa mostra il
+    nome composto nella tipografia del sito, con la stessa altezza delle altre, così la
+    fila resta ordinata mentre i marchi arrivano uno alla volta.
+
+33. **Le sei schede lavoro sono esempi coerenti, non commesse reali.** Le vecchie schede
+    inventavano nomi di clienti e cifre di risultato: su un sito vero è pubblicità
+    ingannevole. Le nuove restano nei mestieri che il cliente ha dichiarato, senza numeri
+    di prestazione e senza nomi di committenti non autorizzati (il campo `cliente` dice
+    che *tipo* di azienda è). Vanno sostituite quando arrivano le foto e i testi veri.
+
+34. **L'elenco delle pagine del check responsive si ricava da `dist/`.** Era scritto a
+    mano e conteneva ancora i vecchi indirizzi dei progetti: le pagine rinominate venivano
+    controllate come 404, che ovviamente non hanno overflow, e il check passava verde su
+    pagine che non esistevano più. Ora l'elenco si costruisce dai file prodotti: 48
+    combinazioni invece di 42, e non può più invecchiare in silenzio.
+
 ---
 
 ## Versioni installate
@@ -341,8 +414,9 @@ immagini social e arriva già come dipendenza di Astro.
 |---|---|---|
 | playwright | 1.62.1 | Solo per il check 14 (overflow e screenshot a 360/768/1280 px). Non finisce in `dist/`. |
 
-Caratteri: Inter 400/600, Source Serif 4 600 e **Archivo 700** (solo il titolo del
-hero), sottoinsieme latino, licenza SIL Open Font License 1.1.
+Caratteri: Inter 400/600 (testo) e **Archivo 700** (titoli e hero), sottoinsieme latino,
+licenza SIL Open Font License 1.1. Source Serif 4 è stato rimosso con il cambio di
+identità: i file dei caratteri passano da quattro a tre.
 
 `ffmpeg` serve solo a `npm run video` e non è dipendenza del progetto: il video è
 committato già codificato.
@@ -350,19 +424,22 @@ committato già codificato.
 Strumenti di verifica eseguiti con `npx`, non installati nel progetto:
 lighthouse 13.4.1, html-validate, linkinator.
 
-Font (copiati come file, non come dipendenze): Inter 400/600 e Source Serif 4 600,
-sottoinsieme latino, licenza SIL Open Font License 1.1.
+Font (copiati come file, non come dipendenze): Inter 400/600 e Archivo 700, sottoinsieme
+latino, licenza SIL Open Font License 1.1.
 
 ---
 
 ## Problemi aperti
 
-Nessun check della Definizione di Fatto resta rosso. Restano tre cose che dipendono dal
-proprietario e non possono essere chiuse da qui:
+Nessun check della Definizione di Fatto resta rosso. Restano cose che dipendono dal
+proprietario e dal cliente, e non possono essere chiuse da qui:
 
-1. **I contenuti sono segnaposto.** Realistici e della lunghezza giusta per far emergere i
-   problemi di impaginazione, ma inventati. Elenco puntuale di che cosa sostituire nel
-   README, sezione «Cosa sostituire prima di andare online».
+1. **Mancano quattro cose del cliente**, elencate nel README in «Cosa sostituire prima di
+   andare online → la lista corta»: via e CAP della sede, le foto dei lavori, i testi veri
+   delle commesse, i marchi dei clienti. Nel frattempo il sito omette i dati mancanti
+   invece di inventarli, e le sei schede lavoro sono esempi coerenti con i mestieri
+   dichiarati, non commesse realmente svolte: vanno confermate o sostituite prima di
+   togliere il blocco dell'indicizzazione.
 2. **Privacy policy e cookie policy vanno rilette da chi tratta i dati.** Il testo è
    coerente con quello che il modulo raccoglie davvero, ma è una base, non un parere
    legale: in particolare vanno indicati per nome i fornitori nominati responsabili del

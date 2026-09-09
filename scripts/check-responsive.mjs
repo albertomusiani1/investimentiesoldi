@@ -14,7 +14,7 @@
  * Uso: npm run preview & ; node scripts/check-responsive.mjs [base-url]
  */
 import { existsSync } from 'node:fs';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
@@ -25,20 +25,38 @@ const base = (process.argv[2] ?? process.env.BASE_URL ?? 'http://localhost:4321'
 
 const LARGHEZZE = [360, 768, 1280];
 
+/**
+ * L'elenco delle pagine si ricava da `dist/`, non si scrive a mano: un
+ * elenco scritto a mano invecchia in silenzio, e una pagina rinominata
+ * verrebbe controllata come una 404 continuando a risultare a posto.
+ */
+async function paginePubblicate(cartella) {
+  const voci = await readdir(cartella, { withFileTypes: true });
+  const trovate = [];
+  for (const voce of voci) {
+    const completo = path.join(cartella, voce.name);
+    if (voce.isDirectory()) trovate.push(...(await paginePubblicate(completo)));
+    else if (voce.name.endsWith('.html')) trovate.push(completo);
+  }
+  return trovate;
+}
+
+const dist = path.join(radice, 'dist');
+if (!existsSync(dist)) {
+  console.error('Manca la cartella dist/: eseguire prima `npm run build`.');
+  process.exit(1);
+}
+
 const PAGINE = [
-  '/',
-  '/servizi',
-  '/progetti',
-  '/progetti/staffa-portamotore-alluminio',
-  '/progetti/serie-cnc-pinze-freno',
-  '/progetti/piastra-raffreddamento-pacco-batteria',
-  '/progetti/linea-collaudo-tenuta-serbatoi',
-  '/chi-siamo',
-  '/contatti',
-  '/contatti/grazie',
-  '/contatti/errore',
-  '/privacy',
-  '/cookie-policy',
+  ...(await paginePubblicate(dist))
+    .map((file) => {
+      const relativo = path.relative(dist, file).replaceAll(path.sep, '/');
+      if (relativo === 'index.html') return '/';
+      return `/${relativo.replace(/\/index\.html$/, '').replace(/\.html$/, '')}`;
+    })
+    // La 404 si controlla chiedendo un indirizzo inesistente, qui sotto.
+    .filter((percorso) => percorso !== '/404')
+    .sort(),
   '/pagina-inesistente-per-la-404',
 ];
 

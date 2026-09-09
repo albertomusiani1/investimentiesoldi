@@ -1,11 +1,11 @@
 # RESULTS.md — esito delle verifiche
 
-Sito vetrina **Brambilla Future** (settore automotive), costruito con Astro.
-Tutti i comandi sono stati eseguiti davvero; sotto c'è il loro output reale, non
-una stima.
+Sito vetrina **PROJECTUNE di Matteuzzi Davide** (progettazione meccanica,
+montaggi e revisioni), costruito con Astro. Tutti i comandi sono stati eseguiti
+davvero; sotto c'è il loro output reale, non una stima.
 
-- **Data dell'esecuzione:** 7 settembre 2026 (rieseguita dopo il rifacimento del
-  hero e l'aggiunta del visualizzatore di disegni)
+- **Data dell'esecuzione:** 9 settembre 2026 (rieseguita dopo l'adozione del
+  marchio, della palette e dei contenuti del cliente)
 - **Ambiente:** Linux x86-64, Node.js v22.22.2, npm 10.9.7
 - **Comando di partenza:** `rm -rf dist && npm run build`
 - **Esito complessivo: 15 check su 15 passati.**
@@ -17,7 +17,7 @@ una stima.
 | # | Check | Esito | Sintesi |
 |---|---|---|---|
 | 1 | Build | ✅ | exit 0, 16 pagine, nessun warning |
-| 2 | Type check | ✅ | 0 errori, 0 warning, 0 hint su 39 file |
+| 2 | Type check | ✅ | 0 errori, 0 warning, 0 hint su 51 file |
 | 3 | Pagine raggiungibili | ✅ | 24/24 risorse a 200 |
 | 4 | 404 personalizzata | ✅ | stato 404 e contenuto della pagina del sito |
 | 5 | Lighthouse home (mobile) | ✅ | 100 / 100 / 100 / 100 |
@@ -30,7 +30,7 @@ una stima.
 | 11 | Schema collection | ✅ | la build si ferma con errore leggibile |
 | 12 | Segreti | ✅ | nessuna corrispondenza per entrambi i grep |
 | 13 | Vulnerabilità | ✅ | 0 problemi high o critical |
-| 14 | Responsive | ✅ | 42/42 combinazioni senza overflow né testo tagliato |
+| 14 | Responsive | ✅ | 48/48 combinazioni senza overflow né testo tagliato |
 | 15 | i18n | ✅ | nessuna stringa di interfaccia scritta a mano |
 
 ---
@@ -41,45 +41,48 @@ una stima.
 
 ```console
 $ npm run build
-> brambilla-future@1.0.0 build
+> projectune@1.0.0 build
 > astro build
 
-10:18:14 [content] Syncing content
-10:18:14 [content] Synced content
-10:18:14 [types] Generated 837ms
-10:18:14 [build] output: "static"
-10:18:14 [build] mode: "static"
-10:18:14 [build] directory: /home/user/investimentiesoldi/dist/
-10:18:14 [build] Collecting build info...
-10:18:14 [build] ✓ Completed in 882ms.
-10:18:14 [build] Building static entrypoints...
-10:18:15 [vite] ✓ built in 687ms
-10:18:15 [vite] ✓ built in 35ms
-10:18:15 [build] Rearranging server assets...
+[content] Syncing content
+[content] Astro config changed
+[content] Clearing content store
+[content] Synced content
+[types] Generated 1.15s
+[build] output: "static"
+[build] mode: "static"
+[build] directory: /home/user/investimentiesoldi/dist/
+[build] Collecting build info...
+[build] ✓ Completed in 1.20s.
+[build] Building static entrypoints...
+[vite] ✓ built in 926ms
+[vite] ✓ built in 84ms
+[build] Rearranging server assets...
 
- generating static routes
-10:18:15   ├─ /404.html (+14ms)
-10:18:15   ├─ /chi-siamo/index.html (+5ms)
-10:18:15   ├─ /contatti/errore/index.html (+3ms)
-10:18:15   ├─ /contatti/grazie/index.html (+2ms)
-10:18:15   ├─ /contatti/index.html (+4ms)
-10:18:15   ├─ /cookie-policy/index.html (+4ms)
-10:18:15   ├─ /privacy/index.html (+3ms)
-10:18:15   ├─ /progetti/banco-prova-sospensioni-pneumatiche/index.html (+9ms)
-10:18:15   ├─ /progetti/linea-collaudo-tenuta-serbatoi/index.html (+4ms)
-10:18:15   ├─ /progetti/piastra-raffreddamento-pacco-batteria/index.html (+3ms)
-10:18:15   ├─ /progetti/retrofit-elettrico-navette-aeroportuali/index.html (+2ms)
-10:18:15   ├─ /progetti/serie-cnc-pinze-freno/index.html (+5ms)
-10:18:15   ├─ /progetti/staffa-portamotore-alluminio/index.html (+2ms)
-10:18:15   ├─ /progetti/index.html (+6ms)
-10:18:15   ├─ /servizi/index.html (+2ms)
-10:18:15   ├─ /index.html (+2ms)
-10:18:15 ✓ Completed in 89ms.
+ generating static routes 
+  ├─ /404.html (+15ms) 
+  ├─ /chi-siamo/index.html (+5ms) 
+  ├─ /contatti/errore/index.html (+4ms) 
+  ├─ /contatti/grazie/index.html (+3ms) 
+  ├─ /contatti/index.html (+5ms) 
+  ├─ /cookie-policy/index.html (+9ms) 
+  ├─ /privacy/index.html (+4ms) 
+  ├─ /progetti/accumulatori-oleodinamici/index.html (+5ms) 
+  ├─ /progetti/attrezzatura-fonderia/index.html (+4ms) 
+  ├─ /progetti/banco-prova-tenuta/index.html (+3ms) 
+  ├─ /progetti/gruppo-dosaggio-farmaceutico/index.html (+6ms) 
+  ├─ /progetti/montaggio-gruppi-packaging/index.html (+3ms) 
+  ├─ /progetti/revisione-pompe-vuoto/index.html (+3ms) 
+  ├─ /progetti/index.html (+7ms) 
+  ├─ /robots.txt (+2ms) 
+  ├─ /servizi/index.html (+3ms) 
+  ├─ /index.html (+4ms) 
+✓ Completed in 103ms.
+[build] ✓ Completed in 1.16s.
+[@astrojs/sitemap] `sitemap-index.xml` created at `dist`
+[build] 16 page(s) built in 2.38s
+[build] Complete!
 
-10:18:15 [build] ✓ Completed in 849ms.
-10:18:15 [@astrojs/sitemap] `sitemap-index.xml` created at `dist`
-10:18:15 [build] 16 page(s) built in 1.75s
-10:18:15 [build] Complete!
 EXIT=0
 ```
 
@@ -90,14 +93,14 @@ disable`), quindi non compare nemmeno l'avviso informativo del primo avvio.
 
 ```console
 $ npm run check
-> brambilla-future@1.0.0 check
+> projectune@1.0.0 check
 > astro check
 
-10:18:17 [content] Syncing content
-10:18:17 [content] Synced content
-10:18:17 [types] Generated 617ms
-10:18:17 [check] Getting diagnostics for Astro files in /home/user/investimentiesoldi...
-Result (39 files):
+[content] Syncing content
+[content] Synced content
+[types] Generated 626ms
+[check] Getting diagnostics for Astro files in /home/user/investimentiesoldi...
+Result (51 files): 
 - 0 errors
 - 0 warnings
 - 0 hints
@@ -113,42 +116,41 @@ copre pagine, componenti, script del client, funzioni Netlify e test.
 
 ```console
 $ npm run preview &
-$ node scripts/check-pages.mjs
-
+$ npm run check:pages
 Server di anteprima: http://localhost:4321
 URL dichiarate in sitemap: 13
 Pagine noindex aggiunte: 2
 
-URL                                                STATO  ESITO
--------------------------------------------------  -----  -----
-/                                                    200  OK
-/chi-siamo                                           200  OK
-/contatti                                            200  OK
-/contatti/errore                                     200  OK
-/contatti/grazie                                     200  OK
-/cookie-policy                                       200  OK
-/privacy                                             200  OK
-/progetti                                            200  OK
-/progetti/banco-prova-sospensioni-pneumatiche        200  OK
-/progetti/linea-collaudo-tenuta-serbatoi             200  OK
-/progetti/piastra-raffreddamento-pacco-batteria      200  OK
-/progetti/retrofit-elettrico-navette-aeroportuali    200  OK
-/progetti/serie-cnc-pinze-freno                      200  OK
-/progetti/staffa-portamotore-alluminio               200  OK
-/servizi                                             200  OK
+URL                                     STATO  ESITO
+--------------------------------------  -----  -----
+/                                         200  OK
+/chi-siamo                                200  OK
+/contatti                                 200  OK
+/contatti/errore                          200  OK
+/contatti/grazie                          200  OK
+/cookie-policy                            200  OK
+/privacy                                  200  OK
+/progetti                                 200  OK
+/progetti/accumulatori-oleodinamici       200  OK
+/progetti/attrezzatura-fonderia           200  OK
+/progetti/banco-prova-tenuta              200  OK
+/progetti/gruppo-dosaggio-farmaceutico    200  OK
+/progetti/montaggio-gruppi-packaging      200  OK
+/progetti/revisione-pompe-vuoto           200  OK
+/servizi                                  200  OK
 
 Riferimenti assoluti al dominio di produzione (canonical, og:image, JSON-LD)
-URL                                                        STATO  ESITO
----------------------------------------------------------  -----  -----
-/404                                                         200  OK
-/favicon.svg                                                 200  OK
-/img/progetti/banco-prova-sospensioni-pneumatiche.svg        200  OK
-/img/progetti/linea-collaudo-tenuta-serbatoi.svg             200  OK
-/img/progetti/piastra-raffreddamento-pacco-batteria.svg      200  OK
-/img/progetti/retrofit-elettrico-navette-aeroportuali.svg    200  OK
-/img/progetti/serie-cnc-pinze-freno.svg                      200  OK
-/img/progetti/staffa-portamotore-alluminio.svg               200  OK
-/og-default.png                                              200  OK
+URL                                             STATO  ESITO
+----------------------------------------------  -----  -----
+/404                                              200  OK
+/favicon.svg                                      200  OK
+/img/progetti/accumulatori-oleodinamici.svg       200  OK
+/img/progetti/attrezzatura-fonderia.svg           200  OK
+/img/progetti/banco-prova-tenuta.svg              200  OK
+/img/progetti/gruppo-dosaggio-farmaceutico.svg    200  OK
+/img/progetti/montaggio-gruppi-packaging.svg      200  OK
+/img/progetti/revisione-pompe-vuoto.svg           200  OK
+/og-default.png                                   200  OK
 
 Pagina 404 personalizzata
   /questa-pagina-non-esiste-mai-12345 -> stato 404 (atteso 404): OK
@@ -179,11 +181,11 @@ Lighthouse 13.4.1 | formFactor mobile | throttling simulate
   Best Practices        100
   SEO                   100
   Agentic Browsing      100
-  first-contentful-paint    0.9 s
+  first-contentful-paint    1.2 s
   largest-contentful-paint  1.4 s
   total-blocking-time       0 ms
-  cumulative-layout-shift   0
-  speed-index               0.9 s
+  cumulative-layout-shift   0.015
+  speed-index               1.2 s
 ```
 
 > **Nota sul comando.** Il brief indicava `--preset=desktop=false`: non è una
@@ -196,7 +198,7 @@ Lighthouse 13.4.1 | formFactor mobile | throttling simulate
 
 ```console
 $ CHROME_PATH=/opt/pw-browsers/chromium npx lighthouse \
-    http://localhost:4321/progetti/staffa-portamotore-alluminio \
+    http://localhost:4321/progetti/gruppo-dosaggio-farmaceutico \
     --output=json --output-path=reports/lighthouse-progetto.json --quiet
 
 Lighthouse 13.4.1 | formFactor mobile | throttling simulate
@@ -205,11 +207,11 @@ Lighthouse 13.4.1 | formFactor mobile | throttling simulate
   Best Practices        100
   SEO                   100
   Agentic Browsing      100
-  first-contentful-paint    0.9 s
+  first-contentful-paint    1.2 s
   largest-contentful-paint  1.4 s
   total-blocking-time       0 ms
   cumulative-layout-shift   0
-  speed-index               0.9 s
+  speed-index               1.2 s
 ```
 
 ### Check 7 — JavaScript al client
@@ -223,25 +225,24 @@ che la usano* — e il controllo manuale a grep è diventato uno script.
 
 ```console
 $ npm run check:js
-
-PAGINA                                             ISOLE                            JSON-LD
--------------------------------------------------  -------------------------------  -------
-/404                                               —                                      0
-/chi-siamo                                         —                                      1
-/contatti/errore                                   —                                      0
-/contatti/grazie                                   —                                      0
-/contatti                                          FormContatti                           1
-/cookie-policy                                     —                                      1
-/                                                  EroeVideo                              1
-/privacy                                           —                                      1
-/progetti/banco-prova-sospensioni-pneumatiche      —                                      2
-/progetti                                          —                                      1
-/progetti/linea-collaudo-tenuta-serbatoi           VisualizzatoreDisegni                  2
-/progetti/piastra-raffreddamento-pacco-batteria    —                                      2
-/progetti/retrofit-elettrico-navette-aeroportuali  —                                      2
-/progetti/serie-cnc-pinze-freno                    VisualizzatoreDisegni                  2
-/progetti/staffa-portamotore-alluminio             VisualizzatoreDisegni                  2
-/servizi                                           —                                      1
+PAGINA                                  ISOLE                            JSON-LD
+--------------------------------------  -------------------------------  -------
+/404                                    —                                      0
+/chi-siamo                              —                                      1
+/contatti/errore                        —                                      0
+/contatti/grazie                        —                                      0
+/contatti                               FormContatti                           1
+/cookie-policy                          —                                      1
+/                                       EroeVideo                              1
+/privacy                                —                                      1
+/progetti/accumulatori-oleodinamici     —                                      2
+/progetti/attrezzatura-fonderia         —                                      2
+/progetti/banco-prova-tenuta            VisualizzatoreDisegni                  2
+/progetti/gruppo-dosaggio-farmaceutico  VisualizzatoreDisegni                  2
+/progetti                               —                                      1
+/progetti/montaggio-gruppi-packaging    VisualizzatoreDisegni                  2
+/progetti/revisione-pompe-vuoto         —                                      2
+/servizi                                —                                      1
 
 Isole dichiarate:
   · EroeVideo              avvia e mette in pausa il video del hero, misura l'intestazione
@@ -278,9 +279,10 @@ usa spazi unificatori.
 ### Check 9 — Link interni
 
 ```console
-$ npx linkinator dist --recurse --skip "^https://www\.brambillafuture\.it"
+$ npx linkinator dist --recurse --skip "^https://www\.projectune\.it"
+(58 righe [200], omesse)
+✓ Successfully scanned 59 links in 0.265 seconds.
 
-✓ Successfully scanned 48 links in 0.243 seconds.
 EXIT=0
 ```
 
@@ -349,7 +351,7 @@ fornitore né nel codice, né nei commenti, né nelle stringhe.
 $ # aggiunto src/content/progetti/prova-schema-non-valido.md senza il campo "cliente"
 $ npm run build
 
-10:19:52 [content] Syncing content
+[content] Syncing content
 [InvalidContentEntryDataError] progetti → prova-schema-non-valido data does not match collection schema.
 
   cliente**: **cliente: Required
@@ -365,9 +367,9 @@ EXIT=1
 
 $ rm src/content/progetti/prova-schema-non-valido.md && npm run build
 
-10:19:56 [@astrojs/sitemap] `sitemap-index.xml` created at `dist`
-10:19:56 [build] 16 page(s) built in 1.99s
-10:19:56 [build] Complete!
+[@astrojs/sitemap] `sitemap-index.xml` created at `dist`
+[build] 16 page(s) built in 1.99s
+[build] Complete!
 
 EXIT=0
 ```
@@ -405,27 +407,14 @@ EXIT=0
 ### Check 14 — Responsive
 
 ```console
-$ node scripts/check-responsive.mjs
-
-PAGINA                                           VIEWPORT  SCROLL-X  TAGLIATI  ESITO
------------------------------------------------  --------  --------  --------  -----
-/                                                     360        no         0  OK
-/servizi                                              360        no         0  OK
-/progetti                                             360        no         0  OK
-/progetti/staffa-portamotore-alluminio                360        no         0  OK
-/progetti/piastra-raffreddamento-pacco-batteria       360        no         0  OK
-/progetti/linea-collaudo-tenuta-serbatoi              360        no         0  OK
-/chi-siamo                                            360        no         0  OK
-/contatti                                             360        no         0  OK
-/contatti/grazie                                      360        no         0  OK
-/contatti/errore                                      360        no         0  OK
-/privacy                                              360        no         0  OK
-/cookie-policy                                        360        no         0  OK
-/pagina-inesistente-per-la-404                        360        no         0  OK
-… (identico per 768 e 1280 px su tutte le 13 pagine)
-
-39/39 combinazioni pagina/larghezza senza overflow orizzontale e senza testo tagliato.
-Screenshot salvati in reports/screenshots/ (39 file).
+$ npm run check:responsive
+PAGINA                                  VIEWPORT  SCROLL-X  TAGLIATI  ESITO
+--------------------------------------  --------  --------  --------  -----
+/                                            360        no         0  OK
+/chi-siamo                                   360        no         0  OK
+(… 44 righe omesse …)
+48/48 combinazioni pagina/larghezza senza overflow orizzontale e senza testo tagliato.
+Screenshot salvati in reports/screenshots/ (48 file).
 
 EXIT=0
 ```
@@ -433,7 +422,7 @@ EXIT=0
 Lo script apre ogni pagina in Chromium a 360, 768 e 1280 px, aspetta il
 caricamento dei font, confronta `documentElement.scrollWidth` con la larghezza
 della viewport e cerca i contenitori che nascondono contenuto più grande di loro
-(testo tagliato). I 39 screenshot a pagina intera restano in
+(testo tagliato). I 48 screenshot a pagina intera restano in
 `reports/screenshots/`, che non è versionata perché sono artefatti di verifica.
 
 Gli screenshot sono stati anche riletti a occhio: da quella lettura sono usciti
@@ -447,7 +436,7 @@ che dentro la frase.
 
 ```console
 $ npm run check:i18n
-File .astro esaminati in src/components e src/layouts: 9
+File .astro esaminati in src/components e src/layouts: 12
 Nessuna stringa di interfaccia scritta a mano: tutte passano da src/i18n/it.json.
 EXIT=0
 
@@ -475,11 +464,11 @@ che non contiene nessuna stringa.
 
 ## 3. Punteggi Lighthouse per esteso
 
-Misurati dopo l'aggiunta del video e del visualizzatore. La pagina di dettaglio
+Misurati dopo il passaggio all'identità PROJECTUNE. La pagina di dettaglio
 scelta è quella che porta **entrambi** i tipi di disegno, tavola 2D e modello
 3D: è il caso peggiore.
 
-| Categoria | Home `/` | `/progetti/serie-cnc-pinze-freno` | Soglia |
+| Categoria | Home `/` | `/progetti/gruppo-dosaggio-farmaceutico` | Soglia |
 |---|---|---|---|
 | Performance | **100** | **100** | ≥ 95 |
 | Accessibility | **100** | **100** | ≥ 95 |
@@ -489,11 +478,15 @@ scelta è quella che porta **entrambi** i tipi di disegno, tavola 2D e modello
 
 | Metrica | Home | Dettaglio progetto |
 |---|---|---|
-| First Contentful Paint | 1,2 s | 0,9 s |
-| Largest Contentful Paint | 1,5 s | 1,5 s |
+| First Contentful Paint | 1,2 s | 1,2 s |
+| Largest Contentful Paint | 1,4 s | 1,4 s |
 | Total Blocking Time | 0 ms | 0 ms |
-| Cumulative Layout Shift | 0,001 | 0 |
-| Peso totale della pagina | 104 KiB | 86 KiB |
+| Cumulative Layout Shift | 0,015 | 0 |
+| Peso totale della pagina | 89 KiB | 81 KiB |
+
+La home è passata da 104 a 89 KiB: il fermo immagine del hero, rigenerato nei
+colori del marchio, comprime meglio, e il carattere serif in meno è un file che
+non viene più scaricato.
 
 Lighthouse 13.4.1, profilo mobile predefinito, throttling simulato, Chromium
 headless. I report completi in JSON sono in `reports/`.
@@ -533,7 +526,7 @@ Ricopiate da `PLAN.md`, dove ognuna ha anche l'alternativa scartata.
    spostato in `src/scripts/modulo-contatti.ts`, così Astro lo emette come file
    esterno invece di incorporarlo nella pagina.
 5. **Titolo delle pagine di dettaglio progetto senza suffisso di marca**: il
-   limite di 60 caratteri non lascia spazio per «… | Brambilla Future» dopo un
+   limite di 60 caratteri non lascia spazio per «… | PROJECTUNE» dopo un
    titolo di progetto reale. `src/lib/seo.ts` interrompe la build se un titolo
    supera i 60 caratteri o se una meta description esce da 120–160.
 6. **Il token antispam viene verificato solo quando è presente.** Turnstile è un
@@ -596,6 +589,27 @@ Ricopiate da `PLAN.md`, dove ognuna ha anche l'alternativa scartata.
     secondo su 2 304 triangoli.
 25. **L'altezza dell'intestazione la misura l'isola**: in CSS non è conoscibile,
     perché dipende da quante righe occupa il menu.
+26. **Il marchio si converte dal PDF del cliente, non si ridisegna**
+    (`npm run logo`): è lo stesso identico disegno, e una versione aggiornata si
+    recepisce sostituendo il file.
+27. **Nella barra in alto va la sola scritta**, perché il marchio completo è
+    alto quanto largo: a 60 px di altezza la scritta sarebbe illeggibile.
+28. **Tre blu invece di uno**: quello del marchio (3,42:1 su bianco) resta per
+    la grafica, per il testo si usano le versioni scurita e schiarita che
+    superano il 4,5:1.
+29. **Il sito resta chiaro, con l'antracite nelle fasce**: dieci pagine di testo
+    tecnico su fondo scuro si leggono peggio.
+30. **Archivo per tutti i titoli** al posto del serif editoriale, che non stava
+    con un marchio geometrico: i file dei caratteri passano da quattro a tre.
+31. **Dove manca un dato, si omette**: via, CAP e orari non sono stati forniti e
+    il sito non li inventa, nemmeno nei dati strutturati per Google.
+32. **I marchi dei clienti non si scaricano da internet**: finché l'azienda non
+    lo manda, la targa mostra il nome composto nella tipografia del sito.
+33. **Le sei schede lavoro sono esempi coerenti, non commesse reali**: niente
+    nomi di committenti né numeri di risultato inventati.
+34. **L'elenco delle pagine del check responsive si ricava da `dist/`**: quello
+    scritto a mano era rimasto ai vecchi indirizzi e passava verde su pagine che
+    non esistevano più.
 
 ---
 
@@ -619,17 +633,18 @@ andare online»**. In sintesi:
 
 | File | Che cosa contiene |
 |---|---|
-| `src/lib/azienda.ts` | Ragione sociale, indirizzo, telefono, email, PEC, partita IVA, REA, capitale sociale, orari, coordinate |
-| `astro.config.mjs` (`SITE_URL`) e `public/robots.txt` | Il dominio reale, oggi `https://www.brambillafuture.it` |
-| `src/i18n/it.json` | Etichette, titoli di sezione, messaggi del modulo, titoli e descrizioni per Google |
-| `src/lib/servizi.ts` | I cinque servizi |
-| `src/lib/testi-legali.ts` | Privacy policy e cookie policy — **da far verificare a chi tratta i dati** |
-| `src/pages/chi-siamo.astro` | Storia, valori, persone, certificazioni |
-| `src/pages/index.astro` | Le quattro cifre della sezione «in cifre» |
-| `src/content/progetti/*.md` | I sei progetti di esempio, da sostituire con commesse vere |
-| `public/img/`, `public/favicon.svg` | Le illustrazioni SVG e l'icona |
+Nomi, telefoni, email, partita IVA, servizi, storia e clienti sono già quelli
+veri. Mancano solo le cose che il cliente non ha ancora mandato:
 
-Ogni blocco da sostituire è marcato nel codice con `CONTENUTO — SOSTITUIRE`.
+| Che cosa manca | Dove si mette |
+|---|---|
+| **Via e CAP** della sede | `src/lib/azienda.ts`, campi `indirizzo.via` e `indirizzo.cap`, oggi vuoti e segnati `DA COMPLETARE`. Finché mancano, il sito scrive solo «Castel Maggiore (BO)» e il JSON-LD omette la via invece di inventarla |
+| **Foto dei lavori** | `public/img/progetti/`, poi il campo `immagine` nel file `.md` |
+| **Testi veri delle commesse** | `src/content/progetti/*.md`: le sei schede di oggi sono esempi coerenti con i mestieri dichiarati, senza nomi di committenti e senza numeri di risultato |
+| **Marchi dei clienti** | `public/img/clienti/`, poi il campo `logo` in `src/lib/clienti.ts`. Vanno chiesti alle aziende: un marchio altrui non si pubblica senza consenso |
+| **Dominio definitivo** | `astro.config.mjs`, `DOMINIO_DEFINITIVO`, oggi il segnaposto `https://www.projectune.it` |
+| **Orari di apertura** (se si vogliono pubblicare) | Non forniti: oggi la pagina contatti non li mostra affatto |
+| **Privacy e cookie policy** | `src/lib/testi-legali.ts` — **da far verificare a chi tratta i dati** |
 
 ### 5.3 Comandi di deploy
 
@@ -667,41 +682,49 @@ $ du -sh dist
 
 | Tipo | File | Peso su disco |
 |---|---|---|
-| MP4 (video del hero) | 1 | 398,0 kB |
-| STL (modelli 3D) | 2 | 225,2 kB |
-| HTML | 16 | 223,3 kB |
-| WOFF2 (4 caratteri) | 4 | 82,2 kB |
-| JPEG (fermo immagine) | 1 | 50,7 kB |
-| PNG | 4 | 34,3 kB |
-| CSS | 12 | 32,5 kB |
-| WebP (fermi immagine) | 2 | 23,4 kB |
-| SVG | 11 | 20,3 kB |
+| MP4 (video del hero) | 1 | 400,8 kB |
+| HTML | 16 | 291,9 kB |
+| STL (modelli 3D) | 2 | 225,1 kB |
+| WOFF2 (3 caratteri) | 3 | 61,1 kB |
+| JPEG (fermo immagine) | 1 | 54,4 kB |
+| PNG | 4 | 38,0 kB |
+| SVG | 11 | 37,2 kB |
+| CSS | 12 | 33,8 kB |
+| WebP (fermi immagine) | 2 | 22,6 kB |
 | JavaScript | 3 | 14,6 kB |
-| TXT | 4 | 13,4 kB |
-| XML (sitemap) | 2 | 1,5 kB |
+| TXT | 3 | 9,1 kB |
+| XML (sitemap) | 2 | 1,3 kB |
 
-**Pagina più pesante su disco:** `dist/progetti/serie-cnc-pinze-freno/index.html`,
-**19,6 kB**. A seguire `staffa-portamotore-alluminio` (18,5 kB) e la home
-(17,1 kB).
+**Pagina più pesante su disco:**
+`dist/progetti/gruppo-dosaggio-farmaceutico/index.html`, **24,3 kB**. A seguire
+`montaggio-gruppi-packaging` (22,3 kB) e la home (22,2 kB). L'HTML è cresciuto
+rispetto a prima perché la scritta del marchio è incorporata in ogni pagina:
+5,6 kB di tracciati che però si comprimono molto bene e risparmiano una
+richiesta di rete su un elemento che sta in cima alla pagina. Il marchio
+completo, che pesa 14 kB, è invece un file esterno servito una volta sola e poi
+tenuto in cache: incorporarlo avrebbe voluto dire ripeterlo sedici volte.
 
 **Pagina più pesante come traffico reale**, misurata da Lighthouse con
-compressione attiva: la home, **104 KiB**, di cui 82 KiB sono i quattro file dei
+compressione attiva: la home, **89 KiB**, di cui 61 KiB sono i tre file dei
 caratteri. Le pagine successive ne scaricano circa 20 KiB, perché i caratteri
 restano in cache per un anno.
 
-Le due voci grosse in `dist/` — il video da 398 kB e i due STL da 225 kB — non
+Le due voci grosse in `dist/` — il video da 401 kB e i due STL da 225 kB — non
 sono sul percorso critico: il video è `preload="none"` e parte solo quando
 l'isola lo avvia, gli STL vengono chiesti solo quando la sezione dei disegni
 entra in vista. Chi apre la home e non scorre non scarica né l'uno né gli altri.
 
 ## 7. Problemi aperti
 
-Nessun check resta rosso. Restano tre cose che dipendono dal proprietario e non
-possono essere chiuse da qui:
+Nessun check resta rosso. Restano cose che dipendono dal cliente e non possono
+essere chiuse da qui:
 
-1. **I contenuti sono segnaposto.** Realistici e della lunghezza giusta per far
-   emergere i problemi di impaginazione, ma inventati. Vanno sostituiti prima di
-   pubblicare: elenco puntuale nel README.
+1. **Mancano quattro dati del cliente** — via e CAP della sede, foto dei lavori,
+   testi veri delle commesse, marchi dei clienti — elencati qui sopra al
+   punto 5.2. Nel frattempo il sito omette quello che non sa invece di
+   inventarlo, e le sei schede lavoro sono esempi coerenti con i mestieri
+   dichiarati: vanno confermate o sostituite prima di togliere il blocco
+   dell'indicizzazione.
 2. **Privacy policy e cookie policy vanno rilette da chi tratta i dati.** Il
    testo è coerente con quello che il modulo raccoglie davvero, ma è una base,
    non un parere legale. In particolare vanno indicati per nome i fornitori

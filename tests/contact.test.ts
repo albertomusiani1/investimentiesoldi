@@ -20,7 +20,7 @@ import {
 import type { EsitoInvio, Mailer, MessaggioEmail } from '../netlify/functions/lib/mailer.ts';
 import { ConfigurazioneMancante } from '../netlify/functions/lib/mailer.ts';
 
-const AMBIENTE = { destinatario: 'titolare@esempio.it', nomeMittente: 'Brambilla Future' };
+const AMBIENTE = { destinatario: 'titolare@esempio.it', nomeMittente: 'PROJECTUNE' };
 
 interface MailerFinto extends Mailer {
   inviate: MessaggioEmail[];

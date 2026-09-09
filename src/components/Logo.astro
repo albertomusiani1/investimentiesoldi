@@ -1,67 +1,70 @@
 ---
 /**
- * Marchio del sito: segno geometrico + nome esteso.
- * SVG inline, nessuna richiesta di rete, scala con la tipografia.
+ * Marchio PROJECTUNE.
+ *
+ * I file sono ricavati dal PDF originale del cliente (`npm run logo`).
+ * Sono decorativi: il nome resta scritto in chiaro per chi usa un lettore di
+ * schermo, così non viene annunciato due volte.
+ *
+ *  - `variante="testo"`: la sola scritta, incorporata nella pagina perché sta
+ *    in cima e deve comparire subito; prende il colore dal CSS. Il marchio
+ *    completo qui non ci starebbe: è alto quanto largo, e alla larghezza di
+ *    una barra di navigazione la scritta sarebbe alta cinque pixel.
+ *  - `variante="completo"`: esagono, icone e scritta, per il piè di pagina.
+ *    È un file esterno da 14 kB: incorporarlo vorrebbe dire ripeterlo in tutte
+ *    le pagine, mentre così il browser lo scarica una volta sola.
  */
+import testo from '../marchio/logo-projectune-testo.svg?raw';
 import { t } from '../i18n';
 
 export interface Props {
-  /** true nell'header sopra sfondo chiaro, false nel footer sopra sfondo scuro. */
-  scuro?: boolean;
+  variante?: 'testo' | 'completo';
 }
 
-const { scuro = true } = Astro.props;
+const { variante = 'testo' } = Astro.props;
 ---
 
-<span class:list={['logo', { 'logo--inverso': !scuro }]}>
-  <svg
-    class="logo__segno"
-    width="32"
-    height="32"
-    viewBox="0 0 32 32"
-    role="img"
-    aria-hidden="true"
-    focusable="false"
-  >
-    <rect x="1" y="1" width="30" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="2"></rect>
-    <rect x="7" y="19" width="5" height="7" fill="currentColor"></rect>
-    <rect x="14" y="13" width="5" height="13" fill="currentColor"></rect>
-    <rect class="logo__accento" x="21" y="7" width="5" height="19"></rect>
-  </svg>
-  <span class="logo__testo">{t('sito.nome')}</span>
+<span class:list={['marchio', `marchio--${variante}`]}>
+  {
+    variante === 'completo' ? (
+      <img
+        src="/img/logo-projectune.svg"
+        alt=""
+        width="304"
+        height="224"
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <Fragment set:html={testo} />
+    )
+  }
+  <span class="solo-screen-reader">{t('sito.nome')}</span>
 </span>
 
 <style>
-  .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3);
-    color: var(--colore-primario);
+  .marchio {
+    display: block;
   }
 
-  .logo--inverso {
-    color: var(--colore-testo-inverso);
+  .marchio :global(svg),
+  .marchio img {
+    display: block;
+    height: auto;
   }
 
-  .logo__accento {
-    fill: var(--colore-accento);
+  /* La scritta: larghezza fissa, altezza in proporzione. */
+  .marchio--testo :global(svg) {
+    width: 10.5rem;
   }
 
-  .logo__segno {
-    flex: none;
-  }
-
-  .logo__testo {
-    font-family: var(--font-serif);
-    font-size: var(--testo-md);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
+  .marchio--completo img {
+    width: 11rem;
   }
 
   @media (min-width: 40em) {
-    .logo__testo {
-      font-size: var(--testo-lg);
+    .marchio--testo :global(svg) {
+      width: 12.5rem;
     }
   }
 </style>

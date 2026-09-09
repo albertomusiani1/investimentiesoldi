@@ -1,12 +1,14 @@
-# Brambilla Future — sito vetrina
+# PROJECTUNE — sito vetrina
 
-Sito statico in **Astro** per Brambilla Future, ingegneria e componentistica per
-l'automotive. Italiano, corporate, senza framework CSS e con il JavaScript
-confinato in tre isole dichiarate.
+Sito statico in **Astro** per PROJECTUNE di Matteuzzi Davide, progettazione
+meccanica, montaggi e revisioni a Castel Maggiore (BO). Italiano, sobrio, senza
+framework CSS e con il JavaScript confinato in tre isole dichiarate.
 
+- **Palette e marchio del cliente**: antracite `#303435` e blu `#3093C9`, i due
+  colori del logo, con i file SVG ricavati dal PDF originale (`npm run logo`).
 - **CSS puro** con custom properties: chi conosce HTML e CSS può mettere mano ai
   file senza imparare nulla di nuovo.
-- **Sezione Progetti che cresce da sola**: si aggiunge un file Markdown, il sito
+- **Sezione Lavori che cresce da sola**: si aggiunge un file Markdown, il sito
   fa il resto.
 - **Video a schermo intero** in home, con titolo e due chiamate all'azione.
 - **Visualizzatore di disegni**: le tavole 2D si ingrandiscono e si trascinano,
@@ -37,11 +39,13 @@ script non dichiarato.
 4. [Come aggiungere un progetto](#come-aggiungere-un-progetto)
 5. [Cosa sostituire prima di andare online](#cosa-sostituire-prima-di-andare-online)
 6. [Variabili d'ambiente](#variabili-dambiente)
-7. [Come funziona il modulo contatti](#come-funziona-il-modulo-contatti)
-8. [Come cambiare fornitore di posta](#come-cambiare-fornitore-di-posta)
-9. [Come aggiungere l'inglese](#come-aggiungere-linglese)
-10. [Deploy su Netlify](#deploy-su-netlify)
-11. [Verifiche](#verifiche)
+7. [Il marchio](#il-marchio)
+8. [I clienti in fondo alla home](#i-clienti-in-fondo-alla-home)
+9. [Come funziona il modulo contatti](#come-funziona-il-modulo-contatti)
+10. [Come cambiare fornitore di posta](#come-cambiare-fornitore-di-posta)
+11. [Come aggiungere l'inglese](#come-aggiungere-linglese)
+12. [Deploy su Netlify](#deploy-su-netlify)
+13. [Verifiche](#verifiche)
 
 ---
 
@@ -76,7 +80,9 @@ l'invio del modulo non funziona.
 | `npm run check:responsive` | Screenshot a 360, 768 e 1280 px e controllo overflow |
 | `npm run check:html` | Validazione HTML di `dist/` |
 | `npm run check:links` | Nessun collegamento interno rotto |
+| `npm run logo` | Ricava gli SVG del marchio e la favicon dal PDF in `brand/` |
 | `npm run immagini:social` | Rigenera `og-default.png` e `apple-touch-icon.png` |
+| `npm run immagini:progetti` | Rigenera le sei illustrazioni delle schede lavoro |
 | `npm run disegni` | Rigenera i disegni e i modelli di esempio |
 | `npm run video` | Rigenera il video del hero e i fermi immagine (serve ffmpeg) |
 
@@ -90,6 +96,7 @@ terminale.
 
 ```
 ├── astro.config.mjs          Configurazione: dominio, i18n, sitemap
+├── brand/                    Il marchio originale del cliente (PDF vettoriale)
 ├── netlify.toml              Deploy, redirect e header di sicurezza
 ├── .env.example              Elenco delle variabili d'ambiente (valori fittizi)
 ├── netlify/functions/
@@ -100,6 +107,7 @@ terminale.
 ├── public/                   File serviti così come sono
 │   ├── fonts/                Caratteri self-hosted in WOFF2
 │   ├── img/                  Illustrazioni SVG e fermi immagine del hero
+│   ├── img/clienti/          Marchi dei clienti (quando arrivano)
 │   ├── video/hero.mp4        Il filmato del hero
 │   ├── disegni/              Tavole 2D dei progetti (SVG)
 │   ├── modelli/              Modelli 3D (STL) e loro anteprime (PNG)
@@ -111,7 +119,8 @@ terminale.
     ├── content.config.ts     Schema dei progetti: fa fallire la build se sbagliato
     ├── i18n/it.json          Tutte le stringhe di interfaccia
     ├── layouts/              Struttura comune delle pagine
-    ├── lib/                  Dati dell'azienda, servizi, testi legali, SEO
+    ├── lib/                  Dati dell'azienda, servizi, clienti, testi legali
+    ├── marchio/              Gli SVG del logo, prodotti da `npm run logo`
     ├── pages/                Una pagina per file (robots.txt incluso, generato)
     ├── scripts/              Le tre isole JavaScript inviate al browser
     └── styles/global.css     Palette, tipografia, spaziature, componenti
@@ -144,13 +153,14 @@ Non serve toccare nessun altro file.
 # Massimo 60 caratteri: oltre, la build si ferma e lo dice (limite SEO).
 titolo: Collettore di scarico in acciaio inox
 
-# Nome del cliente. Se non è pubblicabile scrivere: Confidenziale
+# Il committente. Se il nome non è pubblicabile si scrive che tipo di
+# azienda è, per esempio: Costruttore di macchine automatiche, settore Pharma
 cliente: Officine Barattieri
 
 # Deve essere ESATTAMENTE uno di questi quattro valori:
-#   Progettazione · Produzione · Validazione · Elettrificazione
+#   Progettazione · Montaggio · Revisione · Collaudo
 # Per aggiungerne uno nuovo si modifica CATEGORIE_PROGETTO in src/content.config.ts
-categoria: Produzione
+categoria: Montaggio
 
 # Data di chiusura della commessa, sempre nel formato AAAA-MM-GG.
 data: 2026-02-10
@@ -174,19 +184,19 @@ inEvidenza: false
 ordine: 7
 ---
 
-## Il problema
+## La richiesta
 
 Da qui in giù si scrive normalmente. Le righe che iniziano con "##" diventano
 titoli di sezione della pagina.
 
-## Che cosa abbiamo fatto
+## Come l'abbiamo affrontata
 
 Testo normale. Per un elenco puntato basta iniziare le righe con un trattino:
 
 - primo punto
 - secondo punto
 
-## Il risultato
+## Che cosa resta al cliente
 
 Ultima sezione.
 ```
@@ -208,33 +218,50 @@ esempio, togliendo `cliente`:
 
 ## Cosa sostituire prima di andare online
 
-Tutti i contenuti sono segnaposto realistici ma **inventati**. Ecco l'elenco
-completo, file per file.
+Nomi, telefoni, email, partita IVA, servizi, storia e clienti sono quelli veri
+forniti dal cliente. Restano da completare le cose che il cliente non ha ancora
+mandato: sono poche e sono tutte elencate qui.
+
+### 0. Le cose che mancano davvero — la lista corta
+
+| Che cosa | Dove si mette |
+|---|---|
+| **Via e CAP** della sede di Castel Maggiore | `src/lib/azienda.ts`, campi `indirizzo.via` e `indirizzo.cap`, oggi vuoti e segnati `DA COMPLETARE` |
+| **Foto dei lavori** (progettazione e montaggi) | `public/img/progetti/`, poi il campo `immagine` nel file `.md` del lavoro |
+| **Testi veri dei lavori** | `src/content/progetti/*.md`: le sei schede di oggi sono esempi coerenti con quello che sapete fare, non commesse realmente svolte |
+| **Marchi dei clienti** | `public/img/clienti/`, poi il campo `logo` in `src/lib/clienti.ts` (vedi più sotto) |
+| **Dominio definitivo** | `astro.config.mjs`, costante `DOMINIO_DEFINITIVO` |
+| **Chiavi di posta e antispam** | Variabili d'ambiente su Netlify (vedi più sotto) |
+
+Finché la via non c'è, il sito **non la scrive**: l'indirizzo mostra solo
+«Castel Maggiore (BO)» e i dati strutturati per Google omettono la via invece di
+inventarla. Stessa cosa per gli orari di apertura, che non sono stati forniti e
+quindi non compaiono.
 
 ### 1. Dati dell'azienda — `src/lib/azienda.ts`
 
 È il file più importante: footer, pagina contatti, privacy policy e dati
 strutturati per Google leggono tutti da qui.
 
-| Campo | Che cosa mettere |
+| Campo | Che cosa contiene |
 |---|---|
 | `nome`, `nomeLegale` | Nome commerciale e ragione sociale |
 | `descrizioneBreve` | Una riga su che cosa fa l'azienda |
 | `fondazione` | Anno di fondazione |
-| `email`, `emailPec` | Indirizzi reali |
-| `telefono` | Numero con **spazi unificatori** (U+00A0), non spazi normali |
+| `email` | Indirizzo di posta |
+| `referenti[]` | Le persone con il loro numero diretto: nome, ruolo, telefono |
+| `telefono` | Con **spazi unificatori** (U+00A0), non spazi normali: il numero non deve andare a capo |
 | `telefonoLink` | Lo stesso numero senza spazi, per il link «chiama» |
 | `indirizzo.*` | Via, CAP, città, provincia |
-| `coordinate` | Latitudine e longitudine della sede |
-| `orari` | Giorni e orari di apertura |
-| `datiSocietari` | Partita IVA, REA, capitale sociale |
+| `superficieOfficina` | Metri quadri dell'officina |
+| `datiSocietari` | Partita IVA |
 | `dipendenti` | Numero di persone |
 
 ### 2. Dominio — un punto solo
 
 | File | Che cosa cambiare |
 |---|---|
-| `astro.config.mjs` | `DOMINIO_DEFINITIVO`: da `https://www.brambillafuture.it` al dominio vero |
+| `astro.config.mjs` | `DOMINIO_DEFINITIVO`: da `https://www.projectune.it` (segnaposto) al dominio vero |
 
 Il `robots.txt` e la sitemap si allineano da soli: sono generati alla build a
 partire dall'indirizzo del sito, non scritti a mano. Su Netlify non serve
@@ -249,23 +276,24 @@ L'ordine di precedenza è: variabile `SITE_URL` se la imposti tu → variabile
 | File | Contenuto |
 |---|---|
 | `src/i18n/it.json` | Tutte le etichette, i titoli di sezione, i messaggi del modulo, i titoli e le descrizioni per Google |
-| `src/lib/servizi.ts` | I cinque servizi: titolo, sommario, descrizione estesa, elenco «che cosa comprende» |
+| `src/lib/servizi.ts` | I quattro servizi: titolo, sommario, descrizione estesa, elenco «che cosa comprende» |
+| `src/lib/clienti.ts` | Le aziende mostrate in fondo alla home |
 | `src/lib/testi-legali.ts` | Privacy policy e cookie policy — **da far verificare a chi tratta i dati** |
-| `src/pages/chi-siamo.astro` | Storia, valori, persone, certificazioni (blocchi `storia`, `valori`, `team`, `certificazioni` in cima al file) |
+| `src/pages/chi-siamo.astro` | Storia, credo, persone, officina (blocchi `storia`, `valori`, `persone`, `officina` in cima al file) |
 | `src/pages/index.astro` | Le quattro cifre della sezione «in cifre» (blocco `numeri` in cima al file) |
-| `src/content/progetti/*.md` | I sei progetti di esempio: sostituirli con commesse vere, e con le loro tavole e modelli veri nel campo `disegni` |
+| `src/content/progetti/*.md` | Le sei schede lavoro di esempio: sostituirle con commesse vere, e con le loro tavole e modelli veri nel campo `disegni` |
 
 Ogni blocco da sostituire è marcato nel codice con il commento
 `CONTENUTO — SOSTITUIRE`.
 
 ### 4. Immagini — `public/img/` e `public/`
 
-Sono tutte SVG geometriche disegnate a mano, in palette con il sito.
+Sono tutte SVG geometriche, nella palette del marchio.
 
 | File | Che cos'è |
 |---|---|
-| `img/mappa-seregno.svg` | Mappa statica della pagina contatti (non è una mappa vera) |
-| `img/progetti/*.svg` | Un'immagine per progetto |
+| `img/mappa-castel-maggiore.svg` | Mappa schematica della pagina contatti (non è una mappa vera: indica la zona, non la via) |
+| `img/progetti/*.svg` | Un'immagine per lavoro, generate da `npm run immagini:progetti` |
 | `video/hero.mp4` + `img/hero-poster*` | Il filmato del hero e i suoi fermi immagine (vedi la sezione dedicata) |
 | `disegni/*.svg`, `modelli/*.stl` + `*.png` | Le tavole e i modelli mostrati nel visualizzatore |
 | `favicon.svg` | Icona del sito |
@@ -307,6 +335,84 @@ anche i nomi storici del fornitore come alternativa.
 
 **Se una variabile obbligatoria manca**, la funzione non risponde con un errore
 generico: risponde 500 e nei log scrive per nome quale variabile manca.
+
+---
+
+## Il marchio
+
+Il file originale del cliente è `brand/logo-projectune.pdf`: un PDF vettoriale
+uscito da Inkscape. Da lì `npm run logo` ricava tre file, **senza ridisegnare
+niente a mano**:
+
+| File | Dove si usa |
+|---|---|
+| `src/marchio/logo-projectune.svg` | Marchio completo: piè di pagina, immagine per i social |
+| `src/marchio/logo-projectune-testo.svg` | Solo la scritta: barra in alto |
+| `public/favicon.svg` | Icona del browser |
+
+I primi due stanno in `src/` e non in `public/` perché vengono incorporati nella
+pagina: così prendono il colore dal CSS (`currentColor`) e non costano una
+richiesta di rete.
+
+**Se il cliente manda un marchio aggiornato** basta sostituire il PDF e
+rilanciare `npm run logo`. Lo script si ferma con un messaggio chiaro se il
+disegno è cambiato di struttura, invece di produrre un file sbagliato in
+silenzio.
+
+Nella barra in alto compare la sola scritta e non il marchio completo: il
+marchio è alto quanto largo, e alla larghezza di una barra di navigazione la
+scritta dentro l'esagono sarebbe alta cinque pixel. Il marchio intero sta nel
+piè di pagina, nella favicon e nell'immagine per i social, dove lo spazio c'è.
+
+### I due colori
+
+Sono quelli letti dal PDF: antracite `#303435` e blu `#3093C9`. Stanno in
+`src/styles/global.css` come `--marchio-antracite` e `--marchio-blu`, e **non
+vanno cambiati**.
+
+C'è però un problema che vale la pena conoscere: il blu del marchio su fondo
+bianco raggiunge un contrasto di 3,42:1, sotto il 4,5:1 che serve perché un
+testo sia leggibile da tutti (ed è un requisito, non un'opinione: è lo standard
+WCAG AA). Per questo il foglio di stile ha tre blu:
+
+| Variabile | Valore | Dove si usa |
+|---|---|---|
+| `--marchio-blu` | `#3093C9` | Grafica, filetti, bordi, titoli grandi |
+| `--colore-accento` | `#1B6E9B` | Testo e bottoni su fondo chiaro (5,6:1) |
+| `--colore-accento-chiaro` | `#6FBBE6` | Testo su fondo antracite (5,95:1) |
+
+È lo stesso blu, scurito o schiarito quanto basta. A occhio la differenza non si
+nota; a leggerlo, sì.
+
+---
+
+## I clienti in fondo alla home
+
+L'elenco sta in `src/lib/clienti.ts`. Finché un'azienda non manda il proprio
+marchio, il sito ne compone il nome nello stile del sito: le targhe hanno tutte
+la stessa altezza, quindi la fila resta ordinata anche mentre i marchi arrivano
+uno alla volta.
+
+Per aggiungere un marchio:
+
+1. mettere il file in `public/img/clienti/` — SVG, oppure PNG largo almeno
+   400 px e con lo sfondo trasparente;
+2. aggiungere `logo` e `logoAlt` alla voce corrispondente:
+
+```ts
+{
+  nome: 'AZ Vacuum',
+  logo: '/img/clienti/az-vacuum.svg',
+  logoAlt: 'Marchio AZ Vacuum',
+},
+```
+
+Il campo `sito` è facoltativo e per ora non è usato: serve se un domani si vorrà
+rendere i marchi cliccabili.
+
+> **Una raccomandazione, non tecnica.** Il marchio di un'altra azienda si
+> pubblica se l'azienda lo manda o dà il via libera. Una riga di email che dice
+> «possiamo mettervi fra i nostri clienti sul sito?» evita discussioni dopo.
 
 ---
 
@@ -559,7 +665,7 @@ Il filmato è muto, senza traccia audio: non c'è niente da silenziare.
 **Sostituirlo con riprese vere.** È l'unica cosa da fare:
 
 1. metti il montaggio in `public/video/hero.mp4` — H.264, muto, pensato per
-   girare in ciclo, **sotto il mezzo megabyte** (quello attuale pesa 398 kB per
+   girare in ciclo, **sotto il mezzo megabyte** (quello attuale pesa 401 kB per
    8 secondi: un video di riprese reali va compresso di conseguenza);
 2. metti un fotogramma rappresentativo in `public/img/hero-poster.jpg` e le sue
    versioni leggere in `public/img/hero-poster-900.webp` e
@@ -569,7 +675,8 @@ Il filmato è muto, senza traccia audio: non c'è niente da silenziare.
 
 **Il video attuale è generato, non filmato.** `npm run video` lo ricostruisce da
 zero: è un wireframe di flangia che ruota in proiezione ortografica sopra una
-griglia da tavolo da disegno, calcolato in `scripts/genera-video-hero.mjs`.
+griglia da tavolo da disegno, nei colori del marchio, calcolato in
+`scripts/genera-video-hero.mjs`.
 Serve `ffmpeg` installato (`FFMPEG=/percorso/ffmpeg npm run video` se non è nel
 PATH). Non è una dipendenza del progetto: si esegue una volta e i file prodotti
 si committano.

@@ -30,35 +30,19 @@ export function schemaAttivita(site: URL): Record<string, unknown> {
       '@type': 'QuantitativeValue',
       value: azienda.dipendenti,
     },
+    // Via, CAP, coordinate e orari non sono ancora stati forniti: meglio un
+    // dato in meno che un dato inventato, che qui finirebbe dritto nelle
+    // schede di Google.
     address: {
       '@type': 'PostalAddress',
-      streetAddress: azienda.indirizzo.via,
-      postalCode: azienda.indirizzo.cap,
+      ...(azienda.indirizzo.via ? { streetAddress: azienda.indirizzo.via } : {}),
+      ...(azienda.indirizzo.cap ? { postalCode: azienda.indirizzo.cap } : {}),
       addressLocality: azienda.indirizzo.citta,
       addressRegion: azienda.indirizzo.provincia,
       addressCountry: azienda.indirizzo.nazione,
     },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: azienda.coordinate.latitudine,
-      longitude: azienda.coordinate.longitudine,
-    },
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
-        opens: '08:00',
-        closes: '17:30',
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Friday'],
-        opens: '08:00',
-        closes: '14:00',
-      },
-    ],
-    areaServed: 'Europa',
-    knowsLanguage: ['it', 'en'],
+    areaServed: 'Italia',
+    knowsLanguage: ['it'],
     slogan: t('sito.payoff'),
   };
 }

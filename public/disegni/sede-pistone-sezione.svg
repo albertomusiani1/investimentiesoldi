@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="990" viewBox="0 0 1400 990">
   
-    <rect width="1400" height="990" fill="#faf8f5"/>
-    <rect x="14" y="14" width="1372" height="962" fill="none" stroke="#16232e" stroke-width="1.6"/>
+    <rect width="1400" height="990" fill="#f8faf9"/>
+    <rect x="14" y="14" width="1372" height="962" fill="none" stroke="#1e2223" stroke-width="1.6"/>
 
   <!-- sezione: corpo pinza con sede del pistone -->
-  <g stroke="#16232e" stroke-width="2" fill="none">
+  <g stroke="#1e2223" stroke-width="2" fill="none">
     <path d="M230 130h660v600h-660z"/>
     <path d="M392 130v250h336v-250"/>
     <path d="M392 380h336"/>
   </g>
 
   <!-- gola per l'anello di tenuta -->
-  <g stroke="#16232e" stroke-width="1.6" fill="none">
+  <g stroke="#1e2223" stroke-width="1.6" fill="none">
     <path d="M392 240h-28v34h28"/>
     <path d="M728 240h28v34h-28"/>
   </g>
@@ -19,71 +19,71 @@
   <!-- tratteggio di sezione -->
   <defs>
     <pattern id="tratteggio" width="12" height="12" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
-      <path d="M0 0V12" stroke="#4d5a66" stroke-width="0.8" opacity="0.65"/>
+      <path d="M0 0V12" stroke="#4f5658" stroke-width="0.8" opacity="0.65"/>
     </pattern>
   </defs>
   <path d="M230 130h162v250h336v-250h162v600h-660z" fill="url(#tratteggio)" stroke="none"/>
 
   <!-- assi -->
-  <g stroke="#8f3d18" stroke-width="1" stroke-dasharray="18 6 4 6" opacity="0.9">
+  <g stroke="#1b6e9b" stroke-width="1" stroke-dasharray="18 6 4 6" opacity="0.9">
     <path d="M560 80V780"/>
   </g>
 
   
-    <g stroke="#4d5a66" stroke-width="0.8" fill="none">
+    <g stroke="#4f5658" stroke-width="0.8" fill="none">
       <path d="M392 85v10M728 85v10"/>
       <path d="M392 90H728"/>
-      <path d="M392 90l9 -3v6z" fill="#4d5a66" stroke="none"/>
-      <path d="M728 90l-9 -3v6z" fill="#4d5a66" stroke="none"/>
+      <path d="M392 90l9 -3v6z" fill="#4f5658" stroke="none"/>
+      <path d="M728 90l-9 -3v6z" fill="#4f5658" stroke="none"/>
     </g>
-    <text x="560" y="83" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#16232e">Ø 84,00 H7  +0,030 / 0</text>
+    <text x="560" y="83" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#1e2223">Ø 84,00 H7  +0,030 / 0</text>
   
-    <g stroke="#4d5a66" stroke-width="0.8" fill="none">
+    <g stroke="#4f5658" stroke-width="0.8" fill="none">
       <path d="M230 45v10M890 45v10"/>
       <path d="M230 50H890"/>
-      <path d="M230 50l9 -3v6z" fill="#4d5a66" stroke="none"/>
-      <path d="M890 50l-9 -3v6z" fill="#4d5a66" stroke="none"/>
+      <path d="M230 50l9 -3v6z" fill="#4f5658" stroke="none"/>
+      <path d="M890 50l-9 -3v6z" fill="#4f5658" stroke="none"/>
     </g>
-    <text x="560" y="43" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#16232e">165,0 ±0,2</text>
+    <text x="560" y="43" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#1e2223">165,0 ±0,2</text>
   
-    <g stroke="#4d5a66" stroke-width="0.8" fill="none">
+    <g stroke="#4f5658" stroke-width="0.8" fill="none">
       <path d="M155 130h10M155 380h10"/>
       <path d="M160 130V380"/>
-      <path d="M160 130l-3 9h6z" fill="#4d5a66" stroke="none"/>
-      <path d="M160 380l-3 -9h6z" fill="#4d5a66" stroke="none"/>
+      <path d="M160 130l-3 9h6z" fill="#4f5658" stroke="none"/>
+      <path d="M160 380l-3 -9h6z" fill="#4f5658" stroke="none"/>
     </g>
-    <text x="150" y="259" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#16232e">62,5 ±0,1</text>
+    <text x="150" y="259" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#1e2223">62,5 ±0,1</text>
   
-    <g stroke="#4d5a66" stroke-width="0.8" fill="none">
+    <g stroke="#4f5658" stroke-width="0.8" fill="none">
       <path d="M85 130h10M85 730h10"/>
       <path d="M90 130V730"/>
-      <path d="M90 130l-3 9h6z" fill="#4d5a66" stroke="none"/>
-      <path d="M90 730l-3 -9h6z" fill="#4d5a66" stroke="none"/>
+      <path d="M90 130l-3 9h6z" fill="#4f5658" stroke="none"/>
+      <path d="M90 730l-3 -9h6z" fill="#4f5658" stroke="none"/>
     </g>
-    <text x="80" y="434" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#16232e">150,0</text>
+    <text x="80" y="434" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="#1e2223">150,0</text>
 
   
-    <g stroke="#8f3d18" stroke-width="1" fill="none">
+    <g stroke="#1b6e9b" stroke-width="1" fill="none">
       <path d="M378 257l-60 -70h-26"/>
-      <circle cx="378" cy="257" r="2.5" fill="#8f3d18"/>
+      <circle cx="378" cy="257" r="2.5" fill="#1b6e9b"/>
     </g>
-    <text x="286" y="191" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#8f3d18">gola 3,2 × 2,1 — ISO 3601</text>
+    <text x="286" y="191" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#1b6e9b">gola 3,2 × 2,1 — ISO 3601</text>
   
-    <g stroke="#8f3d18" stroke-width="1" fill="none">
+    <g stroke="#1b6e9b" stroke-width="1" fill="none">
       <path d="M728 370l90 90h26"/>
-      <circle cx="728" cy="370" r="2.5" fill="#8f3d18"/>
+      <circle cx="728" cy="370" r="2.5" fill="#1b6e9b"/>
     </g>
-    <text x="850" y="464" text-anchor="start" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#8f3d18">Ra 0,4 — rettificato</text>
+    <text x="850" y="464" text-anchor="start" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#1b6e9b">Ra 0,4 — rettificato</text>
   
-    <g stroke="#8f3d18" stroke-width="1" fill="none">
+    <g stroke="#1b6e9b" stroke-width="1" fill="none">
       <path d="M728 130l70 -66h26"/>
-      <circle cx="728" cy="130" r="2.5" fill="#8f3d18"/>
+      <circle cx="728" cy="130" r="2.5" fill="#1b6e9b"/>
     </g>
-    <text x="830" y="68" text-anchor="start" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#8f3d18">smusso 1 × 45°</text>
+    <text x="830" y="68" text-anchor="start" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#1b6e9b">smusso 1 × 45°</text>
 
-  <text x="560" y="830" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="15" fill="#1d3648">SEZIONE A-A</text>
+  <text x="560" y="830" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="15" fill="#303435">SEZIONE A-A</text>
 
-  <g font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#4d5a66">
+  <g font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#4f5658">
     <text x="1000" y="120">TOLLERANZE GENERALI ISO 2768-mK</text>
     <text x="1000" y="146">QUOTE IN MILLIMETRI</text>
     <text x="1000" y="172">SMUSSI NON QUOTATI 0,5 × 45°</text>
@@ -93,19 +93,19 @@
 
   
     <g>
-      <rect x="1036" y="870" width="340" height="96" fill="none" stroke="#16232e" stroke-width="1.4"/>
+      <rect x="1036" y="870" width="340" height="96" fill="none" stroke="#1e2223" stroke-width="1.4"/>
       
-      <text x="1048" y="892" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">DISEGNO</text>
-      <text x="1146" y="892" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#16232e">Sede pistone — sez. A-A</text>
-      <path d="M1036 900H1376" stroke="#c9c2b6" stroke-width="0.6"/>
-      <text x="1048" y="916" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">CODICE</text>
-      <text x="1146" y="916" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#16232e">BF-4471-03</text>
-      <path d="M1036 924H1376" stroke="#c9c2b6" stroke-width="0.6"/>
-      <text x="1048" y="940" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">SCALA</text>
-      <text x="1146" y="940" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#16232e">1:2</text>
-      <path d="M1036 948H1376" stroke="#c9c2b6" stroke-width="0.6"/>
-      <text x="1048" y="964" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4d5a66">REVISIONE</text>
-      <text x="1146" y="964" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#16232e">C — 05/11/2024</text>
-      <path d="M1036 972H1376" stroke="#c9c2b6" stroke-width="0.6"/>
+      <text x="1048" y="892" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4f5658">DISEGNO</text>
+      <text x="1146" y="892" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#1e2223">Sede pistone — sez. A-A</text>
+      <path d="M1036 900H1376" stroke="#c6cdcd" stroke-width="0.6"/>
+      <text x="1048" y="916" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4f5658">CODICE</text>
+      <text x="1146" y="916" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#1e2223">PT-0104-A</text>
+      <path d="M1036 924H1376" stroke="#c6cdcd" stroke-width="0.6"/>
+      <text x="1048" y="940" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4f5658">SCALA</text>
+      <text x="1146" y="940" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#1e2223">1:2</text>
+      <path d="M1036 948H1376" stroke="#c6cdcd" stroke-width="0.6"/>
+      <text x="1048" y="964" font-family="'DejaVu Sans Mono',monospace" font-size="10" fill="#4f5658">REVISIONE</text>
+      <text x="1146" y="964" font-family="'DejaVu Sans Mono',monospace" font-size="12" fill="#1e2223">A — 18/06/2025</text>
+      <path d="M1036 972H1376" stroke="#c6cdcd" stroke-width="0.6"/>
     </g>
 </svg>

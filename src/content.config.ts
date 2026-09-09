@@ -15,9 +15,9 @@ import { z } from 'astro/zod';
  */
 export const CATEGORIE_PROGETTO = [
   'Progettazione',
-  'Produzione',
-  'Validazione',
-  'Elettrificazione',
+  'Montaggio',
+  'Revisione',
+  'Collaudo',
 ] as const;
 
 export type CategoriaProgetto = (typeof CATEGORIE_PROGETTO)[number];

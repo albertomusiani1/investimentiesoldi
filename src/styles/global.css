@@ -1,5 +1,5 @@
 /* =========================================================================
-   Brambilla Future — foglio di stile globale
+   PROJECTUNE — foglio di stile globale
    CSS puro, nessun preprocessore, nessun framework.
    Ordine: font · variabili · reset · tipografia · layout · componenti ·
    utility · media query.
@@ -42,47 +42,52 @@
     U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-@font-face {
-  font-family: 'Source Serif 4';
-  src: url('/fonts/source-serif-4-latin-600.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
 /* -------------------------------------------------------------------------
    2. Variabili di progetto
    Cambiare un valore qui si ripercuote su tutto il sito: è il posto giusto
    per adattare palette, spaziature e tipografia.
    ------------------------------------------------------------------------- */
 :root {
-  /* Palette — primario scuro desaturato, neutro caldo, accento usato con parsimonia.
-     Tutti i rapporti di contrasto testo/sfondo sono ≥ 4.5:1. */
-  --colore-primario: #1d3648;
-  --colore-primario-scuro: #142737;
-  --colore-primario-chiaro: #2b4f68;
-  --colore-accento: #8f3d18;
-  --colore-accento-scuro: #73310e;
-  --colore-sfondo: #faf8f5;
+  /* Palette — i due colori del marchio PROJECTUNE e le varianti che servono
+     per farli funzionare anche come testo.
+
+     --marchio-antracite e --marchio-blu sono i colori originali del logo,
+     letti dal PDF del cliente: non vanno cambiati. Il blu del marchio su
+     bianco arriva però a 3,42:1, sotto il 4,5:1 richiesto per il testo:
+     per scritte e bottoni si usa --colore-accento (5,6:1), per il testo su
+     fondo antracite --colore-accento-chiaro (5,95:1). Il blu originale
+     resta dov'è nato: grafica, bordi, filetti e titoli grandi. */
+  --marchio-antracite: #303435;
+  --marchio-blu: #3093c9;
+
+  --colore-primario: #303435;
+  --colore-primario-scuro: #23282a;
+  --colore-primario-chiaro: #454c4e;
+  --colore-accento: #1b6e9b;
+  --colore-accento-scuro: #17658f;
+  --colore-accento-vivo: #3093c9;
+  --colore-accento-chiaro: #6fbbe6;
+  --colore-sfondo: #f4f6f6;
   --colore-superficie: #ffffff;
-  --colore-superficie-alt: #eeeae4;
-  --colore-testo: #16232e;
-  --colore-testo-tenue: #4d5a66;
+  --colore-superficie-alt: #e7ebeb;
+  --colore-testo: #1e2223;
+  --colore-testo-tenue: #4f5658;
   --colore-testo-inverso: #ffffff;
-  --colore-testo-inverso-tenue: #c9d4dd;
-  --colore-bordo: #ddd6cc;
-  --colore-bordo-forte: #6f7a84;
+  --colore-testo-inverso-tenue: #c3c9ca;
+  --colore-bordo: #d5dbdb;
+  --colore-bordo-forte: #6d7677;
   --colore-errore: #97241c;
   --colore-successo: #1f5c3d;
 
-  /* Tipografia — due famiglie, scala coerente di ragione ≈ 1.2 */
+  /* Tipografia — due famiglie, scala coerente di ragione ≈ 1.2.
+     Inter per il testo, Archivo per i titoli: una grottesca industriale sta
+     al marchio, che è geometrico e tecnico, come non ci stava il serif
+     editoriale di prima. Le etichette maiuscole spaziate riprendono la
+     spaziatura larghissima della scritta del logo. */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', Times, serif;
-  /* Solo per il titolo del hero: industriale, stretto, tutto in maiuscolo. */
-  --font-display: 'Archivo', 'Arial Narrow', Impact, var(--font-sans);
+  --font-display: 'Archivo', 'Arial Narrow', Helvetica, var(--font-sans);
+  /* Spaziatura delle etichette maiuscole, ripresa dal marchio. */
+  --tracciatura-etichetta: 0.16em;
 
   --testo-xs: 0.8125rem;
   --testo-sm: 0.9375rem;
@@ -113,8 +118,8 @@
   /* Forme e profondità */
   --raggio-sm: 3px;
   --raggio: 6px;
-  --ombra: 0 1px 2px rgb(22 35 46 / 6%), 0 2px 8px rgb(22 35 46 / 4%);
-  --ombra-forte: 0 2px 4px rgb(22 35 46 / 8%), 0 8px 20px rgb(22 35 46 / 8%);
+  --ombra: 0 1px 2px rgb(30 34 35 / 7%), 0 2px 8px rgb(30 34 35 / 5%);
+  --ombra-forte: 0 2px 4px rgb(30 34 35 / 9%), 0 8px 20px rgb(30 34 35 / 9%);
 
   /* Altezza dell'intestazione: il hero occupa il resto della finestra.
      Questo è il valore di ricaduta, volutamente generoso (l'altezza vera
@@ -202,7 +207,7 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 600;
   line-height: var(--interlinea-stretta);
   color: var(--colore-primario);
@@ -306,7 +311,8 @@ hr {
   color: var(--colore-testo-inverso);
 }
 
-.sezione--scura :focus-visible {
+.sezione--scura :focus-visible,
+.intestazione :focus-visible {
   outline-color: var(--colore-testo-inverso);
 }
 
@@ -374,14 +380,16 @@ hr {
    6. Componenti
    ------------------------------------------------------------------------- */
 
-/* Skip link */
+/* Skip link — sta sopra l'intestazione, che è antracite come lui:
+   il bordo bianco è quello che lo stacca dallo sfondo. */
 .salta-al-contenuto {
   position: absolute;
   top: var(--space-2);
   left: var(--space-2);
   z-index: 100;
   padding: var(--space-3) var(--space-4);
-  background-color: var(--colore-primario);
+  background-color: var(--colore-accento);
+  box-shadow: 0 0 0 2px var(--colore-testo-inverso);
   color: var(--colore-testo-inverso);
   font-size: var(--testo-sm);
   font-weight: 600;
@@ -404,12 +412,12 @@ hr {
   font-family: var(--font-sans);
   font-size: var(--testo-xs);
   font-weight: 600;
-  letter-spacing: 0.09em;
+  letter-spacing: var(--tracciatura-etichetta);
   text-transform: uppercase;
 }
 
 .sezione--scura .occhiello {
-  color: var(--colore-testo-inverso-tenue);
+  color: var(--colore-accento-chiaro);
 }
 
 /* Bottoni */
@@ -649,7 +657,7 @@ hr {
 
 .numero__cifra {
   display: block;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: var(--testo-2xl);
   font-weight: 600;
   line-height: 1.1;
@@ -780,15 +788,15 @@ hr {
   background:
     linear-gradient(
       90deg,
-      rgb(19 36 51 / 88%) 0%,
-      rgb(19 36 51 / 62%) 46%,
-      rgb(19 36 51 / 18%) 100%
+      rgb(35 40 42 / 88%) 0%,
+      rgb(35 40 42 / 62%) 46%,
+      rgb(35 40 42 / 18%) 100%
     ),
     linear-gradient(
       180deg,
-      rgb(19 36 51 / 34%) 0%,
-      rgb(19 36 51 / 18%) 45%,
-      rgb(19 36 51 / 86%) 100%
+      rgb(35 40 42 / 34%) 0%,
+      rgb(35 40 42 / 18%) 45%,
+      rgb(35 40 42 / 86%) 100%
     );
 }
 

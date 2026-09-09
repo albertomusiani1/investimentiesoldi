@@ -45,13 +45,13 @@ const H = 900;
 const FRAME = 200;
 const FPS = 25;
 
-// palette del sito
-const FONDO_ALTO = '#132433';
-const FONDO_BASSO = '#1d3648';
-const GRIGLIA = '#22415a';
-const GRIGLIA_FORTE = '#2a5170';
-const LINEA = '#cfdae2';
-const ACCENTO = '#c8703f';
+// palette del marchio: antracite e blu PROJECTUNE
+const FONDO_ALTO = '#23282a';
+const FONDO_BASSO = '#303435';
+const GRIGLIA = '#3c4446';
+const GRIGLIA_FORTE = '#4b5457';
+const LINEA = '#dfe5e6';
+const ACCENTO = '#3093c9';
 
 // --- geometria della flangia (mm, poi scalata) ------------------------------
 const R_ESTERNO = 250;

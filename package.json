@@ -1,9 +1,9 @@
 {
-  "name": "brambilla-future",
+  "name": "projectune",
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "description": "Sito vetrina Brambilla Future - ingegneria e componentistica automotive",
+  "description": "Sito vetrina PROJECTUNE - progettazione meccanica, montaggi e revisioni",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -20,8 +20,10 @@
     "check:js": "node scripts/check-js.mjs",
     "check:responsive": "node scripts/check-responsive.mjs",
     "check:html": "html-validate \"dist/**/*.html\"",
-    "check:links": "linkinator dist --recurse --skip \"^https://www\\.brambillafuture\\.it\"",
+    "check:links": "linkinator dist --recurse --skip \"^https://www\\.projectune\\.it\"",
+    "logo": "node scripts/genera-logo.mjs",
     "immagini:social": "node scripts/genera-immagini-social.mjs",
+    "immagini:progetti": "node scripts/genera-immagini-progetti.mjs",
     "disegni": "node scripts/genera-disegni.mjs",
     "video": "node scripts/genera-video-hero.mjs"
   },

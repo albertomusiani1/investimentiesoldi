@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EroeVideo from '../components/EroeVideo.astro';
 import SchedaProgetto from '../components/SchedaProgetto.astro';
+import Clienti from '../components/Clienti.astro';
 import { getCollection } from 'astro:content';
 import { t } from '../i18n';
 import { servizi } from '../lib/servizi';
@@ -15,12 +16,12 @@ const inEvidenza = progetti
   .sort((a, b) => (a.data.ordine ?? 99) - (b.data.ordine ?? 99))
   .slice(0, 3);
 
-/** CONTENUTO — SOSTITUIRE: cifre di sintesi mostrate in home. */
+/** CONTENUTO — Cifre di sintesi mostrate in home. Solo dati verificabili. */
 const numeri = [
-  { cifra: '1978', etichetta: "Anno di fondazione dell'officina" },
-  { cifra: '60', etichetta: 'Persone in un unico stabilimento' },
-  { cifra: '14', etichetta: 'Centri di lavoro a controllo numerico' },
-  { cifra: '9', etichetta: 'Paesi europei serviti' },
+  { cifra: '2025', etichetta: 'Anno in cui abbiamo iniziato' },
+  { cifra: '10', etichetta: 'Anni di progettazione nel farmaceutico' },
+  { cifra: '500', etichetta: 'Metri quadri di officina attrezzata' },
+  { cifra: '7', etichetta: 'Aziende che ci hanno dato fiducia' },
 ];
 ---
 
@@ -37,7 +38,7 @@ const numeri = [
         <h2 id="titolo-servizi">{t('home.serviziTitolo')}</h2>
         <p>{t('home.serviziSottotitolo')}</p>
       </div>
-      <ul class="griglia griglia--2 griglia--3 elenco-servizi">
+      <ul class="griglia griglia--2 elenco-servizi">
         {
           servizi.map((servizio) => (
             <li class="scheda scheda--collegata">
@@ -102,6 +103,8 @@ const numeri = [
       </div>
     </div>
   </section>
+
+  <Clienti />
 </BaseLayout>
 
 <style>

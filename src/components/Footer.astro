@@ -4,7 +4,7 @@
  */
 import Logo from './Logo.astro';
 import { t } from '../i18n';
-import { azienda, indirizzoCompleto } from '../lib/azienda';
+import { azienda, indirizzoCompleto, referenti } from '../lib/azienda';
 
 const anno = new Date().getFullYear();
 
@@ -25,7 +25,7 @@ const legali = [
   <div class="contenitore">
     <div class="pie__griglia">
       <div class="pie__marchio">
-        <Logo scuro={false} />
+        <Logo variante="completo" />
         <p>{t('footer.descrizione')}</p>
       </div>
 
@@ -47,7 +47,14 @@ const legali = [
         <h2 class="pie__titolo">{t('footer.contatti')}</h2>
         <address>
           <p>{indirizzoCompleto}</p>
-          <p><a href={`tel:${azienda.telefonoLink}`}>{azienda.telefono}</a></p>
+          {
+            referenti.map((referente) => (
+              <p>
+                <a href={`tel:${referente.telefonoLink}`}>{referente.telefono}</a>
+                {` \u00b7 ${referente.nome.split(' ')[0]}`}
+              </p>
+            ))
+          }
           <p><a href={`mailto:${azienda.email}`}>{azienda.email}</a></p>
         </address>
       </div>
@@ -55,16 +62,13 @@ const legali = [
 
     <div class="pie__coda">
       <p>{`\u00a9 ${anno} ${azienda.nomeLegale} \u2014 ${t('footer.copyright')}`}</p>
-      <p>
-        {`${t('footer.partitaIva')} ${azienda.datiSocietari.partitaIva} \u00b7 ${t('footer.rea')} ${azienda.datiSocietari.rea}`}
-      </p>
+      <p>{`${t('footer.partitaIva')} ${azienda.datiSocietari.partitaIva}`}</p>
     </div>
   </div>
 </footer>
 
 <style>
   .pie {
-    margin-top: var(--space-8);
     padding-block: var(--space-7);
     background-color: var(--colore-primario);
     color: var(--colore-testo-inverso-tenue);
@@ -76,9 +80,15 @@ const legali = [
     gap: var(--space-6);
   }
 
+  .pie__marchio {
+    /* Blu su antracite, come sul biglietto da visita. */
+    color: var(--marchio-blu);
+  }
+
   .pie__marchio p {
     max-width: 34ch;
     margin-top: var(--space-4);
+    color: var(--colore-testo-inverso-tenue);
   }
 
   .pie__titolo {
@@ -87,7 +97,7 @@ const legali = [
     font-family: var(--font-sans);
     font-size: var(--testo-xs);
     font-weight: 600;
-    letter-spacing: 0.09em;
+    letter-spacing: var(--tracciatura-etichetta);
     text-transform: uppercase;
   }
 

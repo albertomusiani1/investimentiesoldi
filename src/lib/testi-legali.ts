@@ -9,7 +9,7 @@
  * I testi sono stringhe pure: nessun tag HTML. Per tradurre il sito si copia
  * questo file (es. `testi-legali.en.ts`), si traducono le stringhe e si
  * seleziona il file in base alla lingua. Convenzioni:
- *   {email} {pec} {nomeLegale} {indirizzo} {partitaIva}  → segnaposto
+ *   {email} {nomeLegale} {indirizzo} {partitaIva}  → segnaposto
  *   [testo](/percorso)                                   → collegamento
  */
 
@@ -54,7 +54,7 @@ export const privacy: SezioneLegale[] = [
       {
         tipo: 'paragrafo',
         testo:
-          'Il titolare del trattamento è {nomeLegale}, {indirizzo}, partita IVA {partitaIva}. Per ogni questione relativa ai dati personali si può scrivere a [{email}](mailto:{email}) oppure alla casella PEC [{pec}](mailto:{pec}).',
+          'Il titolare del trattamento è {nomeLegale}, {indirizzo}, partita IVA {partitaIva}. Per ogni questione relativa ai dati personali si può scrivere a [{email}](mailto:{email}).',
       },
       {
         tipo: 'paragrafo',

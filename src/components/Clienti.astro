@@ -1,0 +1,92 @@
+---
+/**
+ * Fascia delle aziende con cui lavoriamo.
+ *
+ * Ogni voce è una targa: il marchio se c'è, altrimenti il nome composto nello
+ * stile del sito. Le due forme hanno la stessa altezza, così la fila resta
+ * ordinata anche mentre i marchi arrivano uno alla volta.
+ */
+import { t } from '../i18n';
+import { clienti } from '../lib/clienti';
+---
+
+{
+  clienti.length > 0 && (
+    <section class="sezione sezione--alt" aria-labelledby="titolo-clienti">
+      <div class="contenitore">
+        <div class="intestazione-sezione">
+          <h2 id="titolo-clienti">{t('clienti.titolo')}</h2>
+          <p>{t('clienti.sottotitolo')}</p>
+        </div>
+
+        <ul class="clienti">
+          {clienti.map((cliente) => (
+            <li class="cliente">
+              {cliente.logo ? (
+                <img
+                  class="cliente__marchio"
+                  src={cliente.logo}
+                  alt={cliente.logoAlt ?? cliente.nome}
+                  width="200"
+                  height="80"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span class="cliente__nome">{cliente.nome}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .clienti {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cliente {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 5.5rem;
+    padding: var(--space-4);
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    background-color: var(--colore-superficie);
+    text-align: center;
+  }
+
+  .cliente__nome {
+    color: var(--colore-primario);
+    font-family: var(--font-display);
+    font-size: var(--testo-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.35;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .cliente__marchio {
+    width: auto;
+    max-width: 100%;
+    max-height: 3.5rem;
+    object-fit: contain;
+  }
+
+  @media (min-width: 40em) {
+    .clienti {
+      gap: var(--space-5);
+      grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    }
+  }
+</style>

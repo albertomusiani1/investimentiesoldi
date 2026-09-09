@@ -17,7 +17,10 @@ import sitemap from '@astrojs/sitemap';
  * QUANDO COMPRI IL DOMINIO VERO: sostituisci l'indirizzo in DOMINIO_DEFINITIVO
  * e, su Netlify, collega il dominio: la variabile URL si aggiorna da sola.
  */
-const DOMINIO_DEFINITIVO = 'https://www.brambillafuture.it';
+// DA CONFERMARE: il dominio definitivo non è ancora stato registrato.
+// È solo la ricaduta: in produzione Netlify passa l'indirizzo vero
+// nella variabile d'ambiente URL, e questo valore non viene usato.
+const DOMINIO_DEFINITIVO = 'https://www.projectune.it';
 
 /**
  * Accetta solo indirizzi http/https: una variabile sporca non deve rompere la build.

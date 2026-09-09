@@ -36,10 +36,10 @@ tornerai.
 Togliamo subito la magia. Un sito web è **una cartella di file su un computer
 acceso**, e un programma che li spedisce a chi li chiede.
 
-Quando scrivi `brambillafuture.it/servizi` nel browser succede questo:
+Quando scrivi `projectune.it/servizi` nel browser succede questo:
 
 1. Il browser chiede a un servizio chiamato **DNS** — l'elenco telefonico di
-   internet — a quale indirizzo numerico corrisponde `brambillafuture.it`.
+   internet — a quale indirizzo numerico corrisponde `projectune.it`.
    Riceve qualcosa come `75.2.60.5`.
 2. Il browser apre una conversazione con quel computer e dice, in sostanza:
    *«mandami la pagina `/servizi`»*. Questa richiesta viaggia in un linguaggio
@@ -141,7 +141,7 @@ tipo abbiano questo aspetto».
 ```css
 h1 {
   font-size: 2.5rem;
-  color: #1d3648;
+  color: #303435;
 }
 ```
 
@@ -155,8 +155,10 @@ valori importanti sono raccolti in cima sotto forma di *variabili*:
 
 ```css
 :root {
-  --colore-primario: #1d3648;   /* il blu scuro di titoli e footer */
-  --colore-accento:  #8f3d18;   /* il rame dei pulsanti */
+  --marchio-antracite: #303435; /* l'antracite del logo */
+  --marchio-blu:       #3093c9; /* il blu del logo */
+  --colore-accento:    #1b6e9b; /* lo stesso blu, scurito quanto basta
+                                   perché un testo sia leggibile */
   --space-4: 1rem;              /* l'unità base di spaziatura */
 }
 ```
@@ -277,7 +279,7 @@ Aprendo la cartella vedi molte voci. La regola per orientarsi è una sola:
 > `dist/` non va mai modificato: viene cancellato e rifatto a ogni build.
 
 ```
-brambilla-future-sito/
+projectune-sito/
 │
 ├── src/                    ← IL SITO. Qui dentro lavori.
 │   ├── pages/                 Una pagina per file: index.astro è la home,
@@ -288,8 +290,9 @@ brambilla-future-sito/
 │   ├── content/progetti/      UN FILE .md PER PROGETTO. Il posto che userai
 │   │                          più spesso.
 │   ├── i18n/it.json           Tutte le parole dell'interfaccia.
-│   ├── lib/                   I dati: azienda.ts (indirizzo, telefono…),
-│   │                          servizi.ts, testi-legali.ts.
+│   ├── lib/                   I dati: azienda.ts (indirizzo, telefoni…),
+│   │                          servizi.ts, clienti.ts, testi-legali.ts.
+│   ├── marchio/               Il logo in SVG, ricavato dal PDF del cliente.
 │   └── styles/global.css      Colori, caratteri, spaziature: tutto lo stile.
 │
 ├── public/                 ← File copiati così come sono: immagini, caratteri,

@@ -1,10 +1,14 @@
 /**
- * CONTENUTO — I cinque servizi dell'attività.
+ * CONTENUTO — I quattro servizi dell'attività.
  *
- * SOSTITUIRE PRIMA DI ANDARE ONLINE: titoli, sommari, descrizioni e punti
- * elenco sono segnaposto realistici. Sono contenuti, non stringhe di
- * interfaccia: per tradurre il sito si duplica questo file (es. servizi.en.ts)
- * e lo si seleziona in base alla lingua corrente.
+ * Ogni affermazione qui dentro viene da quello che il cliente ci ha detto di
+ * saper fare: settori, lavorazioni, attrezzature. Non ci sono numeri di
+ * prestazione, percentuali o certificazioni, perché non ne sono stati
+ * forniti: aggiungerli richiede prima averli.
+ *
+ * Sono contenuti, non stringhe di interfaccia: per tradurre il sito si
+ * duplica questo file (es. servizi.en.ts) e lo si seleziona in base alla
+ * lingua corrente.
  */
 export interface Servizio {
   /** Usato come ancora nell'URL: /servizi#<id> */
@@ -21,87 +25,71 @@ export interface Servizio {
 export const servizi: Servizio[] = [
   {
     id: 'progettazione',
-    titolo: 'Progettazione e prototipazione',
+    titolo: 'Progettazione meccanica',
     sommario:
-      'Dal requisito al prototipo funzionante, con il calcolo strutturale fatto in casa e i pezzi lavorati nel nostro reparto.',
+      'Gruppi, attrezzature e macchine automatiche progettate su specifica, con dieci anni di lavoro nel settore farmaceutico alle spalle.',
     descrizione: [
-      "Progettiamo componenti meccanici partendo dai carichi reali, non dai valori di capitolato: dove è possibile misuriamo sul veicolo o sul banco prima di aprire il CAD. È il passaggio che più spesso fa risparmiare massa e passaggi di lavorazione.",
-      "Il calcolo strutturale statico e a fatica è interno, così le iterazioni fra disegno e verifica durano ore e non settimane. I prototipi escono dallo stesso reparto CNC che poi produrrà la serie: quello che si prova è già rappresentativo del pezzo definitivo.",
+      "La progettazione è il mestiere con cui è nata PROJECTUNE. Dieci anni di macchine automatiche per il farmaceutico, un settore che non perdona la pulizia approssimativa né la documentazione fatta di corsa, e poi l'oleodinamica degli accumulatori e i macchinari per fonderia: tre mondi con vincoli molto diversi, che insegnano a non applicare la stessa soluzione a tutto.",
+      'Lavoriamo su specifica del cliente, dal concetto alla messa in tavola. Il modello 3D, i disegni di fabbricazione e la distinta base restano di chi ci ha commissionato il lavoro: sono il suo prodotto, non il nostro.',
+      "Quando serve stare vicino alla macchina lavoriamo direttamente in sede dal cliente; quando serve solo il disegno, lo facciamo dal nostro ufficio e ci vediamo alle revisioni.",
     ],
     punti: [
-      'Analisi dei carichi con acquisizione su veicolo o su banco',
-      'Modellazione 3D e messa in tavola secondo ISO GPS',
-      'Calcolo a elementi finiti statico, a fatica e modale',
-      'Ottimizzazione topologica per riduzione di massa',
-      'Prototipi lavorati in casa in due settimane',
+      'Progettazione di gruppi e attrezzature su specifica',
+      'Macchine automatiche per il settore farmaceutico',
+      'Accumulatori oleodinamici',
+      'Macchinari per fonderia',
+      'Modellazione 3D, messa in tavola e distinta base',
     ],
   },
   {
-    id: 'produzione',
-    titolo: 'Produzione di serie e lavorazioni CNC',
+    id: 'montaggi',
+    titolo: 'Montaggi meccanici',
     sommario:
-      'Quattordici centri di lavoro a tre, quattro e cinque assi per serie da mille a centomila pezzi l\'anno.',
+      'Montaggio di piccole e medie serie per macchine automatiche, dal singolo gruppo alla macchina completa.',
     descrizione: [
-      'Produciamo su commessa serie da mille a centomila pezzi l\'anno, in alluminio, acciaio, ghisa e bronzo. Ogni famiglia di prodotto ha attrezzature dedicate: non rimontiamo le macchine fra un lotto e l\'altro, e questo tiene stabile la qualità nel tempo.',
-      'Il controllo dimensionale è in linea sui parametri critici e a campione statistico su tutti gli altri. Ogni lotto esce con il proprio certificato, archiviato per quindici anni e richiamabile dal numero di serie inciso sul pezzo.',
+      "Montiamo gruppi meccanici di piccola e media serie per costruttori di macchine automatiche, con esperienza maturata soprattutto nel packaging. Un montaggio ben fatto è quello che si riconosce dopo, quando la macchina lavora: giochi rispettati, serraggi controllati, niente forzature per far entrare un pezzo che non entra.",
+      "Lavoriamo sia in officina sia presso il cliente, a seconda di dove conviene: portare in casa una serie di gruppi da assemblare oppure andare sul posto quando il montaggio è parte di una macchina già in linea.",
     ],
     punti: [
-      'Fresatura e tornitura a controllo numerico fino a cinque assi',
-      'Attrezzature dedicate per famiglia di prodotto',
-      'Controllo in linea con sonda a contatto e correzione utensile',
-      'Certificato dimensionale per lotto, archiviato quindici anni',
-      'Gestione del conto lavoro per trattamenti e verniciatura',
+      'Montaggio di gruppi meccanici in piccola e media serie',
+      'Macchine automatiche per il packaging',
+      'Montaggio di componenti per accumulatori oleodinamici',
+      'Montaggio in officina o direttamente dal cliente',
+      'Assemblaggio e prova di macchinari automatici completi',
     ],
   },
   {
-    id: 'validazione',
-    titolo: 'Validazione e collaudo',
+    id: 'revisioni',
+    titolo: 'Revisione e manutenzione',
     sommario:
-      'Banchi prova progettati e costruiti da noi, campagne a fatica e assistenza alle pratiche di omologazione.',
+      'Pompe idrauliche e pompe per vuoto smontate, revisionate e riprovate prima di tornare in linea.',
     descrizione: [
-      'Progettiamo e costruiamo banchi prova su misura quando quelli di mercato non riproducono il profilo di missione reale del componente. Il banco resta di proprietà del cliente e viene consegnato con schemi, sorgenti della logica di controllo e formazione del personale.',
-      'Sui componenti che produciamo eseguiamo le campagne di qualifica nel nostro laboratorio: prove a fatica, a corrosione, cicli termici e prove di tenuta. I dati grezzi vengono consegnati insieme al rapporto, senza filtri.',
+      'Revisioniamo pompe idrauliche e pompe per vuoto: smontaggio, verifica dello stato di usura, sostituzione delle parti da sostituire e rimontaggio. Prima di consegnare, la pompa viene riprovata: una revisione che non finisce con una prova è una scommessa, non un intervento.',
+      "Ci occupiamo anche della manutenzione programmata, quella che si fa quando la macchina è ferma per scelta e non perché si è fermata da sola.",
     ],
     punti: [
-      'Progettazione e costruzione di banchi prova monoasse e multiasse',
-      'Campagne a fatica fino a dieci milioni di cicli',
-      'Prove di tenuta a caduta di pressione e con elio',
-      'Cicli termici e nebbia salina',
-      'Assistenza tecnica alle pratiche di omologazione',
+      'Revisione di pompe idrauliche',
+      'Revisione di pompe per vuoto',
+      'Manutenzione programmata su macchine in servizio',
+      'Prova funzionale prima della riconsegna',
+      'Interventi in officina o presso il cliente',
     ],
   },
   {
-    id: 'elettrificazione',
-    titolo: 'Elettrificazione e retrofit',
+    id: 'prove',
+    titolo: 'Prove e collaudo',
     sommario:
-      'Conversione di veicoli esistenti a trazione elettrica e componenti meccanici per pacchi batteria.',
+      "Officina di 500 m² con sale di test per il vuoto, per il farmaceutico e l'alimentare.",
     descrizione: [
-      'Convertiamo a trazione elettrica veicoli commerciali e da lavoro il cui telaio è ancora a metà della vita utile. Il percorso comprende il progetto del telaio batteria, l\'impianto ad alta tensione, il quadro di bordo e la pratica di omologazione individuale.',
-      'Per chi progetta pacchi batteria produciamo la parte meccanica e termica: piastre di raffreddamento brasate, strutture di contenimento, staffe e sistemi di sezionamento. Ogni pezzo destinato al circuito del refrigerante viene provato in tenuta prima di lasciare lo stabilimento.',
+      "La nostra sede la condividiamo con AZ Vacuum, che è insieme partner e cliente: cinquecento metri quadri di officina attrezzata, con sale di test dedicate al vuoto per il farmaceutico e l'alimentare.",
+      "Vuol dire che una macchina o un gruppo possono essere montati e provati nello stesso posto, prima di partire per lo stabilimento di destinazione. È il modo più economico di scoprire un problema: quando il pezzo è ancora sul banco.",
     ],
     punti: [
-      'Progetto del telaio batteria sul telaio esistente',
-      'Impianto ad alta tensione e quadro di bordo',
-      'Piastre di raffreddamento in alluminio brasato',
-      'Prova di tenuta con elio su ogni pezzo',
-      'Formazione dei manutentori e pratica di omologazione individuale',
-    ],
-  },
-  {
-    id: 'qualita',
-    titolo: 'Qualità e sviluppo fornitori',
-    sommario:
-      'Affiancamento alle aziende della filiera che devono raggiungere lo standard richiesto da un costruttore.',
-    descrizione: [
-      'Molte officine della filiera hanno le competenze tecniche ma non la documentazione che un costruttore pretende. Le affianchiamo nel percorso verso IATF 16949: analisi dello scostamento, impianto del sistema documentale, addestramento e accompagnamento fino all\'audit.',
-      'Lo stesso metodo lo applichiamo quando un nostro cliente ha un fornitore in difficoltà: andiamo sul posto, misuriamo il processo e concordiamo un piano di rientro con scadenze verificabili.',
-    ],
-    punti: [
-      'Analisi dello scostamento rispetto a IATF 16949',
-      'Impianto di PPAP, APQP, FMEA e piani di controllo',
-      'Addestramento del personale di reparto e di qualità',
-      'Audit di processo di seconda parte presso i fornitori',
-      'Piani di rientro con scadenze e indicatori concordati',
+      'Officina attrezzata di 500 m² a Castel Maggiore',
+      "Sale di test per il vuoto, farmaceutico e alimentare",
+      'Montaggio e prova di macchinari automatici',
+      'Prove funzionali su gruppi e componenti revisionati',
+      'Possibilità di seguire la prova insieme al cliente',
     ],
   },
 ];
