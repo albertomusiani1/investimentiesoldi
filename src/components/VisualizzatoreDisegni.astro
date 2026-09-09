@@ -15,14 +15,27 @@
  * le regole CSS che pilotano i pannelli sono statiche: un foglio di stile
  * esterno è l'unico modo di stare dentro una CSP senza 'unsafe-inline'.
  */
+import IntestazioneSezione from './IntestazioneSezione.astro';
 import { t } from '../i18n';
 import type { Disegno } from '../content.config';
 
 export interface Props {
   disegni: Disegno[];
+  /** Indice della sezione nella pagina, es. "03". */
+  indice?: string;
+  titolo?: string | undefined;
+  sottotitolo?: string | undefined;
 }
 
-const { disegni } = Astro.props;
+const {
+  disegni,
+  indice = '01',
+  titolo = t('disegni.titolo'),
+  sottotitolo = t('disegni.sottotitolo'),
+} = Astro.props;
+
+/** Con un disegno solo non c'è niente da scegliere: la lista sparisce. */
+const mostraScelta = disegni.length > 1;
 
 const etichettaTipo = (tipo: Disegno['tipo']) =>
   tipo === 'modello3d' ? t('disegni.tipo3d') : t('disegni.tipo2d');
@@ -30,12 +43,15 @@ const etichettaTipo = (tipo: Disegno['tipo']) =>
 
 {
   disegni.length > 0 && (
-    <section class="sezione sezione--scura disegni" aria-labelledby="titolo-disegni">
+    <section class="sezione sezione--scura trama disegni" aria-labelledby="titolo-disegni">
       <div class="contenitore">
-        <div class="intestazione-sezione">
-          <h2 id="titolo-disegni">{t('disegni.titolo')}</h2>
-          <p>{t('disegni.sottotitolo')}</p>
-        </div>
+        <IntestazioneSezione
+          indice={indice}
+          etichetta={t('disegni.etichetta')}
+          titolo={titolo}
+          testo={sottotitolo}
+          id="titolo-disegni"
+        />
 
         {/* I testi dell'isola viaggiano in attributi data-*: restano in it.json
             e non finiscono scritti dentro il JavaScript. */}
@@ -54,8 +70,8 @@ const etichettaTipo = (tipo: Disegno['tipo']) =>
           data-giroscopio-negato={t('disegni.giroscopioNegato')}
         />
 
-        <div class="visualizzatore" data-visualizzatore>
-          <fieldset class="visualizzatore__scelta">
+        <div class:list={['visualizzatore', { 'visualizzatore--singolo': !mostraScelta }]} data-visualizzatore>
+          <fieldset class="visualizzatore__scelta" hidden={!mostraScelta}>
             <legend class="visualizzatore__legenda">{t('disegni.scegli')}</legend>
             <div class="visualizzatore__voci">
               {disegni.map((disegno, indice) => (

@@ -4,8 +4,8 @@ Sito vetrina **PROJECTUNE di Matteuzzi Davide** (progettazione meccanica,
 montaggi e revisioni), costruito con Astro. Tutti i comandi sono stati eseguiti
 davvero; sotto c'è il loro output reale, non una stima.
 
-- **Data dell'esecuzione:** 9 settembre 2026 (rieseguita dopo l'adozione del
-  marchio, della palette e dei contenuti del cliente)
+- **Data dell'esecuzione:** 9 settembre 2026 (rieseguita dopo il rifacimento
+  grafico: sistema di elementi esagonali, sezioni numerate, viewport 3D)
 - **Ambiente:** Linux x86-64, Node.js v22.22.2, npm 10.9.7
 - **Comando di partenza:** `rm -rf dist && npm run build`
 - **Esito complessivo: 15 check su 15 passati.**
@@ -17,14 +17,14 @@ davvero; sotto c'è il loro output reale, non una stima.
 | # | Check | Esito | Sintesi |
 |---|---|---|---|
 | 1 | Build | ✅ | exit 0, 16 pagine, nessun warning |
-| 2 | Type check | ✅ | 0 errori, 0 warning, 0 hint su 51 file |
+| 2 | Type check | ✅ | 0 errori, 0 warning, 0 hint su 55 file |
 | 3 | Pagine raggiungibili | ✅ | 24/24 risorse a 200 |
 | 4 | 404 personalizzata | ✅ | stato 404 e contenuto della pagina del sito |
 | 5 | Lighthouse home (mobile) | ✅ | 100 / 100 / 100 / 100 |
 | 6 | Lighthouse dettaglio progetto | ✅ | 100 / 100 / 100 / 100 |
 | 7 | JS al client | ✅ | tre isole dichiarate, 14,6 kB, ognuna solo sulle sue pagine |
 | 8 | HTML valido | ✅ | 0 errori su 16 file |
-| 9 | Link interni | ✅ | 59 link scansionati, 0 rotti |
+| 9 | Link interni | ✅ | 60 link scansionati, 0 rotti |
 | 10 | Test del form | ✅ | 14 test, 14 passati, 0 falliti |
 | 10b | Astrazione mailer | ✅ | nessuna occorrenza di «mailjet» in `contact.ts` |
 | 11 | Schema collection | ✅ | la build si ferma con errore leggibile |
@@ -100,7 +100,7 @@ $ npm run check
 [content] Synced content
 [types] Generated 626ms
 [check] Getting diagnostics for Astro files in /home/user/investimentiesoldi...
-Result (51 files): 
+Result (55 files): 
 - 0 errors
 - 0 warnings
 - 0 hints
@@ -233,7 +233,7 @@ PAGINA                                  ISOLE                            JSON-LD
 /contatti/grazie                        —                                      0
 /contatti                               FormContatti                           1
 /cookie-policy                          —                                      1
-/                                       EroeVideo                              1
+/                                       EroeVideo, VisualizzatoreDisegni        1
 /privacy                                —                                      1
 /progetti/accumulatori-oleodinamici     —                                      2
 /progetti/attrezzatura-fonderia         —                                      2
@@ -280,8 +280,8 @@ usa spazi unificatori.
 
 ```console
 $ npx linkinator dist --recurse --skip "^https://www\.projectune\.it"
-(58 righe [200], omesse)
-✓ Successfully scanned 59 links in 0.265 seconds.
+(59 righe [200], omesse)
+✓ Successfully scanned 60 links in 0.259 seconds.
 
 EXIT=0
 ```
@@ -436,7 +436,7 @@ che dentro la frase.
 
 ```console
 $ npm run check:i18n
-File .astro esaminati in src/components e src/layouts: 12
+File .astro esaminati in src/components e src/layouts: 14
 Nessuna stringa di interfaccia scritta a mano: tutte passano da src/i18n/it.json.
 EXIT=0
 
@@ -478,15 +478,17 @@ scelta è quella che porta **entrambi** i tipi di disegno, tavola 2D e modello
 
 | Metrica | Home | Dettaglio progetto |
 |---|---|---|
-| First Contentful Paint | 1,2 s | 1,2 s |
-| Largest Contentful Paint | 1,4 s | 1,4 s |
+| First Contentful Paint | 1,4 s | 1,4 s |
+| Largest Contentful Paint | 1,5 s | 1,5 s |
 | Total Blocking Time | 0 ms | 0 ms |
-| Cumulative Layout Shift | 0,015 | 0 |
-| Peso totale della pagina | 89 KiB | 81 KiB |
+| Cumulative Layout Shift | 0 | 0 |
+| Peso totale della pagina | 100 KiB | 86 KiB |
 
-La home è passata da 104 a 89 KiB: il fermo immagine del hero, rigenerato nei
-colori del marchio, comprime meglio, e il carattere serif in meno è un file che
-non viene più scaricato.
+Il rifacimento grafico è costato 11 KiB sulla home: 12 kB di CSS in più e
+l'emblema incorporato in ogni pagina, meno quello che si è risparmiato altrove.
+Le comparse allo scorrimento non pesano perché sono CSS, e il modello 3D della
+sezione 03 non entra nella misura: viene chiesto solo quando la sezione entra in
+vista, cioè mai durante il caricamento.
 
 Lighthouse 13.4.1, profilo mobile predefinito, throttling simulato, Chromium
 headless. I report completi in JSON sono in `reports/`.
@@ -610,6 +612,23 @@ Ricopiate da `PLAN.md`, dove ognuna ha anche l'alternativa scartata.
 34. **L'elenco delle pagine del check responsive si ricava da `dist/`**: quello
     scritto a mano era rimasto ai vecchi indirizzi e passava verde su pagine che
     non esistevano più.
+35. **Un sistema grafico riusabile** (pastiglia esagonale, trama a favo,
+    etichetta tecnica, squadratura, comparsa, collegamento tecnico) invece di
+    decorazioni sparse: più CSS, ma le pagine restano coerenti.
+36. **Le trame a favo sono file SVG generati** da `npm run trame`, continui per
+    costruzione, non `data:` URI incollati nel foglio di stile.
+37. **Il monospaziato è quello di sistema**: stesso effetto, nessun quarto file
+    di caratteri da scaricare.
+38. **Le comparse allo scorrimento sono CSS** (`animation-timeline: view()`):
+    dove il browser non lo supporta il contenuto è già al suo posto.
+39. **Il visualizzatore 3D è anche in home**, con un modello preso dalle schede
+    lavoro invece che duplicato, e le schede segnalano col bollino quali portano
+    tavole o modelli.
+40. **Modello 3D in un viewport scuro, tavole 2D su carta bianca**: sono due
+    cose diverse e devono sembrarlo.
+41. **Intestazione appiccicosa** con `position: sticky`, senza JavaScript.
+42. **Le sigle dei clienti si calcolano dal nome commerciale**, non si scrivono
+    a mano.
 
 ---
 
@@ -683,31 +702,29 @@ $ du -sh dist
 | Tipo | File | Peso su disco |
 |---|---|---|
 | MP4 (video del hero) | 1 | 400,8 kB |
-| HTML | 16 | 291,9 kB |
+| HTML | 16 | 343,9 kB |
 | STL (modelli 3D) | 2 | 225,1 kB |
 | WOFF2 (3 caratteri) | 3 | 61,1 kB |
 | JPEG (fermo immagine) | 1 | 54,4 kB |
+| CSS | 13 | 45,5 kB |
+| SVG | 13 | 39,6 kB |
 | PNG | 4 | 38,0 kB |
-| SVG | 11 | 37,2 kB |
-| CSS | 12 | 33,8 kB |
 | WebP (fermi immagine) | 2 | 22,6 kB |
 | JavaScript | 3 | 14,6 kB |
 | TXT | 3 | 9,1 kB |
 | XML (sitemap) | 2 | 1,3 kB |
 
-**Pagina più pesante su disco:**
-`dist/progetti/gruppo-dosaggio-farmaceutico/index.html`, **24,3 kB**. A seguire
-`montaggio-gruppi-packaging` (22,3 kB) e la home (22,2 kB). L'HTML è cresciuto
-rispetto a prima perché la scritta del marchio è incorporata in ogni pagina:
-5,6 kB di tracciati che però si comprimono molto bene e risparmiano una
-richiesta di rete su un elemento che sta in cima alla pagina. Il marchio
-completo, che pesa 14 kB, è invece un file esterno servito una volta sola e poi
-tenuto in cache: incorporarlo avrebbe voluto dire ripeterlo sedici volte.
+**L'HTML è la voce cresciuta di più.** In ogni pagina sono incorporati la
+scritta del marchio (5,6 kB) e l'emblema (1,8 kB): tracciati che si comprimono
+molto bene e che risparmiano due richieste di rete su elementi che stanno in
+cima alla pagina. Il marchio completo, 14 kB, è invece un file esterno servito
+una volta sola e tenuto in cache: incorporarlo avrebbe voluto dire ripeterlo
+sedici volte.
 
 **Pagina più pesante come traffico reale**, misurata da Lighthouse con
-compressione attiva: la home, **89 KiB**, di cui 61 KiB sono i tre file dei
-caratteri. Le pagine successive ne scaricano circa 20 KiB, perché i caratteri
-restano in cache per un anno.
+compressione attiva: la home, **100 KiB**, di cui 61 KiB sono i tre file dei
+caratteri. Le pagine successive ne scaricano circa 25 KiB, perché caratteri,
+foglio di stile e marchio restano in cache per un anno.
 
 Le due voci grosse in `dist/` — il video da 401 kB e i due STL da 225 kB — non
 sono sul percorso critico: il video è `preload="none"` e parte solo quando

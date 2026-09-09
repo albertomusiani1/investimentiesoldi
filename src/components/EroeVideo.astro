@@ -14,8 +14,12 @@
  * Il video non è contenuto informativo: è decorazione. Per questo è
  * `aria-hidden` e il poster ha `alt` vuoto — chi usa un lettore di schermo
  * sente il titolo, non la descrizione di un'animazione.
+ *
+ * Sopra il filmato ci sono due strati grafici: la trama a favo del marchio e
+ * i due veli che garantiscono il contrasto del testo bianco.
  */
 import { t } from '../i18n';
+import { azienda } from '../lib/azienda';
 
 export interface Props {
   /** Ancora della prima sezione sotto il hero, per il collegamento "Scorri". */
@@ -23,6 +27,14 @@ export interface Props {
 }
 
 const { ancoraSuccessiva } = Astro.props;
+
+/** La riga di dati sotto il titolo: fatti, non slogan. */
+const dati = [
+  `${azienda.indirizzo.citta} (${azienda.indirizzo.provincia})`,
+  `${t('home.heroDal')} ${azienda.fondazione}`,
+  `${azienda.superficieOfficina} m²`,
+  t('home.heroPreventivo'),
+];
 ---
 
 <section class="eroe" data-eroe>
@@ -54,17 +66,27 @@ const { ancoraSuccessiva } = Astro.props;
     >
       <source src="/video/hero.mp4" type="video/mp4" />
     </video>
+    <div class="eroe__favo" aria-hidden="true"></div>
     <div class="eroe__velo" aria-hidden="true"></div>
   </div>
 
   <div class="contenitore eroe__contenuto">
-    <p class="eroe__occhiello">{t('home.heroOcchiello')}</p>
-    <h1 class="eroe__titolo">{t('home.heroTitolo')}</h1>
-    <p class="eroe__sommario">{t('home.heroTesto')}</p>
-    <div class="eroe__azioni">
-      <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
-      <a class="bottone bottone--chiaro" href="/servizi">{t('azioni.scopriServizi')}</a>
+    <div class="eroe__blocco">
+      <p class="etichetta-tecnica eroe__occhiello">{t('home.heroOcchiello')}</p>
+      <h1 class="eroe__titolo">
+        {t('home.heroTitolo')}
+        <span class="eroe__titolo-accento">{t('home.heroTitoloAccento')}</span>
+      </h1>
+      <p class="eroe__sommario">{t('home.heroTesto')}</p>
+      <div class="eroe__azioni">
+        <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
+        <a class="bottone bottone--chiaro" href="/servizi">{t('azioni.scopriServizi')}</a>
+      </div>
     </div>
+
+    <ul class="eroe__dati">
+      {dati.map((voce) => <li>{voce}</li>)}
+    </ul>
   </div>
 
   <a class="eroe__scorri" href={`#${ancoraSuccessiva}`}>

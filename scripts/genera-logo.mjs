@@ -14,6 +14,7 @@
  *
  * Produce:
  *   src/marchio/logo-projectune-testo.svg  solo la scritta, per l'intestazione
+ *   src/marchio/emblema.svg                esagono e ingranaggio, senza scritta
  *   public/img/logo-projectune.svg         marchio completo, per il piè di pagina
  *   public/favicon.svg                     esagono e ingranaggio su antracite
  *
@@ -155,6 +156,10 @@ const completo =
   `fill="${BLU}"><path d="${unisci(marchio)}"/></svg>\n`;
 const soloTesto = `${intestazione(vistaCon(scritta, 2))}<path d="${unisci(scritta)}"/></svg>\n`;
 
+// Emblema: esagono e ingranaggio, monocromatico e senza fondo. È la stessa
+// composizione della favicon (vedi sotto) e serve accanto alla scritta nella
+// barra in alto, dove il marchio intero sarebbe troppo alto.
+//
 // Favicon: quadrato antracite, esagono e ingranaggio blu.
 //
 // A 16 px la scritta sparirebbe e l'ingranaggio, che nel marchio sta nella
@@ -173,6 +178,9 @@ const ingranaggioCentrato =
   `${arrotonda(eyc - iyc * INGRANDIMENTO)}) scale(${INGRANDIMENTO})">` +
   `<path d="${unisci(ingranaggio)}"/></g>`;
 
+const emblema =
+  `${intestazione(vistaCon(esagono, 4))}<path d="${unisci(esagono)}"/>${ingranaggioCentrato}</svg>\n`;
+
 const lato = Math.max(rEsagono.x1 - rEsagono.x0, rEsagono.y1 - rEsagono.y0);
 const scala = arrotonda(186 / lato);
 const dx = arrotonda(128 - exc * scala);
@@ -185,6 +193,7 @@ const favicon =
 
 const uscite = [
   ['src/marchio/logo-projectune-testo.svg', soloTesto],
+  ['src/marchio/emblema.svg', emblema],
   ['public/img/logo-projectune.svg', completo],
   ['public/favicon.svg', favicon],
 ];

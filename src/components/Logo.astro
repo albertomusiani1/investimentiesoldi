@@ -10,21 +10,26 @@
  *    in cima e deve comparire subito; prende il colore dal CSS. Il marchio
  *    completo qui non ci starebbe: è alto quanto largo, e alla larghezza di
  *    una barra di navigazione la scritta sarebbe alta cinque pixel.
+ *  - `variante="orizzontale"`: l'emblema (esagono e ingranaggio) accanto alla
+ *    scritta. È la composizione della barra in alto: la stessa che il marchio
+ *    usa nella favicon, messa in riga invece che in colonna.
  *  - `variante="completo"`: esagono, icone e scritta, per il piè di pagina.
  *    È un file esterno da 14 kB: incorporarlo vorrebbe dire ripeterlo in tutte
  *    le pagine, mentre così il browser lo scarica una volta sola.
  */
 import testo from '../marchio/logo-projectune-testo.svg?raw';
+import emblema from '../marchio/emblema.svg?raw';
 import { t } from '../i18n';
 
 export interface Props {
-  variante?: 'testo' | 'completo';
+  variante?: 'testo' | 'orizzontale' | 'completo';
 }
 
 const { variante = 'testo' } = Astro.props;
 ---
 
 <span class:list={['marchio', `marchio--${variante}`]}>
+  {variante === 'orizzontale' && <Fragment set:html={emblema} />}
   {
     variante === 'completo' ? (
       <img
@@ -47,6 +52,19 @@ const { variante = 'testo' } = Astro.props;
     display: block;
   }
 
+  .marchio--orizzontale {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  /* L'emblema: la punta dell'esagono allineata alla riga della scritta. */
+  .marchio--orizzontale :global(svg:first-child) {
+    flex: none;
+    width: auto;
+    height: 2.25rem;
+  }
+
   .marchio :global(svg),
   .marchio img {
     display: block;
@@ -54,8 +72,9 @@ const { variante = 'testo' } = Astro.props;
   }
 
   /* La scritta: larghezza fissa, altezza in proporzione. */
-  .marchio--testo :global(svg) {
-    width: 10.5rem;
+  .marchio--testo :global(svg),
+  .marchio--orizzontale :global(svg:last-of-type) {
+    width: 9.5rem;
   }
 
   .marchio--completo img {
@@ -63,8 +82,13 @@ const { variante = 'testo' } = Astro.props;
   }
 
   @media (min-width: 40em) {
-    .marchio--testo :global(svg) {
-      width: 12.5rem;
+    .marchio--testo :global(svg),
+    .marchio--orizzontale :global(svg:last-of-type) {
+      width: 11.5rem;
+    }
+
+    .marchio--orizzontale :global(svg:first-child) {
+      height: 2.75rem;
     }
   }
 </style>

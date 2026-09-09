@@ -86,8 +86,22 @@
      spaziatura larghissima della scritta del logo. */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --font-display: 'Archivo', 'Arial Narrow', Helvetica, var(--font-sans);
+  /* Monospaziato di sistema per le etichette tecniche e i numeri: dà il tono
+     da manuale senza far scaricare un quarto file di caratteri. */
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
   /* Spaziatura delle etichette maiuscole, ripresa dal marchio. */
   --tracciatura-etichetta: 0.16em;
+
+  /* La forma del marchio, riusabile: esagono con la punta in alto, inscritto
+     in un riquadro qualsiasi. */
+  --esagono: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  /* Proporzione di un esagono regolare con la punta in alto. */
+  --esagono-proporzione: 0.866;
+
+  /* Trame di sfondo: favi continui, generati da `npm run trame`. */
+  --trama-esagoni: url('/img/trama-esagoni.svg');
+  --trama-esagoni-fitta: url('/img/trama-esagoni-fitta.svg');
 
   --testo-xs: 0.8125rem;
   --testo-sm: 0.9375rem;
@@ -149,6 +163,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* L'intestazione resta attaccata in alto: saltando a un'ancora, il
+     titolo deve fermarsi sotto la barra e non dietro. */
+  scroll-padding-top: calc(var(--altezza-intestazione) + var(--space-4));
 }
 
 body,
@@ -298,6 +315,7 @@ hr {
   color: var(--colore-testo-inverso);
 }
 
+.sezione--scura h1,
 .sezione--scura h2,
 .sezione--scura h3 {
   color: var(--colore-testo-inverso);
@@ -309,6 +327,16 @@ hr {
 
 .sezione--scura a {
   color: var(--colore-testo-inverso);
+}
+
+/* Il bottone chiaro ha il fondo bianco: su fascia scura la regola qui sopra
+   gli renderebbe bianco anche il testo. */
+.sezione--scura .bottone--chiaro {
+  color: var(--colore-primario);
+}
+
+.sezione--scura .bottone--chiaro:hover {
+  color: var(--colore-primario-scuro);
 }
 
 .sezione--scura :focus-visible,
@@ -517,8 +545,49 @@ hr {
 }
 
 .scheda__media {
+  position: relative;
   border-bottom: 1px solid var(--colore-bordo);
   background-color: var(--colore-superficie-alt);
+  overflow: hidden;
+}
+
+.scheda__media img {
+  transition: transform 500ms ease-out;
+}
+
+.scheda:hover .scheda__media img {
+  transform: scale(1.03);
+}
+
+/* Bollino «qui c'è un disegno da guardare»: la cosa che distingue una
+   scheda dall'altra, quindi va vista prima del titolo. */
+.scheda__bollino {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-1);
+  border-radius: 999px;
+  background-color: rgb(30 34 35 / 88%);
+  color: var(--colore-testo-inverso);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.scheda__bollino-segno {
+  width: 1.25rem;
+  background-color: transparent;
+  color: var(--colore-accento-chiaro);
+}
+
+.scheda__bollino-segno svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 .scheda__media img {
@@ -778,6 +847,17 @@ hr {
   opacity: 1;
 }
 
+/* Trama a favo sopra il filmato: lega il hero al marchio senza appiccicarci
+   sopra un logo. Sta sotto i veli, così non intacca il contrasto del testo. */
+.eroe__favo {
+  position: absolute;
+  inset: 0;
+  background-image: var(--trama-esagoni);
+  opacity: 0.28;
+  -webkit-mask-image: radial-gradient(60% 70% at 82% 40%, #000 0%, transparent 68%);
+  mask-image: radial-gradient(60% 70% at 82% 40%, #000 0%, transparent 68%);
+}
+
 .eroe__velo {
   position: absolute;
   inset: 0;
@@ -790,7 +870,7 @@ hr {
       90deg,
       rgb(35 40 42 / 88%) 0%,
       rgb(35 40 42 / 62%) 46%,
-      rgb(35 40 42 / 18%) 100%
+      rgb(35 40 42 / 6%) 100%
     ),
     linear-gradient(
       180deg,
@@ -803,31 +883,55 @@ hr {
 .eroe__contenuto {
   position: relative;
   padding-block: var(--space-8) var(--space-8);
-  max-width: 54rem;
+}
+
+.eroe__blocco,
+.eroe__dati {
+  max-width: 52rem;
 }
 
 .eroe__occhiello {
-  display: inline-block;
-  margin: 0 0 var(--space-4);
-  padding-bottom: var(--space-2);
-  border-bottom: 2px solid var(--colore-accento);
-  color: var(--colore-testo-inverso);
-  font-size: var(--testo-xs);
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  max-width: 22rem;
+  margin: 0 0 var(--space-5);
+  color: var(--colore-accento-chiaro);
+}
+
+/* Il blocco del testo è squadrato come un riquadro di tavola: un filetto
+   verticale blu a sinistra e le due crocette agli angoli. */
+.eroe__blocco {
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+.eroe__blocco::before {
+  content: '';
+  position: absolute;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  left: 0;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--marchio-blu) 0%,
+    rgb(48 147 201 / 10%) 100%
+  );
 }
 
 .eroe__titolo {
   margin: 0;
   color: var(--colore-testo-inverso);
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 1.2rem + 7.4vw, 5.6rem);
+  font-size: clamp(2.4rem, 1.1rem + 6.6vw, 5rem);
   font-weight: 700;
   line-height: 0.95;
   letter-spacing: -0.015em;
   text-transform: uppercase;
   text-wrap: balance;
+}
+
+.eroe__titolo-accento {
+  display: block;
+  color: var(--colore-accento-chiaro);
 }
 
 .eroe__sommario {
@@ -842,6 +946,39 @@ hr {
   flex-wrap: wrap;
   gap: var(--space-3);
   margin-top: var(--space-6);
+}
+
+/* La riga di dati sotto il testo: fatti in monospaziato, separati da un
+   esagono. È la stessa idea del cartiglio di una tavola. */
+.eroe__dati {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  margin: var(--space-7) 0 0;
+  padding: var(--space-4) 0 0;
+  border-top: 1px solid rgb(255 255 255 / 16%);
+  list-style: none;
+  color: var(--colore-testo-inverso-tenue);
+  font-family: var(--font-mono);
+  font-size: var(--testo-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.eroe__dati li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.eroe__dati li::before {
+  content: '';
+  flex: none;
+  width: 0.375rem;
+  height: calc(0.375rem / var(--esagono-proporzione));
+  background-color: var(--marchio-blu);
+  clip-path: var(--esagono);
 }
 
 .eroe__scorri {
@@ -981,13 +1118,26 @@ hr {
   max-height: 70svh;
   background-color: var(--colore-superficie);
   background-image:
-    linear-gradient(to right, rgb(29 54 72 / 7%) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(29 54 72 / 7%) 1px, transparent 1px);
+    linear-gradient(to right, rgb(30 34 35 / 7%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(30 34 35 / 7%) 1px, transparent 1px);
   background-size: 32px 32px;
   border: 1px solid rgb(255 255 255 / 22%);
   border-radius: var(--raggio);
   overflow: hidden;
   touch-action: none;
+}
+
+/* La tavola 2D sta su carta bianca, il modello 3D in un viewport da CAD:
+   fondo scuro, reticolo blu e un alone al centro. Sono due cose diverse e
+   devono sembrarlo. */
+.scena--3d {
+  background-color: #1b1f20;
+  background-image:
+    radial-gradient(70% 70% at 50% 45%, rgb(48 147 201 / 12%) 0%, transparent 70%),
+    linear-gradient(to right, rgb(48 147 201 / 10%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(48 147 201 / 10%) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+  border-color: rgb(48 147 201 / 35%);
 }
 
 .scena--pronta {
@@ -1131,7 +1281,449 @@ hr {
 }
 
 /* -------------------------------------------------------------------------
-   12. Movimento ridotto
+   12. Sistema grafico: esagoni, trame, cornici tecniche
+
+   Tre elementi ricorrenti, tutti derivati dal marchio:
+     · l'esagono, come pastiglia, filigrana e cornice;
+     · il favo, come trama di sfondo delle fasce scure;
+     · la squadratura tecnica, cioè le crocette e gli angoli da tavola di
+       disegno che marcano gli spigoli dei blocchi importanti.
+   Sono tutti CSS: nessuna immagine oltre alle due tessere del favo, nessun
+   JavaScript.
+   ------------------------------------------------------------------------- */
+
+/* Pastiglia esagonale piena: il mattone di tutto il resto. */
+.esagono {
+  display: grid;
+  place-items: center;
+  aspect-ratio: var(--esagono-proporzione);
+  clip-path: var(--esagono);
+  background-color: var(--colore-accento);
+  color: var(--colore-testo-inverso);
+}
+
+/* Etichetta tecnica: monospaziata, maiuscola, con l'esagono davanti. */
+.etichetta-tecnica {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--colore-accento);
+  font-family: var(--font-mono);
+  font-size: var(--testo-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracciatura-etichetta);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.etichetta-tecnica::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: calc(0.5rem / var(--esagono-proporzione));
+  background-color: currentcolor;
+  clip-path: var(--esagono);
+}
+
+/* La riga sottile che accompagna l'etichetta fino al bordo del blocco. */
+.etichetta-tecnica::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, currentcolor, transparent);
+  opacity: 0.45;
+}
+
+.sezione--scura .etichetta-tecnica {
+  color: var(--colore-accento-chiaro);
+}
+
+/* Trama a favo. Sta su uno pseudo-elemento per poterla sfumare: a piena
+   opacità su tutta la fascia sembrerebbe carta da parati. */
+.trama {
+  position: relative;
+  isolation: isolate;
+}
+
+.trama::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--trama-esagoni);
+  background-repeat: repeat;
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(120% 100% at 100% 0%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(120% 100% at 100% 0%, #000 0%, transparent 72%);
+  pointer-events: none;
+}
+
+.trama--fitta::before {
+  background-image: var(--trama-esagoni-fitta);
+  opacity: 0.35;
+}
+
+.trama--sinistra::before {
+  -webkit-mask-image: radial-gradient(110% 100% at 0% 100%, #000 0%, transparent 70%);
+  mask-image: radial-gradient(110% 100% at 0% 100%, #000 0%, transparent 70%);
+}
+
+/* Squadratura: due angoli in blu, come i riferimenti di una tavola. */
+.squadrato {
+  position: relative;
+}
+
+.squadrato::before,
+.squadrato::after {
+  content: '';
+  position: absolute;
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 2px solid var(--marchio-blu);
+  opacity: 0;
+  transition: opacity var(--transizione);
+  pointer-events: none;
+}
+
+.squadrato::before {
+  top: -1px;
+  left: -1px;
+  border-right-width: 0;
+  border-bottom-width: 0;
+}
+
+.squadrato::after {
+  right: -1px;
+  bottom: -1px;
+  border-top-width: 0;
+  border-left-width: 0;
+}
+
+.squadrato:hover::before,
+.squadrato:hover::after,
+.squadrato:focus-within::before,
+.squadrato:focus-within::after {
+  opacity: 1;
+}
+
+/* Intestazione di sezione con l'indice progressivo. */
+.intestazione-sezione__indice {
+  display: block;
+  margin-bottom: var(--space-3);
+}
+
+.intestazione-sezione h2,
+.intestazione-sezione h1 {
+  margin-top: var(--space-4);
+}
+
+/* Sezione scura: fondo profondo con un alone blu, non un grigio piatto. */
+.sezione--scura {
+  background-image:
+    radial-gradient(80% 120% at 85% -10%, rgb(48 147 201 / 16%) 0%, transparent 60%),
+    linear-gradient(180deg, var(--colore-primario-scuro) 0%, var(--colore-primario) 100%);
+}
+
+/* Fascia chiara alternata: favo finissimo, quasi invisibile, che si spegne
+   verso il centro. Serve a dare consistenza al fondo, non a farsi notare. */
+.sezione--alt {
+  position: relative;
+  isolation: isolate;
+}
+
+.sezione--alt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--trama-esagoni-fitta);
+  opacity: 0.14;
+  -webkit-mask-image: linear-gradient(105deg, #000 0%, transparent 42%);
+  mask-image: linear-gradient(105deg, #000 0%, transparent 42%);
+  pointer-events: none;
+}
+
+/* Blocco numerico: ogni cifra ha il suo esagono dietro. */
+.numero {
+  position: relative;
+  padding-top: var(--space-4);
+}
+
+.numero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -0.75rem;
+  width: 3.25rem;
+  height: calc(3.25rem / var(--esagono-proporzione));
+  background-color: var(--marchio-blu);
+  opacity: 0.18;
+  clip-path: var(--esagono);
+}
+
+.numero__cifra {
+  position: relative;
+  font-size: clamp(2.25rem, 1.4rem + 3vw, 3.25rem);
+  letter-spacing: -0.02em;
+}
+
+.numero__etichetta {
+  color: var(--colore-testo-inverso-tenue);
+  font-size: var(--testo-sm);
+  max-width: 22ch;
+}
+
+/* Il processo: quattro passi in fila, uniti da una linea tratteggiata. */
+.processo {
+  display: grid;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: passo;
+}
+
+.passo {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.passo__numero {
+  width: 3.5rem;
+  height: calc(3.5rem / var(--esagono-proporzione));
+  font-family: var(--font-mono);
+  font-size: var(--testo-md);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.passo__titolo {
+  font-size: var(--testo-md);
+}
+
+.passo__testo {
+  margin-top: var(--space-2);
+  color: var(--colore-testo-tenue);
+  font-size: var(--testo-sm);
+  max-width: 34ch;
+}
+
+@media (min-width: 48em) {
+  .processo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-6);
+  }
+}
+
+@media (min-width: 64em) {
+  .processo {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .passo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  /* Il filo tratteggiato che porta da un passo al successivo. */
+  .passo:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: calc(3.5rem / var(--esagono-proporzione) / 2);
+    left: 4.25rem;
+    right: calc(var(--space-5) * -1);
+    border-top: 1px dashed var(--colore-bordo-forte);
+    opacity: 0.6;
+  }
+}
+
+/* Scheda servizio in home: icona esagonale, filetto blu allo hover. */
+.scheda-servizio {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+  padding: var(--space-5);
+  background-color: var(--colore-superficie);
+  border: 1px solid var(--colore-bordo);
+  border-radius: var(--raggio);
+  overflow: hidden;
+  transition: border-color var(--transizione), transform var(--transizione),
+    box-shadow var(--transizione);
+}
+
+.scheda-servizio::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--marchio-blu), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transizione);
+}
+
+.scheda-servizio:hover,
+.scheda-servizio:focus-within {
+  border-color: var(--colore-bordo-forte);
+  transform: translateY(-3px);
+  box-shadow: var(--ombra-forte);
+}
+
+.scheda-servizio:hover::after,
+.scheda-servizio:focus-within::after {
+  transform: scaleX(1);
+}
+
+.scheda-servizio__icona {
+  width: 3rem;
+  color: var(--colore-accento);
+  background-color: rgb(48 147 201 / 12%);
+}
+
+.scheda-servizio__icona svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.scheda-servizio__titolo {
+  font-size: var(--testo-md);
+}
+
+.scheda-servizio__titolo a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.scheda-servizio__titolo a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.scheda-servizio:hover .scheda-servizio__titolo a,
+.scheda-servizio__titolo a:hover {
+  color: var(--colore-accento);
+}
+
+.scheda-servizio__testo {
+  color: var(--colore-testo-tenue);
+  font-size: var(--testo-sm);
+}
+
+.scheda-servizio__freccia {
+  margin-top: auto;
+  color: var(--colore-accento);
+  font-family: var(--font-mono);
+  font-size: var(--testo-xs);
+  letter-spacing: var(--tracciatura-etichetta);
+  text-transform: uppercase;
+}
+
+/* Richiamo finale: un riquadro squadrato, non un blocco di testo centrato
+   in mezzo al bianco. */
+.richiamo__riquadro {
+  position: relative;
+  padding: var(--space-7) var(--space-5);
+  border: 1px solid var(--colore-bordo);
+  border-radius: var(--raggio);
+  background-color: var(--colore-superficie);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.richiamo__riquadro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--trama-esagoni);
+  opacity: 0.35;
+  -webkit-mask-image: radial-gradient(80% 120% at 92% 0%, #000 0%, transparent 62%);
+  mask-image: radial-gradient(80% 120% at 92% 0%, #000 0%, transparent 62%);
+}
+
+.richiamo__riquadro::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 6rem;
+  height: 3px;
+  background-color: var(--marchio-blu);
+  transform: translateX(-50%);
+}
+
+/* Collegamento in stile tecnico: monospaziato, con l'esagono davanti. */
+.collegamento-tecnico {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-3);
+  border: 1px solid var(--colore-bordo-forte);
+  border-radius: 999px;
+  color: var(--colore-accento);
+  font-family: var(--font-mono);
+  font-size: var(--testo-xs);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: border-color var(--transizione), background-color var(--transizione);
+}
+
+.collegamento-tecnico::before {
+  content: '';
+  width: 0.5rem;
+  height: calc(0.5rem / var(--esagono-proporzione));
+  background-color: currentcolor;
+  clip-path: var(--esagono);
+}
+
+.collegamento-tecnico:hover {
+  border-color: var(--colore-accento);
+  background-color: rgb(48 147 201 / 8%);
+}
+
+/* Comparsa allo scorrimento, senza una riga di JavaScript.
+   `animation-timeline: view()` è supportato dai browser recenti; dove non
+   c'è, il contenuto è semplicemente già al suo posto. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .rivela {
+      animation: comparsa linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 20%;
+    }
+  }
+}
+
+@keyframes comparsa {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Un disegno solo: niente colonna di scelta, il pannello prende tutto. */
+.visualizzatore--singolo {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* -------------------------------------------------------------------------
+   13. Movimento ridotto
    ------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html {

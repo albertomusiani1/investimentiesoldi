@@ -16,31 +16,41 @@ const collegamenti = [
   descrizione={t('errore404.metaDescrizione')}
   noindex={true}
 >
-  <section class="sezione">
+  <section class="sezione sezione--scura trama errore">
     <div class="contenitore contenitore--stretto">
       <p class="codice" aria-hidden="true">{t('errore404.codice')}</p>
       <h1>{t('errore404.titolo')}</h1>
       <p class="testo">{t('errore404.testo')}</p>
 
-      <h2 class="collegamenti__titolo">{t('errore404.collegamentiTitolo')}</h2>
+      <h2 class="etichetta-tecnica collegamenti__titolo">{t('errore404.collegamentiTitolo')}</h2>
       <ul class="collegamenti">
         {collegamenti.map((voce) => <li><a href={voce.href}>{voce.etichetta}</a></li>)}
       </ul>
 
       <div class="gruppo-bottoni">
-        <a class="bottone bottone--primario" href="/">{t('azioni.tornaAllaHome')}</a>
+        <a class="bottone bottone--chiaro" href="/">{t('azioni.tornaAllaHome')}</a>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  /* La pagina si presenta come un pannello di errore: fondo scuro, codice
+     enorme in monospaziato, il resto in ordine sotto. */
+  .errore {
+    display: grid;
+    align-items: center;
+    min-height: max(28rem, calc(100svh - var(--altezza-intestazione) - 22rem));
+  }
+
   .codice {
-    font-family: var(--font-display);
-    font-size: var(--testo-3xl);
-    font-weight: 600;
+    margin: 0;
+    color: var(--colore-accento-chiaro);
+    font-family: var(--font-mono);
+    font-size: clamp(3.5rem, 2rem + 8vw, 7rem);
+    font-weight: 500;
+    letter-spacing: 0.04em;
     line-height: 1;
-    color: var(--colore-accento);
   }
 
   h1 {
@@ -56,11 +66,6 @@ const collegamenti = [
 
   .collegamenti__titolo {
     margin-top: var(--space-7);
-    font-family: var(--font-sans);
-    font-size: var(--testo-xs);
-    font-weight: 600;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
   }
 
   .collegamenti {

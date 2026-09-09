@@ -1,0 +1,46 @@
+---
+/**
+ * Le quattro icone dei servizi, disegnate a mano in SVG.
+ *
+ * Sono tratti di 1,6 px su una griglia di 24, come le icone di un pannello
+ * di controllo: nessuna libreria di icone, nessun file da scaricare.
+ * Sono decorative — il nome del servizio è scritto accanto — quindi restano
+ * fuori dall'albero di accessibilità.
+ */
+export type NomeIcona = 'progettazione' | 'montaggi' | 'revisioni' | 'prove';
+
+export interface Props {
+  nome: NomeIcona;
+}
+
+const { nome } = Astro.props;
+
+/** Tracciati per icona, tutti sulla stessa griglia 24 × 24. */
+const tracciati: Record<NomeIcona, string[]> = {
+  // Squadra e matita: il disegno.
+  progettazione: ['M3 20h18', 'M6 20V8l7-5 5 4v13', 'M6 12h11', 'M13 3v17'],
+  // Chiave e bullone: il montaggio.
+  montaggi: [
+    'M14.5 6.5a3.5 3.5 0 0 0 4.6 4.6l-7.7 7.7a2.3 2.3 0 0 1-3.2-3.2z',
+    'M4 4l3.5 3.5',
+    'M4 9V4h5',
+  ],
+  // Pompa con albero: la revisione.
+  revisioni: ['M3 9h12v9H3z', 'M15 12h4v3h-4', 'M9 13.5h.01', 'M6 9V6h6v3', 'M3 18h12'],
+  // Manometro: la prova.
+  prove: ['M12 20a8 8 0 1 1 0-16 8 8 0 0 1 0 16z', 'M12 12l4-3', 'M12 4v2', 'M4 12h2', 'M20 12h-2'],
+};
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {tracciati[nome].map((d) => <path d={d} />)}
+</svg>

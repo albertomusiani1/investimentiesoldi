@@ -10,9 +10,13 @@
  * duplica questo file (es. servizi.en.ts) e lo si seleziona in base alla
  * lingua corrente.
  */
+import type { NomeIcona } from '../components/IconaServizio.astro';
+
 export interface Servizio {
   /** Usato come ancora nell'URL: /servizi#<id> */
   id: string;
+  /** Quale delle quattro icone disegnate in IconaServizio.astro. */
+  icona: NomeIcona;
   titolo: string;
   /** Una riga, per la sintesi in home. */
   sommario: string;
@@ -25,6 +29,7 @@ export interface Servizio {
 export const servizi: Servizio[] = [
   {
     id: 'progettazione',
+    icona: 'progettazione',
     titolo: 'Progettazione meccanica',
     sommario:
       'Gruppi, attrezzature e macchine automatiche progettate su specifica, con dieci anni di lavoro nel settore farmaceutico alle spalle.',
@@ -43,6 +48,7 @@ export const servizi: Servizio[] = [
   },
   {
     id: 'montaggi',
+    icona: 'montaggi',
     titolo: 'Montaggi meccanici',
     sommario:
       'Montaggio di piccole e medie serie per macchine automatiche, dal singolo gruppo alla macchina completa.',
@@ -60,6 +66,7 @@ export const servizi: Servizio[] = [
   },
   {
     id: 'revisioni',
+    icona: 'revisioni',
     titolo: 'Revisione e manutenzione',
     sommario:
       'Pompe idrauliche e pompe per vuoto smontate, revisionate e riprovate prima di tornare in linea.',
@@ -77,6 +84,7 @@ export const servizi: Servizio[] = [
   },
   {
     id: 'prove',
+    icona: 'prove',
     titolo: 'Prove e collaudo',
     sommario:
       "Officina di 500 m² con sale di test per il vuoto, per il farmaceutico e l'alimentare.",

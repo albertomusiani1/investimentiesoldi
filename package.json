@@ -24,6 +24,7 @@
     "logo": "node scripts/genera-logo.mjs",
     "immagini:social": "node scripts/genera-immagini-social.mjs",
     "immagini:progetti": "node scripts/genera-immagini-progetti.mjs",
+    "trame": "node scripts/genera-trame.mjs",
     "disegni": "node scripts/genera-disegni.mjs",
     "video": "node scripts/genera-video-hero.mjs"
   },

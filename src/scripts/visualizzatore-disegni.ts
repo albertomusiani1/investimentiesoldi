@@ -433,10 +433,12 @@ function creaMotore3D(tela: HTMLCanvasElement, modello: Modello, alCambioZoom: (
       if (stato.filoDiFerro) {
         // profondità normalizzata sul raggio del pezzo: le linee lontane
         // sbiadiscono, come in un wireframe da CAD
+        // Il fondo del viewport è scuro: in filo di ferro le linee sono
+        // chiare, e quelle lontane sbiadiscono invece di scurirsi.
         const vicinanza = Math.max(0, Math.min(1, (profondita[casella]! / raggio + 1) / 2));
-        contesto.strokeStyle = `rgba(22,35,46,${(0.16 + vicinanza * 0.74).toFixed(2)})`;
+        contesto.strokeStyle = `rgba(214,226,232,${(0.14 + vicinanza * 0.76).toFixed(2)})`;
       } else {
-        contesto.strokeStyle = 'rgba(22,35,46,0.92)';
+        contesto.strokeStyle = 'rgba(24,30,32,0.92)';
       }
       contesto.beginPath();
       contesto.moveTo(spigoloX1[e]!, spigoloY1[e]!);

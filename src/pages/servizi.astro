@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import IntestazioneSezione from '../components/IntestazioneSezione.astro';
+import IconaServizio from '../components/IconaServizio.astro';
 import { t } from '../i18n';
 import { servizi } from '../lib/servizi';
 ---
@@ -11,25 +13,34 @@ import { servizi } from '../lib/servizi';
 >
   <section class="sezione">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h1>{t('servizi.titolo')}</h1>
-        <p>{t('servizi.introduzione')}</p>
-      </div>
+      <IntestazioneSezione
+        indice="01"
+        etichetta={t('nav.servizi')}
+        titolo={t('servizi.titolo')}
+        testo={t('servizi.introduzione')}
+        id="titolo-servizi"
+        principale
+      />
 
       <div class="elenco-servizi">
         {
           servizi.map((servizio, indice) => (
-            <article class="servizio" id={servizio.id}>
-              <div class="servizio__numero" aria-hidden="true">
-                {String(indice + 1).padStart(2, '0')}
+            <article class="voce rivela" id={servizio.id}>
+              <div class="voce__lato">
+                <span class="esagono voce__icona" aria-hidden="true">
+                  <IconaServizio nome={servizio.icona} />
+                </span>
+                <span class="voce__numero" aria-hidden="true">
+                  {String(indice + 1).padStart(2, '0')}
+                </span>
               </div>
-              <div class="servizio__corpo">
+              <div class="voce__corpo">
                 <h2>{servizio.titolo}</h2>
                 {servizio.descrizione.map((paragrafo) => (
-                  <p class="servizio__paragrafo">{paragrafo}</p>
+                  <p class="voce__paragrafo">{paragrafo}</p>
                 ))}
-                <h3 class="servizio__sottotitolo">{t('servizi.cosaComprende')}</h3>
-                <ul class="servizio__punti">
+                <p class="etichetta-tecnica voce__sottotitolo">{t('servizi.cosaComprende')}</p>
+                <ul class="voce__punti">
                   {servizio.punti.map((punto) => (
                     <li>{punto}</li>
                   ))}
@@ -42,7 +53,7 @@ import { servizi } from '../lib/servizi';
     </div>
   </section>
 
-  <section class="sezione sezione--scura" aria-labelledby="titolo-cta-servizi">
+  <section class="sezione sezione--scura trama" aria-labelledby="titolo-cta-servizi">
     <div class="contenitore contenitore--stretto">
       <h2 id="titolo-cta-servizi">{t('servizi.ctaTitolo')}</h2>
       <p class="cta__testo">{t('servizi.ctaTesto')}</p>
@@ -59,47 +70,76 @@ import { servizi } from '../lib/servizi';
     gap: var(--space-7);
   }
 
-  .servizio {
+  .voce {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-4);
     padding-top: var(--space-6);
-    border-top: 2px solid var(--colore-bordo);
-    scroll-margin-top: var(--space-5);
+    border-top: 1px solid var(--colore-bordo);
+    scroll-margin-top: calc(var(--altezza-intestazione) + var(--space-5));
   }
 
-  .servizio__numero {
-    font-family: var(--font-display);
+  .voce__lato {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .voce__icona {
+    width: 3.25rem;
+    color: var(--colore-testo-inverso);
+    background-color: var(--colore-primario);
+  }
+
+  .voce__icona svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .voce__numero {
+    color: var(--colore-bordo-forte);
+    font-family: var(--font-mono);
     font-size: var(--testo-lg);
-    font-weight: 600;
-    color: var(--colore-accento);
+    letter-spacing: 0.04em;
   }
 
-  .servizio__corpo {
+  .voce__corpo {
     max-width: var(--misura);
   }
 
-  .servizio__paragrafo {
+  .voce__paragrafo {
     margin-top: var(--space-4);
     color: var(--colore-testo-tenue);
   }
 
-  .servizio__sottotitolo {
-    margin-top: var(--space-5);
-    font-family: var(--font-sans);
-    font-size: var(--testo-xs);
-    font-weight: 600;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--colore-primario);
+  .voce__sottotitolo {
+    margin-top: var(--space-6);
   }
 
-  .servizio__punti {
-    margin-top: var(--space-3);
+  /* Punti elenco con l'esagono al posto del pallino. */
+  .voce__punti {
+    margin-top: var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .voce__punti li {
+    position: relative;
     padding-left: var(--space-5);
   }
 
-  .servizio__punti li + li {
-    margin-top: var(--space-2);
+  .voce__punti li + li {
+    margin-top: var(--space-3);
+  }
+
+  .voce__punti li::before {
+    content: '';
+    position: absolute;
+    top: 0.55em;
+    left: 0;
+    width: 0.5rem;
+    height: calc(0.5rem / var(--esagono-proporzione));
+    background-color: var(--marchio-blu);
+    clip-path: var(--esagono);
   }
 
   .cta__testo {
@@ -108,9 +148,16 @@ import { servizi } from '../lib/servizi';
   }
 
   @media (min-width: 64em) {
-    .servizio {
-      grid-template-columns: 6rem 1fr;
+    .voce {
+      grid-template-columns: 9rem 1fr;
       gap: var(--space-6);
+      align-items: start;
+    }
+
+    .voce__lato {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
     }
   }
 </style>

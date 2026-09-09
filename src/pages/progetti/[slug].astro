@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import IntestazioneSezione from '../../components/IntestazioneSezione.astro';
 import SchedaProgetto from '../../components/SchedaProgetto.astro';
 import VisualizzatoreDisegni from '../../components/VisualizzatoreDisegni.astro';
 import { t } from '../../i18n';
@@ -65,10 +66,19 @@ const altri = (await getCollection('progetti'))
 >
   <article class="sezione progetto">
     <div class="contenitore">
-      <header class="progetto__testata">
+      <header class="progetto__testata rivela">
         <p><span class="etichetta etichetta--accento">{categoria}</span></p>
         <h1>{titolo}</h1>
         <p class="progetto__sommario">{descrizioneBreve}</p>
+        {
+          disegni && disegni.length > 0 && (
+            <p class="progetto__vai-disegni">
+              <a class="collegamento-tecnico" href="#titolo-disegni">
+                {t('progetti.vaiAiDisegni')} ↓
+              </a>
+            </p>
+          )
+        }
       </header>
 
       <img
@@ -108,13 +118,16 @@ const altri = (await getCollection('progetti'))
     </div>
   </article>
 
-  {disegni && disegni.length > 0 && <VisualizzatoreDisegni disegni={disegni} />}
+  {disegni && disegni.length > 0 && <VisualizzatoreDisegni disegni={disegni} indice="02" />}
 
   <section class="sezione sezione--alt" aria-labelledby="titolo-altri-progetti">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h2 id="titolo-altri-progetti">{t('progetti.altriProgetti')}</h2>
-      </div>
+      <IntestazioneSezione
+        indice={disegni && disegni.length > 0 ? '03' : '02'}
+        etichetta={t('nav.progetti')}
+        titolo={t('progetti.altriProgetti')}
+        id="titolo-altri-progetti"
+      />
       <ul class="griglia griglia--2 griglia--3 elenco-altri">
         {altri.map((altro) => <li><SchedaProgetto progetto={altro} /></li>)}
       </ul>
@@ -136,6 +149,10 @@ const altri = (await getCollection('progetti'))
     margin-top: var(--space-4);
     color: var(--colore-testo-tenue);
     font-size: var(--testo-md);
+  }
+
+  .progetto__vai-disegni {
+    margin-top: var(--space-5);
   }
 
   .progetto__immagine {

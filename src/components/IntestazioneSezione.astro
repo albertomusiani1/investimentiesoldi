@@ -1,0 +1,39 @@
+---
+/**
+ * Testata di una sezione: indice progressivo, titolo, sommario.
+ *
+ * L'indice («01», «02»…) non è decorazione fine a sé stessa: dà alla pagina
+ * l'aria di un fascicolo tecnico e, insieme all'etichetta monospaziata, è il
+ * filo che tiene insieme tutte le sezioni del sito.
+ */
+export interface Props {
+  /** Numero progressivo della sezione nella pagina, es. "01". */
+  indice: string;
+  /** Etichetta breve accanto all'indice: la stessa cosa che dice il titolo. */
+  etichetta: string;
+  titolo: string;
+  /** Id del titolo, per `aria-labelledby` della sezione. */
+  id: string;
+  testo?: string | undefined;
+  /** true per il titolo principale della pagina. */
+  principale?: boolean;
+}
+
+const { indice, etichetta, titolo, id, testo, principale = false } = Astro.props;
+---
+
+<div class="intestazione-sezione rivela">
+  <p class="etichetta-tecnica intestazione-sezione__indice">
+    <span>{indice}</span>
+    <span>{etichetta}</span>
+  </p>
+  {principale ? <h1 id={id}>{titolo}</h1> : <h2 id={id}>{titolo}</h2>}
+  {testo && <p>{testo}</p>}
+</div>
+
+<style>
+  .intestazione-sezione__indice span:first-of-type {
+    padding-right: var(--space-3);
+    border-right: 1px solid currentcolor;
+  }
+</style>

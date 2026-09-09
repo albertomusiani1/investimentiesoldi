@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import IntestazioneSezione from '../components/IntestazioneSezione.astro';
 import SchedaProgetto from '../components/SchedaProgetto.astro';
 import { getCollection } from 'astro:content';
 import { CATEGORIE_PROGETTO } from '../content.config';
@@ -29,10 +30,14 @@ const idCategoria = (categoria: string) =>
 >
   <section class="sezione">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h1>{t('progetti.titolo')}</h1>
-        <p>{t('progetti.introduzione')}</p>
-      </div>
+      <IntestazioneSezione
+        indice="01"
+        etichetta={t('nav.progetti')}
+        titolo={t('progetti.titolo')}
+        testo={t('progetti.introduzione')}
+        id="titolo-progetti"
+        principale
+      />
 
       {
         progetti.length === 0 ? (
@@ -72,7 +77,7 @@ const idCategoria = (categoria: string) =>
 
             <ul class="griglia griglia--2 griglia--3 elenco-progetti">
               {progetti.map((progetto, indice) => (
-                <li data-categoria={progetto.data.categoria}>
+                <li class="rivela" data-categoria={progetto.data.categoria}>
                   <SchedaProgetto progetto={progetto} prioritaria={indice < 2} />
                 </li>
               ))}
@@ -116,8 +121,11 @@ const idCategoria = (categoria: string) =>
     border: 1px solid var(--colore-bordo-forte);
     border-radius: 999px;
     color: var(--colore-testo);
-    font-size: var(--testo-sm);
-    font-weight: 600;
+    font-family: var(--font-mono);
+    font-size: var(--testo-xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     cursor: pointer;
     transition:
       background-color var(--transizione),
@@ -134,6 +142,7 @@ const idCategoria = (categoria: string) =>
     background-color: var(--colore-primario);
     border-color: var(--colore-primario);
     color: var(--colore-testo-inverso);
+    box-shadow: inset 0 -2px 0 0 var(--marchio-blu);
   }
 
   .filtro__radio:focus-visible + .filtro__etichetta {

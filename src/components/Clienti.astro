@@ -6,35 +6,71 @@
  * stile del sito. Le due forme hanno la stessa altezza, così la fila resta
  * ordinata anche mentre i marchi arrivano uno alla volta.
  */
+import IntestazioneSezione from './IntestazioneSezione.astro';
 import { t } from '../i18n';
 import { clienti } from '../lib/clienti';
+
+export interface Props {
+  /** Indice della sezione nella pagina, es. "05". */
+  indice?: string;
+}
+
+const { indice = '01' } = Astro.props;
+
+/**
+ * Sigla di ripiego finché non arriva il marchio.
+ *
+ * Si tiene il nome commerciale — quello che viene prima di «di», che in
+ * «Roscomec di Rossi Fabio» introduce il titolare e non l'azienda — si
+ * scartano le forme societarie, e si prendono due lettere: la sigla se il
+ * nome ne è già una (AZ, SL), altrimenti le iniziali.
+ */
+const FORME_SOCIETARIE = /^(s\.?r\.?l\.?|s\.?p\.?a\.?|s\.?n\.?c\.?|s\.?a\.?s\.?)$/i;
+
+const sigla = (nome: string) => {
+  const parole = nome
+    .split(/\s+di\s+/i)[0]!
+    .split(/\s+/)
+    .filter((parola) => parola !== '' && !FORME_SOCIETARIE.test(parola));
+
+  const prima = parole[0] ?? nome;
+  if (prima.length <= 3 && prima === prima.toUpperCase()) return prima;
+  if (parole.length > 1) return (prima[0]! + parole[1]![0]!).toUpperCase();
+  return prima.slice(0, 2).toUpperCase();
+};
 ---
 
 {
   clienti.length > 0 && (
     <section class="sezione sezione--alt" aria-labelledby="titolo-clienti">
       <div class="contenitore">
-        <div class="intestazione-sezione">
-          <h2 id="titolo-clienti">{t('clienti.titolo')}</h2>
-          <p>{t('clienti.sottotitolo')}</p>
-        </div>
+        <IntestazioneSezione
+          indice={indice}
+          etichetta={t('clienti.etichetta')}
+          titolo={t('clienti.titolo')}
+          testo={t('clienti.sottotitolo')}
+          id="titolo-clienti"
+        />
 
         <ul class="clienti">
           {clienti.map((cliente) => (
-            <li class="cliente">
-              {cliente.logo ? (
-                <img
-                  class="cliente__marchio"
-                  src={cliente.logo}
-                  alt={cliente.logoAlt ?? cliente.nome}
-                  width="200"
-                  height="80"
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <span class="cliente__nome">{cliente.nome}</span>
-              )}
+            <li class="cliente rivela">
+              <span class="cliente__placca" aria-hidden="true">
+                {cliente.logo ? (
+                  <img
+                    class="cliente__marchio"
+                    src={cliente.logo}
+                    alt=""
+                    width="200"
+                    height="80"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <span class="cliente__sigla">{sigla(cliente.nome)}</span>
+                )}
+              </span>
+              <span class="cliente__nome">{cliente.nome}</span>
             </li>
           ))}
         </ul>
@@ -44,10 +80,12 @@ import { clienti } from '../lib/clienti';
 }
 
 <style>
+  /* Un favo di placche esagonali: la forma del marchio che torna, e una fila
+     che resta ordinata anche mentre i marchi veri arrivano uno alla volta. */
   .clienti {
     display: grid;
-    gap: var(--space-4);
-    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    gap: var(--space-5) var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
     margin: 0;
     padding: 0;
     list-style: none;
@@ -55,38 +93,59 @@ import { clienti } from '../lib/clienti';
 
   .cliente {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 5.5rem;
-    padding: var(--space-4);
-    border: 1px solid var(--colore-bordo);
-    border-radius: var(--raggio);
-    background-color: var(--colore-superficie);
+    gap: var(--space-3);
     text-align: center;
   }
 
-  .cliente__nome {
-    color: var(--colore-primario);
-    font-family: var(--font-display);
-    font-size: var(--testo-xs);
-    font-weight: 700;
+  .cliente__placca {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    max-width: 6.5rem;
+    aspect-ratio: var(--esagono-proporzione);
+    clip-path: var(--esagono);
+    background:
+      linear-gradient(160deg, rgb(48 147 201 / 16%) 0%, rgb(48 147 201 / 6%) 100%),
+      var(--colore-superficie);
+    transition: background var(--transizione), transform var(--transizione);
+  }
+
+  .cliente:hover .cliente__placca {
+    background:
+      linear-gradient(160deg, rgb(48 147 201 / 30%) 0%, rgb(48 147 201 / 12%) 100%),
+      var(--colore-superficie);
+    transform: translateY(-3px);
+  }
+
+  .cliente__sigla {
+    color: var(--colore-accento);
+    font-family: var(--font-mono);
+    font-size: var(--testo-md);
+    font-weight: 600;
     letter-spacing: 0.08em;
+  }
+
+  .cliente__nome {
+    max-width: 12rem;
+    color: var(--colore-testo-tenue);
+    font-size: var(--testo-xs);
+    font-weight: 600;
     line-height: 1.35;
-    text-transform: uppercase;
     text-wrap: balance;
   }
 
   .cliente__marchio {
     width: auto;
-    max-width: 100%;
-    max-height: 3.5rem;
+    max-width: 60%;
+    max-height: 2.75rem;
     object-fit: contain;
   }
 
   @media (min-width: 40em) {
     .clienti {
-      gap: var(--space-5);
-      grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
     }
   }
 </style>

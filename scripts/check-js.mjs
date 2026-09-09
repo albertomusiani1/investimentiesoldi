@@ -43,7 +43,8 @@ const ISOLE = [
   {
     nome: 'VisualizzatoreDisegni',
     perche: 'rende interattive le tavole 2D e i modelli 3D',
-    pagine: /^\/progetti\/[^/]+$/,
+    // In home c'è il modello in vetrina, sulle schede lavoro le loro tavole.
+    pagine: /^\/$|^\/progetti\/[^/]+$/,
   },
 ];
 

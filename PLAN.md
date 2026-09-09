@@ -19,6 +19,17 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
   `npm run check:js`. Nessun'altra parte del sito è stata toccata. Tutte le verifiche
   rieseguite: Lighthouse 100/100/100/100 su home e su una pagina progetto col
   visualizzatore.
+- 2026-09-09 17:05 — **Rifacimento grafico: il sito diventa tecnico, non solo
+  sobrio.** Su richiesta del proprietario («troppo semplice»): sistema di elementi
+  grafici derivati dall'esagono del marchio — pastiglie, trame a favo, etichette
+  monospaziate, squadrature agli angoli — sezioni numerate come un fascicolo
+  tecnico, intestazione appiccicosa con emblema, hero con riga di dati e titolo a
+  due colori, quattro passi del metodo in esagoni collegati, viewport 3D scuro da
+  CAD, comparse allo scorrimento in CSS puro. Il visualizzatore dei disegni, che
+  esisteva solo nelle schede lavoro ed era invisibile a chi non ci entrava, ora è
+  anche in home come sezione 03, e le schede segnalano con un bollino quali
+  lavori hanno tavole o modelli. Nessun JavaScript in più: le isole restano tre,
+  14,6 kB. Verifiche rieseguite: Lighthouse 100/100/100/100, responsive 48/48.
 - 2026-09-09 16:30 — **Il sito diventa di PROJECTUNE.** Il proprietario ha passato il
   marchio del cliente (PDF vettoriale e biglietto da visita) e il testo di presentazione
   dell'azienda: identità, palette, tipografia e contenuti sono stati rifatti su quelli.
@@ -392,6 +403,59 @@ l'isola del form contatti. Collection `progetti` estendibile via file Markdown.
     controllate come 404, che ovviamente non hanno overflow, e il check passava verde su
     pagine che non esistevano più. Ora l'elenco si costruisce dai file prodotti: 48
     combinazioni invece di 42, e non può più invecchiare in silenzio.
+
+35. **Un sistema grafico, non una spolverata di decorazioni.** «Più moderno» si
+    poteva risolvere con qualche ombra e un gradiente. Ho preferito costruire sei
+    elementi riusabili — pastiglia esagonale, trama a favo, etichetta tecnica,
+    squadratura, comparsa, collegamento tecnico — definiti una volta in
+    `global.css` e applicati con una classe. Costa più CSS (da 33 a 45 kB) ma
+    tiene insieme le pagine e rende ovvio come si aggiunge la prossima.
+
+36. **Le trame a favo sono file SVG generati, non `data:` URI incollati nel CSS.**
+    Le tessere sono continue per costruzione (il reticolo si ripete ogni
+    √3·lato × 3·lato e il viewBox taglia il resto), quindi vanno calcolate:
+    `npm run trame`. Un `data:` URI sarebbe stato una riga illeggibile e non
+    ricalcolabile; un file si scarica una volta e resta in cache per tutte le
+    pagine.
+
+37. **Il monospaziato è quello di sistema.** Le etichette tecniche chiedevano un
+    carattere a spaziatura fissa: prenderne uno da scaricare avrebbe aggiunto un
+    quarto file solo per le scritte piccole. `ui-monospace` e le sue ricadute
+    danno lo stesso effetto a costo zero, e ogni sistema ci mette il suo, che è
+    esattamente il tono giusto per un'etichetta da pannello.
+
+38. **Le comparse allo scorrimento sono CSS, non JavaScript.**
+    `animation-timeline: view()` fa quello che di solito si fa con un
+    IntersectionObserver. Dove il browser non lo supporta il contenuto è già al
+    suo posto — nessun blocco invisibile in attesa di uno script, che è il modo
+    tipico in cui queste animazioni rompono le pagine. Ed è dentro
+    `prefers-reduced-motion: no-preference`.
+
+39. **Il visualizzatore 3D va anche in home.** Era il pezzo più forte del sito ed
+    era sepolto in tre schede lavoro su sei: chi arrivava dalla home non sapeva
+    che esistesse. Ora la sezione 03 ne mostra uno vero, preso dalla prima scheda
+    che ne ha uno invece di duplicarlo, e le schede lavoro segnalano col bollino
+    quali portano tavole o modelli. L'isola resta caricata solo dalle pagine che
+    la usano, e il modello si scarica solo quando la sezione entra in vista.
+
+40. **Il modello 3D sta in un viewport scuro, le tavole 2D su carta bianca.** Un
+    disegno quotato è carta e va guardato come carta; un modello è un oggetto in
+    uno spazio, e ogni CAD lo mostra su fondo scuro. Distinguerli aiuta a capire
+    che cosa si sta guardando, e in filo di ferro le linee chiare su fondo scuro
+    si leggono molto meglio del contrario. Ha richiesto di invertire il colore
+    delle linee del filo di ferro e di rifare le anteprime statiche con lo stesso
+    fondo, altrimenti si vedeva un lampo bianco prima che partisse l'isola.
+
+41. **L'intestazione resta attaccata in alto.** Su un sito di dieci pagine il
+    menu deve essere sempre raggiungibile; senza JavaScript basta
+    `position: sticky`. Serviva anche `scroll-padding-top`, altrimenti saltando a
+    un'ancora il titolo finisce dietro la barra.
+
+42. **Le sigle dei clienti si calcolano, non si scrivono.** La placca esagonale
+    mostra due lettere finché non arriva il marchio vero: si prende il nome
+    commerciale (quello prima di «di», che introduce il titolare e non l'azienda),
+    si scartano le forme societarie e si tiene la sigla se il nome ne è già una.
+    Scriverle a mano avrebbe voluto dire ricordarsi di farlo a ogni cliente nuovo.
 
 ---
 

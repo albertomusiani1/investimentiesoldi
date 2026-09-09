@@ -40,12 +40,13 @@ script non dichiarato.
 5. [Cosa sostituire prima di andare online](#cosa-sostituire-prima-di-andare-online)
 6. [Variabili d'ambiente](#variabili-dambiente)
 7. [Il marchio](#il-marchio)
-8. [I clienti in fondo alla home](#i-clienti-in-fondo-alla-home)
-9. [Come funziona il modulo contatti](#come-funziona-il-modulo-contatti)
-10. [Come cambiare fornitore di posta](#come-cambiare-fornitore-di-posta)
-11. [Come aggiungere l'inglese](#come-aggiungere-linglese)
-12. [Deploy su Netlify](#deploy-su-netlify)
-13. [Verifiche](#verifiche)
+8. [Il sistema grafico](#il-sistema-grafico)
+9. [I clienti in fondo alla home](#i-clienti-in-fondo-alla-home)
+10. [Come funziona il modulo contatti](#come-funziona-il-modulo-contatti)
+11. [Come cambiare fornitore di posta](#come-cambiare-fornitore-di-posta)
+12. [Come aggiungere l'inglese](#come-aggiungere-linglese)
+13. [Deploy su Netlify](#deploy-su-netlify)
+14. [Verifiche](#verifiche)
 
 ---
 
@@ -83,6 +84,7 @@ l'invio del modulo non funziona.
 | `npm run logo` | Ricava gli SVG del marchio e la favicon dal PDF in `brand/` |
 | `npm run immagini:social` | Rigenera `og-default.png` e `apple-touch-icon.png` |
 | `npm run immagini:progetti` | Rigenera le sei illustrazioni delle schede lavoro |
+| `npm run trame` | Rigenera le tessere a favo usate come sfondo |
 | `npm run disegni` | Rigenera i disegni e i modelli di esempio |
 | `npm run video` | Rigenera il video del hero e i fermi immagine (serve ffmpeg) |
 
@@ -121,6 +123,7 @@ terminale.
     ├── layouts/              Struttura comune delle pagine
     ├── lib/                  Dati dell'azienda, servizi, clienti, testi legali
     ├── marchio/              Gli SVG del logo, prodotti da `npm run logo`
+    ├── lib/processo.ts       I quattro passi della sezione «Come lavoriamo»
     ├── pages/                Una pagina per file (robots.txt incluso, generato)
     ├── scripts/              Le tre isole JavaScript inviate al browser
     └── styles/global.css     Palette, tipografia, spaziature, componenti
@@ -383,6 +386,61 @@ WCAG AA). Per questo il foglio di stile ha tre blu:
 
 È lo stesso blu, scurito o schiarito quanto basta. A occhio la differenza non si
 nota; a leggerlo, sì.
+
+---
+
+## Il sistema grafico
+
+Il sito non è «un tema»: è un pugno di elementi che tornano dappertutto, tutti
+derivati dal marchio. Sono definiti una volta sola in `src/styles/global.css`,
+sezione **12**, e si applicano aggiungendo una classe.
+
+| Classe | Che cos'è | Dove si vede |
+|---|---|---|
+| `.esagono` | Pastiglia esagonale: qualunque riquadro diventa un esagono | Icone dei servizi, numeri del processo, monogrammi, placche dei clienti |
+| `.etichetta-tecnica` | Etichetta monospaziata maiuscola con l'esagono davanti e il filetto dietro | Testate di sezione, colonne dei contatti, «che cosa comprende» |
+| `.trama` / `.trama--fitta` | Favo di sfondo, sfumato con una maschera | Fasce scure, intestazione, piè di pagina, riquadro finale |
+| `.squadrato` | Due angoli blu che compaiono al passaggio del mouse | Schede lavoro, schede del credo |
+| `.rivela` | Comparsa dal basso mentre si scorre | Quasi tutti i blocchi |
+| `.collegamento-tecnico` | Collegamento a pastiglia, monospaziato | «Guarda i disegni» nelle schede lavoro |
+
+Il componente `IntestazioneSezione.astro` mette insieme indice, etichetta,
+titolo ed eventuale sommario: è quello che dà alle pagine l'aria del fascicolo
+tecnico numerato. Si usa così:
+
+```astro
+<IntestazioneSezione
+  indice="02"
+  etichetta="Metodo"
+  titolo="Come lavoriamo"
+  testo="Quattro passi, sempre gli stessi."
+  id="titolo-processo"
+/>
+```
+
+**Le comparse allo scorrimento non usano JavaScript.** Sono fatte con
+`animation-timeline: view()`, una funzione CSS recente: dove il browser non la
+supporta il contenuto è semplicemente già al suo posto, senza né errori né
+salti. Ed è disattivata quando il sistema chiede meno animazioni.
+
+**Il monospaziato è quello di sistema** (`ui-monospace`, poi Menlo, Consolas…):
+dà il tono da manuale tecnico senza far scaricare un quarto file di caratteri.
+
+**Le due tessere a favo** (`public/img/trama-esagoni*.svg`) sono generate da
+`npm run trame`: sono continue, cioè ripetendole non si vedono giunture, e sono
+grigie perché lo stesso file deve funzionare su fondo chiaro e su fondo scuro.
+L'intensità si regola dal CSS con l'opacità.
+
+### Il modello 3D in home
+
+La sezione 03 della home mostra il visualizzatore con un modello vero, preso
+dalla prima scheda lavoro che ne ha uno: se un domani cambierà il file, cambierà
+anche in home. È lo stesso componente delle pagine lavoro, con la lista di
+scelta nascosta perché il disegno è uno solo.
+
+Il modello 3D si vede in un **viewport scuro** con il reticolo blu, come in un
+CAD; le tavole 2D restano su carta bianca. Sono due cose diverse e devono
+sembrarlo.
 
 ---
 

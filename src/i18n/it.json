@@ -47,20 +47,32 @@
   "home": {
     "metaTitolo": "PROJECTUNE | Progettazione meccanica e montaggi",
     "metaDescrizione": "Officina artigiana a Castel Maggiore: progettazione meccanica di macchine automatiche, montaggi di serie, revisione di pompe idrauliche e per vuoto.",
-    "heroOcchiello": "Castel Maggiore, dal 2025",
-    "heroTitolo": "Dal disegno alla macchina che gira",
+    "heroOcchiello": "Officina meccanica artigiana",
+    "heroTitolo": "Dal disegno alla",
+    "heroTitoloAccento": "macchina che gira",
+    "heroDal": "dal",
+    "heroPreventivo": "Preventivo gratuito",
     "heroTesto": "Progettazione meccanica, montaggi e revisioni per chi costruisce macchine automatiche. Due fratelli, un'officina di cinquecento metri quadri, un modo di lavorare che si vede nei dettagli.",
+    "serviziEtichetta": "Servizi",
     "serviziTitolo": "Che cosa facciamo",
     "serviziSottotitolo": "Quattro mestieri che abbiamo imparato in azienda, prima di metterci in proprio.",
+    "progettiEtichetta": "Lavori",
     "progettiTitolo": "Lavori in evidenza",
     "progettiSottotitolo": "Il tipo di commessa che ci viene affidata, raccontata da vicino.",
     "numeriTitolo": "PROJECTUNE in breve",
+    "processoEtichetta": "Metodo",
+    "processoTitolo": "Come lavoriamo",
+    "processoSottotitolo": "Quattro passi, sempre gli stessi, che ci evitano le sorprese a metà strada.",
+    "disegniTitolo": "I disegni si guardano, non si immaginano",
+    "disegniSottotitolo": "Sulle schede dei lavori pubblichiamo le tavole e i modelli 3D: si ingrandiscono, si ruotano col mouse o inclinando il telefono. Questo è uno di quelli.",
+    "approfondisci": "Servizio completo",
     "ctaTitolo": "Parliamo del vostro lavoro",
     "ctaTesto": "Un disegno da fare, un gruppo da montare, una pompa che non tiene: chiamateci o scriveteci. Il preventivo è gratuito e la prima risposta arriva presto.",
     "heroScorri": "Scorri",
     "heroVideoDescrizione": "Animazione del modello a filo di ferro di una flangia che ruota su un fondo a griglia da tavolo da disegno."
   },
   "clienti": {
+    "etichetta": "Clienti",
     "titolo": "Con chi lavoriamo",
     "sottotitolo": "Le aziende che ci hanno dato fiducia e con cui, in buona parte, lavoriamo ancora oggi."
   },
@@ -80,6 +92,9 @@
     "introduzione": "Alcuni esempi del tipo di lavoro che ci viene affidato. I nomi delle aziende committenti compaiono solo dove siamo stati autorizzati a pubblicarli.",
     "nessunProgetto": "Non c'è ancora nessun lavoro pubblicato in questa categoria.",
     "schedaProgetto": "Scheda del lavoro",
+    "con3d": "Modello 3D",
+    "vaiAiDisegni": "Guarda i disegni",
+    "conTavole": "Tavole",
     "altriProgetti": "Altri lavori"
   },
   "chiSiamo": {
@@ -87,9 +102,13 @@
     "metaDescrizione": "Davide e Simone Matteuzzi: un progettista meccanico e un montatore, fratelli, che nel 2025 hanno aperto insieme a Castel Maggiore.",
     "titolo": "Chi siamo",
     "introduzione": "PROJECTUNE è una piccola azienda artigiana nata nel 2025 da due fratelli, Davide e Simone Matteuzzi, a Castel Maggiore: il paese dove siamo nati e cresciuti e dove volevamo che restasse il nostro lavoro.",
+    "storiaEtichetta": "Storia",
     "storiaTitolo": "Come siamo arrivati fin qui",
+    "valoriEtichetta": "Valori",
     "valoriTitolo": "Il nostro credo",
+    "teamEtichetta": "Persone",
     "teamTitolo": "Noi due",
+    "sedeEtichetta": "Officina",
     "sedeTitolo": "Dove lavoriamo"
   },
   "contatti": {
@@ -99,6 +118,7 @@
     "introduzione": "Per una richiesta, un preventivo o semplicemente per capire se possiamo esservi utili: il preventivo è gratuito e rispondiamo il prima possibile.",
     "sedeTitolo": "Dove siamo",
     "referentiTitolo": "Chi vi risponde",
+    "moduloEtichetta": "Modulo",
     "formTitolo": "Scriveteci",
     "mappaAlt": "Mappa schematica di Castel Maggiore, a nord di Bologna: le strade principali, il canale, la ferrovia e un segnaposto esagonale sul centro del paese.",
     "sedeTesto": "L'officina è a Castel Maggiore, alle porte di Bologna, e la condividiamo con AZ Vacuum. Ci si viene su appuntamento: una telefonata prima evita di trovare la porta chiusa perché siamo dal cliente.",
@@ -167,6 +187,7 @@
     "partitaIva": "P. IVA"
   },
   "disegni": {
+    "etichetta": "Disegni e modelli",
     "titolo": "Disegni e modelli",
     "sottotitolo": "Le tavole e i modelli 3D prodotti per questa commessa. I modelli si ruotano col mouse, col dito o inclinando il telefono.",
     "scegli": "Scegli il disegno",

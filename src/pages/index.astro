@@ -1,11 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EroeVideo from '../components/EroeVideo.astro';
+import IntestazioneSezione from '../components/IntestazioneSezione.astro';
+import IconaServizio from '../components/IconaServizio.astro';
 import SchedaProgetto from '../components/SchedaProgetto.astro';
+import VisualizzatoreDisegni from '../components/VisualizzatoreDisegni.astro';
 import Clienti from '../components/Clienti.astro';
 import { getCollection } from 'astro:content';
 import { t } from '../i18n';
 import { servizi } from '../lib/servizi';
+import { processo } from '../lib/processo';
 import { schemaAttivita } from '../lib/schema';
 
 const site = Astro.site ?? new URL('http://localhost:4321');
@@ -15,6 +19,15 @@ const inEvidenza = progetti
   .filter((p) => p.data.inEvidenza)
   .sort((a, b) => (a.data.ordine ?? 99) - (b.data.ordine ?? 99))
   .slice(0, 3);
+
+/**
+ * Il modello mostrato in home è lo stesso di una scheda lavoro: si prende da
+ * lì invece di duplicarlo, così se cambia il file cambia in tutti e due i
+ * posti. Se un giorno nessun lavoro avrà modelli 3D, la sezione sparisce.
+ */
+const modelloInVetrina = progetti
+  .flatMap((p) => p.data.disegni ?? [])
+  .find((disegno) => disegno.tipo === 'modello3d');
 
 /** CONTENUTO — Cifre di sintesi mostrate in home. Solo dati verificabili. */
 const numeri = [
@@ -34,20 +47,29 @@ const numeri = [
 
   <section class="sezione" id="che-cosa-facciamo" aria-labelledby="titolo-servizi">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h2 id="titolo-servizi">{t('home.serviziTitolo')}</h2>
-        <p>{t('home.serviziSottotitolo')}</p>
-      </div>
-      <ul class="griglia griglia--2 elenco-servizi">
+      <IntestazioneSezione
+        indice="01"
+        etichetta={t('home.serviziEtichetta')}
+        titolo={t('home.serviziTitolo')}
+        testo={t('home.serviziSottotitolo')}
+        id="titolo-servizi"
+      />
+      <ul class="griglia griglia--2 elenco-piatto">
         {
           servizi.map((servizio) => (
-            <li class="scheda scheda--collegata">
-              <div class="scheda__corpo">
-                <h3 class="scheda__titolo">
+            <li class="rivela">
+              <article class="scheda-servizio squadrato">
+                <span class="esagono scheda-servizio__icona" aria-hidden="true">
+                  <IconaServizio nome={servizio.icona} />
+                </span>
+                <h3 class="scheda-servizio__titolo">
                   <a href={`/servizi#${servizio.id}`}>{servizio.titolo}</a>
                 </h3>
-                <p class="scheda__testo">{servizio.sommario}</p>
-              </div>
+                <p class="scheda-servizio__testo">{servizio.sommario}</p>
+                <p class="scheda-servizio__freccia" aria-hidden="true">
+                  {t('home.approfondisci')} →
+                </p>
+              </article>
             </li>
           ))
         }
@@ -55,15 +77,13 @@ const numeri = [
     </div>
   </section>
 
-  <section class="sezione sezione--scura" aria-labelledby="titolo-numeri">
+  <section class="sezione sezione--scura trama fascia-numeri" aria-labelledby="titolo-numeri">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h2 id="titolo-numeri">{t('home.numeriTitolo')}</h2>
-      </div>
+      <h2 id="titolo-numeri" class="solo-screen-reader">{t('home.numeriTitolo')}</h2>
       <ul class="numeri">
         {
           numeri.map((n) => (
-            <li>
+            <li class="numero rivela">
               <span class="numero__cifra">{n.cifra}</span>
               <span class="numero__etichetta">{n.etichetta}</span>
             </li>
@@ -73,16 +93,57 @@ const numeri = [
     </div>
   </section>
 
-  <section class="sezione sezione--alt" aria-labelledby="titolo-progetti">
+  <section class="sezione sezione--alt" aria-labelledby="titolo-processo">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h2 id="titolo-progetti">{t('home.progettiTitolo')}</h2>
-        <p>{t('home.progettiSottotitolo')}</p>
-      </div>
-      <ul class="griglia griglia--2 griglia--3">
+      <IntestazioneSezione
+        indice="02"
+        etichetta={t('home.processoEtichetta')}
+        titolo={t('home.processoTitolo')}
+        testo={t('home.processoSottotitolo')}
+        id="titolo-processo"
+      />
+      <ol class="processo">
+        {
+          processo.map((passo, indice) => (
+            <li class="passo rivela">
+              <span class="esagono passo__numero" aria-hidden="true">
+                {String(indice + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 class="passo__titolo">{passo.titolo}</h3>
+                <p class="passo__testo">{passo.testo}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {
+    modelloInVetrina && (
+      <VisualizzatoreDisegni
+        disegni={[modelloInVetrina]}
+        indice="03"
+        titolo={t('home.disegniTitolo')}
+        sottotitolo={t('home.disegniSottotitolo')}
+      />
+    )
+  }
+
+  <section class="sezione" aria-labelledby="titolo-progetti">
+    <div class="contenitore">
+      <IntestazioneSezione
+        indice="04"
+        etichetta={t('home.progettiEtichetta')}
+        titolo={t('home.progettiTitolo')}
+        testo={t('home.progettiSottotitolo')}
+        id="titolo-progetti"
+      />
+      <ul class="griglia griglia--2 griglia--3 elenco-piatto">
         {
           inEvidenza.map((progetto, indice) => (
-            <li>
+            <li class="rivela">
               <SchedaProgetto progetto={progetto} prioritaria={indice === 0} />
             </li>
           ))
@@ -94,27 +155,29 @@ const numeri = [
     </div>
   </section>
 
-  <section class="sezione" aria-labelledby="titolo-cta">
-    <div class="contenitore contenitore--stretto centrato">
-      <h2 id="titolo-cta">{t('home.ctaTitolo')}</h2>
-      <p class="cta__testo">{t('home.ctaTesto')}</p>
-      <div class="gruppo-bottoni gruppo-bottoni--centrato">
-        <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
+  <section class="sezione richiamo" aria-labelledby="titolo-cta">
+    <div class="contenitore">
+      <div class="richiamo__riquadro centrato rivela">
+        <h2 id="titolo-cta">{t('home.ctaTitolo')}</h2>
+        <p class="richiamo__testo">{t('home.ctaTesto')}</p>
+        <div class="gruppo-bottoni gruppo-bottoni--centrato">
+          <a class="bottone bottone--primario" href="/contatti">{t('azioni.vaiAiContatti')}</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <Clienti />
+  <Clienti indice="05" />
 </BaseLayout>
 
 <style>
-  .elenco-servizi {
+  .elenco-piatto {
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .cta__testo {
+  .richiamo__testo {
     margin-top: var(--space-4);
     margin-inline: auto;
     max-width: var(--misura);
@@ -133,5 +196,4 @@ const numeri = [
   .griglia > li > :global(*) {
     width: 100%;
   }
-
 </style>

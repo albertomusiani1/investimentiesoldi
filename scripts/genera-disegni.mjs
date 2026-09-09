@@ -31,6 +31,8 @@ const ACCENTO = '#1b6e9b';
 const TENUE = '#4f5658';
 const CARTA = '#f8faf9';
 const BORDO = '#c6cdcd';
+/* Fondo del viewport 3D: l'anteprima deve combaciare con la scena viva. */
+const VIEWPORT = '#1b1f20';
 
 // ===========================================================================
 // 1. Geometria: profili chiusi "a stella" rispetto al centro
@@ -233,7 +235,7 @@ function anteprimaSvg(triangoli) {
     .join('');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${LARGHEZZA_ANTEPRIMA}" height="${ALTEZZA_ANTEPRIMA}" viewBox="0 0 ${LARGHEZZA_ANTEPRIMA} ${ALTEZZA_ANTEPRIMA}">
-  <rect width="${LARGHEZZA_ANTEPRIMA}" height="${ALTEZZA_ANTEPRIMA}" fill="${CARTA}"/>
+  <rect width="${LARGHEZZA_ANTEPRIMA}" height="${ALTEZZA_ANTEPRIMA}" fill="${VIEWPORT}"/>
   <g shape-rendering="crispEdges">${corpo}</g>
 </svg>`;
 }

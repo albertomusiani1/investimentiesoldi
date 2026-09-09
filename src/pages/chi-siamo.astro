@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import IntestazioneSezione from '../components/IntestazioneSezione.astro';
 import { t } from '../i18n';
 import { azienda, referenti } from '../lib/azienda';
 
@@ -101,22 +102,29 @@ const iniziali = (nome: string) =>
 >
   <section class="sezione">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h1>{t('chiSiamo.titolo')}</h1>
-        <p>{t('chiSiamo.introduzione')}</p>
-      </div>
+      <IntestazioneSezione
+        indice="01"
+        etichetta={t('nav.chiSiamo')}
+        titolo={t('chiSiamo.titolo')}
+        testo={t('chiSiamo.introduzione')}
+        id="titolo-chi-siamo"
+        principale
+      />
     </div>
   </section>
 
   <section class="sezione sezione--alt" aria-labelledby="titolo-storia">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h2 id="titolo-storia">{t('chiSiamo.storiaTitolo')}</h2>
-      </div>
+      <IntestazioneSezione
+        indice="02"
+        etichetta={t('chiSiamo.storiaEtichetta')}
+        titolo={t('chiSiamo.storiaTitolo')}
+        id="titolo-storia"
+      />
       <ol class="storia">
         {
           storia.map((tappa) => (
-            <li class="tappa">
+            <li class="tappa rivela">
               <span class="tappa__anno">{tappa.anno}</span>
               <div class="tappa__corpo">
                 <h3 class="tappa__titolo">{tappa.titolo}</h3>
@@ -131,35 +139,19 @@ const iniziali = (nome: string) =>
 
   <section class="sezione" aria-labelledby="titolo-team">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h2 id="titolo-team">{t('chiSiamo.teamTitolo')}</h2>
-      </div>
+      <IntestazioneSezione
+        indice="03"
+        etichetta={t('chiSiamo.teamEtichetta')}
+        titolo={t('chiSiamo.teamTitolo')}
+        id="titolo-team"
+      />
       <ul class="griglia griglia--2 elenco-piatto">
         {
           persone.map((persona) => (
-            <li class="persona">
-              <svg
-                class="persona__monogramma"
-                width="72"
-                height="72"
-                viewBox="0 0 72 72"
-                role="img"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <rect width="72" height="72" rx="6" fill="#303435" />
-                <text
-                  x="36"
-                  y="46"
-                  text-anchor="middle"
-                  font-family="Arial, Helvetica, sans-serif"
-                  font-size="26"
-                  font-weight="bold"
-                  fill="#6fbbe6"
-                >
-                  {iniziali(persona.nome)}
-                </text>
-              </svg>
+            <li class="persona rivela">
+              <span class="esagono persona__monogramma" aria-hidden="true">
+                {iniziali(persona.nome)}
+              </span>
               <div>
                 <h3 class="persona__nome">{persona.nome}</h3>
                 <p class="persona__ruolo">{persona.ruolo}</p>
@@ -174,13 +166,16 @@ const iniziali = (nome: string) =>
 
   <section class="sezione sezione--alt" aria-labelledby="titolo-valori">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h2 id="titolo-valori">{t('chiSiamo.valoriTitolo')}</h2>
-      </div>
+      <IntestazioneSezione
+        indice="04"
+        etichetta={t('chiSiamo.valoriEtichetta')}
+        titolo={t('chiSiamo.valoriTitolo')}
+        id="titolo-valori"
+      />
       <ul class="griglia griglia--2 elenco-piatto">
         {
           valori.map((valore) => (
-            <li class="scheda">
+            <li class="scheda squadrato rivela">
               <div class="scheda__corpo">
                 <h3 class="scheda__titolo">{valore.titolo}</h3>
                 <p class="scheda__testo">{valore.testo}</p>
@@ -194,9 +189,12 @@ const iniziali = (nome: string) =>
 
   <section class="sezione" aria-labelledby="titolo-sede">
     <div class="contenitore">
-      <div class="intestazione-sezione">
-        <h2 id="titolo-sede">{t('chiSiamo.sedeTitolo')}</h2>
-      </div>
+      <IntestazioneSezione
+        indice="05"
+        etichetta={t('chiSiamo.sedeEtichetta')}
+        titolo={t('chiSiamo.sedeTitolo')}
+        id="titolo-sede"
+      />
       <dl class="prosa officina">
         {
           officina.map((riga) => (
@@ -266,7 +264,13 @@ const iniziali = (nome: string) =>
 
   .persona__monogramma {
     flex: none;
-    border-radius: var(--raggio);
+    width: 4.25rem;
+    background-color: var(--colore-primario);
+    color: var(--colore-accento-chiaro);
+    font-family: var(--font-mono);
+    font-size: var(--testo-md);
+    font-weight: 600;
+    letter-spacing: 0.05em;
   }
 
   .persona__nome {

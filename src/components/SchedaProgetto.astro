@@ -14,13 +14,18 @@ export interface Props {
 }
 
 const { progetto, prioritaria = false } = Astro.props;
-const { titolo, descrizioneBreve, immagine, immagineAlt, cliente, categoria, data } = progetto.data;
+const { titolo, descrizioneBreve, immagine, immagineAlt, cliente, categoria, data, disegni } =
+  progetto.data;
 
 const anno = data.getFullYear();
 const percorso = `/progetti/${progetto.id}`;
+
+/** Se il lavoro porta tavole o modelli lo si dice qui: è il pezzo forte. */
+const conModello3D = (disegni ?? []).some((disegno) => disegno.tipo === 'modello3d');
+const conDisegni = (disegni ?? []).length > 0;
 ---
 
-<article class="scheda scheda--collegata">
+<article class="scheda scheda--collegata squadrato">
   <div class="scheda__media">
     <img
       src={immagine}
@@ -30,6 +35,19 @@ const percorso = `/progetti/${progetto.id}`;
       loading={prioritaria ? 'eager' : 'lazy'}
       decoding="async"
     />
+    {
+      conDisegni && (
+        <p class="scheda__bollino">
+          <span class="esagono scheda__bollino-segno" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M12 3l7 4v10l-7 4-7-4V7z" stroke-linejoin="round" />
+              <path d="M5 7l7 4 7-4M12 11v10" stroke-linejoin="round" />
+            </svg>
+          </span>
+          {conModello3D ? t('progetti.con3d') : t('progetti.conTavole')}
+        </p>
+      )
+    }
   </div>
   <div class="scheda__corpo">
     <p><span class="etichetta">{categoria}</span></p>

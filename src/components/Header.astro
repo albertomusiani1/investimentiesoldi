@@ -24,7 +24,7 @@ const isAttiva = (href: string) =>
 <header class="intestazione">
   <div class="contenitore intestazione__interno">
     <a class="intestazione__marchio" href="/">
-      <Logo variante="testo" />
+      <Logo variante="orizzontale" />
       <span class="solo-screen-reader">— {t('nav.home')}</span>
     </a>
 
@@ -51,10 +51,31 @@ const isAttiva = (href: string) =>
 <style>
   .intestazione {
     /* Antracite e filetto blu: gli stessi due colori del marchio, nello
-       stesso rapporto del biglietto da visita. */
-    background-color: var(--colore-primario);
+       stesso rapporto del biglietto da visita.
+       Resta attaccata in alto mentre si scorre: su un sito di dieci pagine
+       il menu deve essere sempre a portata, senza JavaScript. */
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: var(--colore-primario-scuro);
     border-bottom: 2px solid var(--marchio-blu);
     color: var(--colore-testo-inverso);
+  }
+
+  /* Filigrana a favo, appena percettibile, dietro la barra. */
+  .intestazione::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--trama-esagoni-fitta);
+    opacity: 0.35;
+    -webkit-mask-image: linear-gradient(90deg, transparent 40%, #000 100%);
+    mask-image: linear-gradient(90deg, transparent 40%, #000 100%);
+    pointer-events: none;
+  }
+
+  .intestazione__interno {
+    position: relative;
   }
 
   .intestazione__interno {
