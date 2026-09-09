@@ -1,0 +1,19 @@
+# Configurazione per il deploy su Cloudflare Workers.
+#
+# I segreti NON vanno qui: si impostano una volta con
+#   npx wrangler secret put META_ACCESS_TOKEN
+#   npx wrangler secret put MCP_AUTH_TOKEN
+# e restano cifrati lato Cloudflare.
+
+name = "investimentiesoldi-ads-mcp"
+main = "src/worker.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Variabili non segrete. I guardrail stanno qui perche' devono essere
+# visibili e verificabili, non nascosti.
+META_ALLOWED_ACCOUNT_IDS = ""
+META_READ_ONLY = "false"
+META_MAX_DAILY_BUDGET = "50"
+META_MAX_LIFETIME_BUDGET = "1000"
