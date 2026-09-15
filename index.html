@@ -1171,10 +1171,34 @@ async function loadSeries(sym) {
   }
 }
 
+/** i simboli che servono davvero: quelli che possiede, più i cambi delle
+    loro valute */
+function symbolsInUse() {
+  const keep = new Set();
+  for (const p of POS) {
+    if (!isQuoted(p)) continue;
+    keep.add(p.ticker);
+    const s = SERIES[p.ticker] || CACHE[p.ticker];
+    const cur = s && s.meta && s.meta.currency;
+    if (cur && cur !== 'EUR') keep.add(cur + 'EUR=X');
+  }
+  return keep;
+}
+
 function persistCache() {
+  /* Tengo solo i simboli in uso. Quelli delle posizioni cancellate restavano
+     in cache per sempre: da soli erano innocui, ma da quando all'avvio la
+     cache viene riversata in SERIES facevano scattare l'avviso «il canale
+     dati non risponde» anche quando lo scarico era andato benissimo — la
+     data vecchia era la loro, non quella dei titoli davvero posseduti. */
+  const inUse = symbolsInUse();
+  for (const k in SERIES) if (!inUse.has(k)) delete SERIES[k];
+  for (const k in FX) if (!inUse.has(k + 'EUR=X')) delete FX[k];
+
   // limita la dimensione: massimo ~2600 punti (10 anni) per simbolo
   const out = {};
   for (const k in CACHE) {
+    if (!inUse.has(k)) { delete CACHE[k]; continue; }
     const c = CACHE[k];
     const n = c.dates.length, keep = Math.min(n, 2600);
     out[k] = { t: c.t, meta: c.meta, dates: c.dates.slice(n - keep), close: c.close.slice(n - keep) };
@@ -2140,7 +2164,8 @@ async function loadAll(showSpinner = true) {
   freezeShares();
   persistCache();
   $('#notices').innerHTML = '';
-  const stale = Object.values(SERIES).filter(s => s.stale);
+  const inUse = symbolsInUse();
+  const stale = [...inUse].map(k => SERIES[k]).filter(s => s && s.stale);
   if (unknown.length) notice(`Yahoo Finance non conosce questi simboli: <b>${esc(unknown.join(', '))}</b>. Di solito è la borsa sbagliata nel suffisso — per esempio l'iShares Core S&P 500 a Milano è <b>CSSPX.MI</b>, non CSPX.MI. Cerca il nome su finance.yahoo.com e copia il simbolo esatto.`, 'err');
   if (errs.length) notice(`Non sono riuscito a scaricare: <b>${esc(errs.join(', '))}</b>. Riprova con "Aggiorna prezzi": il canale dati ha un limite di richieste al minuto. Puoi anche inserire prezzo e quote a mano nella tabella.`, 'err');
   if (stale.length) notice(`Il canale dati non risponde: sto usando l'ultima copia salvata (${new Date(Math.max(...stale.map(s => s.stale))).toLocaleString('it-IT')}). I valori potrebbero non essere aggiornati.`);
@@ -2148,8 +2173,12 @@ async function loadAll(showSpinner = true) {
   if (noFx.length) notice(`Non ho il cambio <b>${esc(noFx.join(', '))}/EUR</b>. I titoli in quella valuta li sto mostrando al prezzo di borsa senza convertirli: il rendimento che vedi è quello in valuta, non in euro. Riprova con "Aggiorna prezzi".`, 'err');
 
   const when = new Date().toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-  const okCount = list.length - errs.length - unknown.length;
-  setStatus(`<span>Aggiornato ${when} · ${okCount}/${list.length}</span>` +
+  /* Un titolo servito dalla copia salvata non è «scaricato»: contarlo fra i
+     riusciti faceva comparire «1/1» accanto all'avviso che il canale non
+     risponde, due messaggi che si smentivano a vicenda. */
+  const fromCache = list.filter(t => SERIES[t] && SERIES[t].stale).length;
+  const okCount = list.length - errs.length - unknown.length - fromCache;
+  setStatus(`<span>${fromCache && !okCount ? 'Copia salvata del' : 'Aggiornato'} ${when} · ${okCount}/${list.length}</span>` +
     `<button class="quiet" id="btnDiag" title="Diagnostica del canale dati">ⓘ</button>`);
   const bd = $('#btnDiag'); if (bd) bd.onclick = showDiag;
   refresh();
