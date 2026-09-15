@@ -239,12 +239,26 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:10p
 .bkv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);
   border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-top:11px}
 @media(min-width:560px){ .bkv{grid-template-columns:repeat(4,minmax(0,1fr))} }
+/* dentro un foglio la larghezza è quella della finestra (max 480px), non
+   quella dello schermo: a quattro colonne le etichette si troncherebbero */
+dialog.modal .bkv{grid-template-columns:repeat(2,minmax(0,1fr))}
 .bkv>div{background:var(--card);padding:8px 10px;min-width:0}
 .bkv .k{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:660;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bkv .v{font-size:14.5px;font-weight:660;font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:2px}
 .bkv .v em{font-style:normal;font-size:10.5px;font-weight:560;color:var(--ink-3);
   display:block;margin-top:1px;white-space:normal;line-height:1.3}
+/* titoletto sopra un gruppo di numeri, nella schermata di dettaglio */
+.kvlab{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);
+  font-weight:660;margin:15px 0 -3px}
+.kvlab:first-child{margin-top:4px}
+/* la matita per modificare, separata dal tocco che apre il dettaglio */
+/* unico accesso alla modifica, quindi deve vedersi e avere un bersaglio
+   che si prende col pollice (40px, non i 28 di prima) */
+.row .acts .pen{border:0;background:transparent;color:var(--ink-2);border-radius:10px;font-size:15px;
+  min-width:40px;min-height:40px;display:flex;align-items:center;justify-content:center;padding:0}
+.row .acts .pen:hover{background:var(--card-2);color:var(--accent)}
+.row .acts .pen:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .bbar{height:6px;border-radius:100px;background:var(--card-2);margin-top:12px;overflow:hidden}
 .bbar i{display:block;height:100%;border-radius:100px;background:var(--accent)}
 .bfoot{display:flex;justify-content:space-between;gap:12px;font-size:10.5px;color:var(--ink-3);margin-top:5px}
@@ -717,6 +731,30 @@ footer.foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 12p
   </div>
 </dialog>
 
+<dialog class="modal" id="dlgDet">
+  <div class="mhead">
+    <div style="min-width:0">
+      <h3 id="detTitle">Posizione</h3>
+      <div class="muted" id="detSub" style="font-size:11.5px;margin-top:2px"></div>
+    </div>
+    <button type="button" class="x" data-close="dlgDet">✕</button>
+  </div>
+  <div class="mbody">
+    <div id="detHero"></div>
+    <div class="chart-wrap" id="detWrap" style="margin-top:14px">
+      <svg class="chart" id="detChart" role="img" aria-label="Andamento della posizione"></svg>
+      <div class="tip" id="detTip"></div>
+    </div>
+    <div class="legend" id="detLegend"></div>
+    <div id="detGrids"></div>
+    <div id="detNotes"></div>
+  </div>
+  <div class="mfoot">
+    <button type="button" class="ghost" data-close="dlgDet">Chiudi</button>
+    <button type="button" class="primary" id="btnDetEdit">✎ Modifica</button>
+  </div>
+</dialog>
+
 <dialog class="modal" id="dlgPos">
   <div class="mhead"><h3 id="posDlgTitle">Nuova posizione</h3><button type="button" class="x" data-close="dlgPos">✕</button></div>
   <div class="mbody">
@@ -1174,14 +1212,32 @@ function lastPrice(s) { return s ? s.close[s.close.length - 1] : null; }
    ===================================================================== */
 const FX = {};   // cur -> series | null
 
+/* Anche i cambi vengono dall'ultima copia salvata, non solo i prezzi.
+   Senza questo, alla prima apertura una posizione in sterline veniva
+   valutata a 1 £ = 1 €: il rendimento mostrato era quello in valuta
+   estera, e nessuno lo diceva. */
+for (const k in CACHE) {
+  const m = /^([A-Z]{3})EUR=X$/.exec(k);
+  if (m && SERIES[k]) FX[m[1]] = SERIES[k];
+}
+
+/* Quando un cambio manca davvero non posso far finta che valga 1: sarebbe
+   spacciare per euro un rendimento in valuta estera. Lo segno, e chi
+   chiama decide cosa dire all'utente. */
+const FX_MISSING = new Set();
 function fxAt(cur, d) {
   if (cur === 'EUR') return 1;
   const s = FX[cur];
-  if (!s) return 1;
+  if (!s) { FX_MISSING.add(cur); return 1; }
   const p = priceAt(s, d);
   return p || 1;
 }
-function fxLast(cur) { if (cur === 'EUR') return 1; const s = FX[cur]; return s ? (lastPrice(s) || 1) : 1; }
+function fxLast(cur) {
+  if (cur === 'EUR') return 1;
+  const s = FX[cur];
+  if (!s) { FX_MISSING.add(cur); return 1; }
+  return lastPrice(s) || 1;
+}
 
 /** Tre specie di posizione, e cambia solo da dove arriva il valore di oggi.
     quotato — Yahoo manda il prezzo
@@ -1399,18 +1455,25 @@ function computePositions() {
     const cur = (s && s.meta.currency) || 'EUR';
     const pAtBuy = s ? priceAt(s, p.date) : null;
     const fxBuy = fxAt(cur, p.date);
-    const shares = p.shares != null && p.shares > 0
-      ? p.shares
-      : (pAtBuy ? p.amount / (pAtBuy * fxBuy) : null);
+    const fxNow = fxLast(cur);
+    const ownShares = p.shares != null && p.shares > 0;
+    const shares = ownShares ? p.shares : (pAtBuy ? p.amount / (pAtBuy * fxBuy) : null);
     const px = p.manualPrice != null ? p.manualPrice : lastPrice(s);
-    const value = (shares != null && px != null) ? shares * px * fxLast(cur) : null;
+    const value = (shares != null && px != null) ? shares * px * fxNow : null;
     const pl = value != null ? value - p.amount : null;
     const plp = (pl != null && p.amount) ? pl / p.amount : null;
     const yrs = Math.max(daysBetween(p.date, iso(Date.now())) / 365.25, 1 / 365.25);
     const ann = plp != null ? Math.pow(1 + plp, 1 / yrs) - 1 : null;
+    /* Due modi in cui il numero può essere giusto solo in apparenza, e che
+       prima non venivano detti: il cambio non c'è (allora sto mostrando un
+       rendimento in valuta estera), oppure lo storico scaricato comincia
+       dopo la data di acquisto (allora il prezzo di carico è una stima). */
+    const fxMissing = cur !== 'EUR' && !FX[cur];
+    const buyApprox = !ownShares && !!s && s.dates.length > 0 && s.dates[0] > p.date;
     rows.push({
       ...p, series: s, currency: cur, name: (s && s.meta.name) || p.ticker, bc: null, cashIn: 0,
-      buyPrice: pAtBuy, shares, price: px, value, pl, plp, ann, yrs,
+      buyPrice: pAtBuy, shares, ownShares, price: px, value, pl, plp, ann, yrs,
+      fxBuy, fxNow, fxMissing, buyApprox,
       missing: !s || px == null
     });
   }
@@ -1674,23 +1737,31 @@ function renderTable(rows, tot) {
       sub.push(`<span>${eur(r.amount)} dal ${dispDate(r.date)}</span>`);
     }
     if (r.missing) sub.push('<span class="down">dati da completare</span>');
+    if (r.fxMissing) sub.push(`<span class="down">manca il cambio ${esc(r.currency)}</span>`);
+    else if (r.buyApprox) sub.push('<span class="muted">carico stimato</span>');
 
-    return `<div class="row tap" role="button" tabindex="0" data-edit="${r.id}"
-        aria-label="Modifica ${esc(r.ticker)}">
+    return `<div class="row tap" role="button" tabindex="0" data-open="${r.id}"
+        aria-label="Apri ${esc(r.ticker)}">
       <div class="main">
         <div class="t">${esc(r.ticker)}</div>
         <div class="s">${sub.join('')}</div>
       </div>
       <div class="amt">${r.value != null ? eur(r.value) : '—'}
         ${deltaPill(r.pl, r.plp, true)}</div>
-      <div class="acts"><span class="muted" style="font-size:15px;padding:0 2px">›</span></div>
+      <div class="acts"><button type="button" class="pen" data-pen="${r.id}"
+        aria-label="Modifica ${esc(r.ticker)}" title="Modifica">✎</button></div>
     </div>`;
   }).join('');
 
-  $$('#posRows [data-edit]').forEach(el => {
-    const go = () => openPos(el.dataset.edit);
+  // il tocco sulla riga racconta la posizione; la matita la modifica
+  $$('#posRows [data-open]').forEach(el => {
+    const go = () => openDetail(el.dataset.open);
     el.onclick = go;
     el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
+  });
+  $$('#posRows [data-pen]').forEach(b => b.onclick = e => {
+    e.stopPropagation();          // se no aprirebbe anche il dettaglio sotto
+    openPos(b.dataset.pen);
   });
 }
 
@@ -1781,6 +1852,197 @@ function renderBonds(rows) {
 
 
 
+/* =====================================================================
+   LA SCHERMATA DELLA POSIZIONE
+   Cosa ho comprato, a che prezzo, quanto vale la quota adesso, e la curva
+   in mezzo. Serve a rispondere a «come era prima, come è adesso» senza
+   dover aprire il modulo di modifica.
+   ===================================================================== */
+let DETID = null;
+
+/** la serie da disegnare, in euro, dal giorno dell'acquisto a oggi */
+function detSeries(r) {
+  if (r.bc) {
+    const at = bondValuer(r);
+    if (!at) return null;
+    const dates = dateGrid(r.date, iso(Date.now()), 160).filter(d => d <= r.bond.maturity);
+    if (dates.length < 2) return null;
+    return { dates, vals: dates.map(at), ref: r.bc.spesa,
+             lab: 'Quanto vale', refLab: 'Quanto hai speso' };
+  }
+  if (!r.series || !r.series.dates.length || r.shares == null) return null;
+  const dates = [], vals = [];
+  for (let i = 0; i < r.series.dates.length; i++) {
+    const d = r.series.dates[i];
+    if (d < r.date) continue;
+    dates.push(d);
+    vals.push(r.series.close[i] * fxAt(r.currency, d));   // sempre in euro
+  }
+  if (dates.length < 2) return null;
+  const ref = r.buyPrice != null ? r.buyPrice * r.fxBuy : null;
+  return { dates, vals, ref, lab: 'Valore della quota', refLab: 'Prezzo di carico' };
+}
+
+function drawDetChart(r) {
+  const svg = $('#detChart'), wrap = $('#detWrap'), tip = $('#detTip');
+  svg.textContent = ''; $('#detLegend').textContent = '';
+  const ser = detSeries(r);
+  if (!ser) {
+    wrap.classList.add('hidden');
+    $('#detLegend').innerHTML = isManual(r)
+      ? '<span class="muted">Una posizione a mano non ha uno storico: c\'è solo quello che hai scritto tu.</span>'
+      : '<span class="muted">Non ho abbastanza storico per tracciare una curva.</span>';
+    return;
+  }
+  wrap.classList.remove('hidden');
+
+  const { dates, vals, ref } = ser;
+  const W = Math.max(260, wrap.clientWidth || 380);
+  const H = clamp(Math.round(W * 0.52), 150, 210);
+  const M = { t: 12, r: 10, b: 24, l: 52 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const pool = ref != null ? [...vals, ref] : vals;
+  const lo0 = Math.min(...pool), hi0 = Math.max(...pool);
+  const pad = (hi0 - lo0) * 0.14 || hi0 * 0.08 || 1;
+  const lo = lo0 - pad, hi = hi0 + pad;
+  const x = i => M.l + (i / (dates.length - 1)) * iw;
+  const y = v => M.t + (hi - v) / (hi - lo) * ih;
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H);
+  const g = el('g'); svg.appendChild(g);
+
+  const big = hi >= 1000;
+  niceTicks(lo, hi, 3).forEach(v => {
+    g.appendChild(el('line', { x1: M.l, x2: M.l + iw, y1: y(v), y2: y(v), class: 'gridline' }));
+    const t = el('text', { x: M.l - 7, y: y(v) + 4, 'text-anchor': 'end', class: 'axis-lbl' });
+    t.textContent = (big ? Math.round(v).toLocaleString('it-IT') : dec(v, 2)) + ' €';
+    g.appendChild(t);
+  });
+  timeTicks(dates, W < 420 ? 3 : 4).forEach(i => {
+    const t = el('text', { x: clamp(x(i), M.l + 14, M.l + iw - 14), y: H - 7, 'text-anchor': 'middle', class: 'axis-lbl' });
+    t.textContent = monthYear(dates[i]); g.appendChild(t);
+  });
+
+  if (ref != null && ref >= lo && ref <= hi) {
+    g.appendChild(el('line', { x1: M.l, x2: M.l + iw, y1: y(ref), y2: y(ref),
+      stroke: cssv('--series-2'), 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }));
+  }
+  let d = `M ${x(0)} ${y(vals[0])}`;
+  for (let i = 1; i < vals.length; i++) d += ` L ${x(i)} ${y(vals[i])}`;
+  const up = vals[vals.length - 1] >= (ref != null ? ref : vals[0]);
+  const col = cssv(up ? '--up' : '--down');
+  g.appendChild(el('path', { d, fill: 'none', stroke: col, 'stroke-width': 2,
+    'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+  g.appendChild(el('circle', { cx: x(vals.length - 1), cy: y(vals[vals.length - 1]), r: 4, fill: col }));
+
+  const cross = el('line', { y1: M.t, y2: M.t + ih, stroke: cssv('--border-strong'), 'stroke-width': 1, opacity: 0 });
+  g.appendChild(cross);
+  const hit = el('rect', { x: 0, y: 0, width: W, height: H, fill: 'transparent', style: 'cursor:crosshair' });
+  g.appendChild(hit);
+  const fmt = v => big ? eur(v) : dec(v, 2) + ' €';
+  const move = ev => {
+    const rc = svg.getBoundingClientRect();
+    const px = ((ev.touches ? ev.touches[0].clientX : ev.clientX) - rc.left) * (W / rc.width);
+    const i = clamp(Math.round((px - M.l) / iw * (dates.length - 1)), 0, dates.length - 1);
+    cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('opacity', .6);
+    const diff = ref != null ? vals[i] - ref : null;
+    tip.innerHTML = `<div class="th">${dispDate(dates[i])}</div>
+      <div class="tr"><span>${esc(ser.lab)}</span><b>${fmt(vals[i])}</b></div>` +
+      (diff != null ? `<div class="tr"><span>rispetto al carico</span><b class="${cls(diff)}">${pct(diff / ref, 1) || '0%'}</b></div>` : '');
+    tip.style.opacity = 1;
+    const tw = tip.offsetWidth || 150;
+    tip.style.left = clamp(x(i) / W * rc.width - tw / 2, 4, rc.width - tw - 4) + 'px';
+    tip.style.top = '4px';
+  };
+  hit.addEventListener('mousemove', move);
+  hit.addEventListener('touchmove', move, { passive: true });
+  const leave = () => { tip.style.opacity = 0; cross.setAttribute('opacity', 0); };
+  hit.addEventListener('mouseleave', leave); hit.addEventListener('touchend', leave);
+
+  $('#detLegend').innerHTML =
+    `<span><i class="swatch" style="background:${col}"></i>${esc(ser.lab)}</span>` +
+    (ref != null ? `<span><i class="swatch" style="background:${cssv('--series-2')}"></i>${esc(ser.refLab)} ${fmt(ref)}</span>` : '');
+}
+
+function openDetail(id) {
+  const r = (STATE.rows || []).find(x => x.id === id);
+  if (!r) return;
+  DETID = id;
+
+  const kv = (k, v, em) => `<div><div class="k">${k}</div><div class="v">${v}${em ? `<em>${em}</em>` : ''}</div></div>`;
+  const grids = [], notes = [];
+
+  $('#detTitle').textContent = r.ticker;
+  $('#detSub').textContent = [
+    CATS[r.cat].label,
+    r.bc ? '' : isManual(r) ? 'inserita a mano' : (r.name !== r.ticker ? r.name : ''),
+    'dal ' + dispDate(r.date)
+  ].filter(Boolean).join(' · ');
+
+  $('#detHero').innerHTML = `<div class="summary"><div class="hero">
+      <div class="biglab">Vale oggi</div>
+      <div class="big">${r.value != null ? eur(r.value) : '—'}</div>
+      ${deltaPill(r.pl, r.plp)}
+    </div></div>`;
+
+  if (r.bc) {
+    const c = r.bc;
+    grids.push('<div class="kvlab">Il titolo</div><div class="bkv">' + [
+      kv('Nominale', eur(c.nominal), 'quanto ti rendono a scadenza'),
+      kv('Prezzo di carico', dec(c.buyPx, 2), 'su 100 di nominale'),
+      kv('Cedola', c.freq ? dec(r.bond.coupon, 2) + '%' : '—', c.freq ? FREQ_LAB[c.freq] : 'senza cedola'),
+      kv('Scadenza', dispDate(r.bond.maturity), c.matured ? 'rimborsato' : `fra ${dec(c.yrsLeft, 1)} anni`)
+    ].join('') + '</div>');
+    grids.push('<div class="kvlab">A oggi</div><div class="bkv">' + [
+      kv('Speso', eur(c.spesa), c.accrBuy > 0.005 ? 'rateo compreso' : ''),
+      kv(c.freq ? 'Cedole incassate' : 'Sconto maturato', eur(c.freq ? c.cashIn : Math.max(c.gain, 0)), c.freq ? `${c.got} ${c.got === 1 ? 'stacco' : 'stacchi'}` : ''),
+      kv('Rendimento', c.ytmNet != null ? pctPlain(c.ytmNet, 2) : '—', 'netto, all\'anno'),
+      kv('Guadagno', (c.gain >= 0 ? '+' : '−') + eur(Math.abs(c.gain)), pctPlain(c.plp, 1) + ' sulla spesa')
+    ].join('') + '</div>');
+    if (!c.quoted) notes.push('Senza un prezzo di mercato il valore cresce al rendimento che hai bloccato comprando, e arriva alla pari il giorno della scadenza. Se sai il prezzo di oggi, scrivilo nella modifica e uso quello.');
+  } else if (isManual(r)) {
+    grids.push('<div class="kvlab">La posizione</div><div class="bkv">' + [
+      kv('Investito', eur(r.amount), 'il ' + dispDate(r.date)),
+      kv('Vale oggi', r.value != null ? eur(r.value) : '—', 'come l\'hai scritto tu'),
+      kv('Guadagno', r.pl != null ? (r.pl >= 0 ? '+' : '−') + eur(Math.abs(r.pl)) : '—', r.plp != null ? pctPlain(r.plp, 1) : ''),
+      kv('All\'anno', r.ann != null ? pctPlain(r.ann, 1) : '—', `in ${dec(r.yrs, 1)} anni`)
+    ].join('') + '</div>');
+    notes.push('Questo valore non si aggiorna da solo: lo aggiorni tu quando guardi l\'estratto conto.');
+  } else {
+    const pxNow = r.price != null ? r.price * r.fxNow : null;
+    const pxBuy = r.buyPrice != null ? r.buyPrice * r.fxBuy : null;
+    const dq = (pxNow != null && pxBuy) ? pxNow / pxBuy - 1 : null;
+    const q2 = v => v == null ? '—' : (v >= 1000 ? eur(v) : dec(v, 2) + ' €');
+    grids.push('<div class="kvlab">La quota</div><div class="bkv">' + [
+      kv('Com\'era', q2(pxBuy), 'il ' + dispDate(r.date)),
+      kv('Com\'è adesso', q2(pxNow), r.price != null ? 'ultimo prezzo noto' : 'prezzo mancante'),
+      kv('Variazione', dq != null ? (dq >= 0 ? '+' : '−') + dec(Math.abs(dq) * 100, 2) + '%' : '—', 'della singola quota'),
+      kv('Quante ne hai', r.shares != null ? nfSh.format(r.shares) : '—', r.ownShares ? 'quote registrate' : 'stimate da quanto hai messo')
+    ].join('') + '</div>');
+    grids.push('<div class="kvlab">La posizione</div><div class="bkv">' + [
+      kv('Investito', eur(r.amount), 'il ' + dispDate(r.date)),
+      kv('Vale oggi', r.value != null ? eur(r.value) : '—', ''),
+      kv('Guadagno', r.pl != null ? (r.pl >= 0 ? '+' : '−') + eur(Math.abs(r.pl)) : '—', r.plp != null ? pctPlain(r.plp, 1) : ''),
+      kv('All\'anno', r.ann != null ? pctPlain(r.ann, 1) : '—', `in ${dec(r.yrs, 1)} anni`)
+    ].join('') + '</div>');
+
+    if (r.currency !== 'EUR') {
+      notes.push(r.fxMissing
+        ? `<b>Il titolo è quotato in ${esc(r.currency)} e non ho il cambio.</b> Quello che vedi è il rendimento in ${esc(r.currency)}, non in euro: il vero numero in euro è diverso. Tocca ↻ in alto per riprovare.`
+        : `Quotato in ${esc(r.currency)}: converto in euro al cambio del giorno, oggi ${dec(r.fxNow, 4)} € per ${esc(r.currency)}.`);
+    }
+    if (r.buyApprox) notes.push('Lo storico scaricato comincia dopo la tua data di acquisto, quindi il prezzo di carico qui sopra è una stima. Se sai quante quote hai davvero, scrivile nella modifica: da lì in poi il conto è esatto.');
+    if (r.missing) notes.push('Non ho il prezzo di questo titolo, quindi non entra nei totali.');
+  }
+
+  $('#detGrids').innerHTML = grids.join('');
+  $('#detNotes').innerHTML = notes.map(n =>
+    `<div class="notice ${/<b>/.test(n) ? 'warn' : ''}" style="margin:14px 0 0"><span>${/<b>/.test(n) ? '⚠' : 'ⓘ'}</span><div>${n}</div></div>`).join('');
+
+  openD('dlgDet');
+  drawDetChart(r);       // dopo l'apertura: prima la larghezza del riquadro è zero
+}
+
 function renderTargets() {
   const box = $('#targetEditor');
   const sum = Object.values(SET.targets).reduce((a, b) => a + (+b || 0), 0);
@@ -1818,6 +2080,33 @@ function refresh() {
   drawAllocation(tot);
 }
 
+/* Le quote venivano ricalcolate ogni volta come «quanto ho messo, diviso il
+   prezzo di quel giorno». Sembra innocuo, ma la cache dei prezzi viene
+   accorciata quando lo spazio del browser scarseggia: il giorno in cui lo
+   storico non arriva più fino all'acquisto, priceAt restituisce il prezzo
+   più vecchio che gli resta, il prezzo di carico cambia da solo, e con lui
+   il valore dell'intera posizione — in silenzio.
+   Perciò appena ho dati che coprono davvero la data di acquisto, scrivo le
+   quote una volta e da lì in poi non si muovono più. */
+function freezeShares() {
+  let changed = false;
+  for (const p of POS) {
+    if (!isQuoted(p) || (p.shares != null && p.shares > 0)) continue;
+    const s = SERIES[p.ticker];
+    if (!s || s.fromCache || !s.dates.length || s.dates[0] > p.date) continue;
+    const cur = (s.meta && s.meta.currency) || 'EUR';
+    if (cur !== 'EUR' && !FX[cur]) continue;      // senza cambio il conto non è definitivo
+    const px = priceAt(s, p.date);
+    if (!(px > 0)) continue;
+    const sh = p.amount / (px * fxAt(cur, p.date));
+    if (!(sh > 0) || !isFinite(sh)) continue;
+    p.shares = +sh.toFixed(6);
+    stamp('pos', p.id);
+    changed = true;
+  }
+  if (changed) savePos();
+}
+
 async function loadAll(showSpinner = true) {
   const need = new Set(POS.filter(isQuoted).map(p => p.ticker));
   if (!need.size) {
@@ -1848,12 +2137,15 @@ async function loadAll(showSpinner = true) {
     FX[c] = await loadFx(c);
   }
 
+  freezeShares();
   persistCache();
   $('#notices').innerHTML = '';
   const stale = Object.values(SERIES).filter(s => s.stale);
   if (unknown.length) notice(`Yahoo Finance non conosce questi simboli: <b>${esc(unknown.join(', '))}</b>. Di solito è la borsa sbagliata nel suffisso — per esempio l'iShares Core S&P 500 a Milano è <b>CSSPX.MI</b>, non CSPX.MI. Cerca il nome su finance.yahoo.com e copia il simbolo esatto.`, 'err');
   if (errs.length) notice(`Non sono riuscito a scaricare: <b>${esc(errs.join(', '))}</b>. Riprova con "Aggiorna prezzi": il canale dati ha un limite di richieste al minuto. Puoi anche inserire prezzo e quote a mano nella tabella.`, 'err');
   if (stale.length) notice(`Il canale dati non risponde: sto usando l'ultima copia salvata (${new Date(Math.max(...stale.map(s => s.stale))).toLocaleString('it-IT')}). I valori potrebbero non essere aggiornati.`);
+  const noFx = [...curs].filter(c => !FX[c]);
+  if (noFx.length) notice(`Non ho il cambio <b>${esc(noFx.join(', '))}/EUR</b>. I titoli in quella valuta li sto mostrando al prezzo di borsa senza convertirli: il rendimento che vedi è quello in valuta, non in euro. Riprova con "Aggiorna prezzi".`, 'err');
 
   const when = new Date().toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   const okCount = list.length - errs.length - unknown.length;
@@ -2232,6 +2524,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#btnReset').onclick = resetAll;
   $('#btnDiag2').onclick = showDiag;
   $('#btnPriceTest').onclick = priceSelfTest;
+  $('#btnDetEdit').onclick = () => { const id = DETID; closeD('dlgDet'); setTimeout(() => openPos(id), 120); };
   $('#btnAddToggle').onclick = () => openPos(null);
   $('#btnAddFirst').onclick = () => openPos(null);
   $('#btnAdd').onclick = savePosition;
@@ -2248,6 +2541,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let rt;
   addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => {
     drawPortfolio(STATE.hist); if (STATE.tot) drawAllocation(STATE.tot);
+    if ($('#dlgDet').open && DETID) { const r = (STATE.rows || []).find(x => x.id === DETID); if (r) drawDetChart(r); }
   }, 160); });
 
   boot(true);
@@ -3591,7 +3885,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const t = e.target.tagName;
     if (t === 'INPUT' || t === 'SELECT' || t === 'TEXTAREA') return;
-    if ($('#dlgExp').open || $('#dlgFut').open || $('#dlgPick').open || $('#dlgPos').open) return;
+    if ($('#dlgExp').open || $('#dlgFut').open || $('#dlgPick').open || $('#dlgPos').open || $('#dlgDet').open) return;
     if (e.key === 's' || e.key === 'S') { e.preventDefault(); openExpDlg('out'); }
     if (e.key === 'e' || e.key === 'E') { e.preventDefault(); openExpDlg('in'); }
     if (e.key === 'f' || e.key === 'F') { e.preventDefault(); openFut(null); }
